@@ -1,0 +1,22 @@
+<div class="container mt-5">
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="inputEmail" class="form-label">Email</label>
+          <input type="email" class="form-control" id="inputEmail" formControlName="email">
+          <small *ngIf="loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched">
+              Inserisci la mail con la quale ti sei registrato.
+          </small>
+        </div>
+        <div class="mb-3">
+          <label for="inputPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="inputPassword" formControlName="password">
+          <small *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched">
+            Inserisci la tua password.
+        </small>
+        </div>
+    
+        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">ENTRA</button>
+      </form>
+    
+    </div>

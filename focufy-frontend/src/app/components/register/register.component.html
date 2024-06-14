@@ -1,0 +1,53 @@
+<div class="container mt-5">
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+            <label for="inputName" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="inputName" formControlName="name">
+            <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+                <small *ngIf="registerForm.get('name')?.errors?.['required']">
+                    Il nome è richiesto
+                </small>
+                <small *ngIf="registerForm.get('name')?.errors?.['minlength']">
+                    Il nome deve contenere almeno 3 caratteri
+                </small>
+                <small *ngIf="registerForm.get('name')?.errors?.['maxlength']">
+                    Il nome può contenere al massimo 20 caratteri
+                </small>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="inputEmail" formControlName="email">
+            <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                E' richiesta un'email valida
+            </small>
+        </div>
+        <div class="mb-3">
+            <label for="inputPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="inputPassword" formControlName="password">
+            <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                <small *ngIf="registerForm.get('password')?.errors?.['required']">La password è richiesta</small>
+                <small *ngIf="registerForm.get('password')?.errors?.['minlength']">La password deve contenere almeno 8
+                    caratteri</small>
+                <small *ngIf="registerForm.get('password')?.errors?.['maxlength']">La password può contenere al massimo
+                    30 caratteri</small>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="inputPasswordConf" class="form-label">Conferma password</label>
+            <input type="password" class="form-control" id="passwordConf" formControlName="passwordConf">
+            <div *ngIf="registerForm.get('passwordConf')?.invalid && registerForm.get('passwordConf')?.touched">
+                <small *ngIf="registerForm.get('passwordConf')?.errors?.['required']">La conferma della password è
+                    richiesta</small>
+                <small
+                    *ngIf="registerForm.get('passwordConf')?.hasError('passwordMatch') && registerForm.get('passwordConf')?.touched">
+                    Le password non coincidono
+                </small>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">REGISTRATI</button>
+    </form>
+
+</div>
