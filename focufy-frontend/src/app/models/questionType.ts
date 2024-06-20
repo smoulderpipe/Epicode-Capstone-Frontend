@@ -1,0 +1,9 @@
+export enum QuestionType {
+    CHRONOTYPE = 'CHRONOTYPE',
+    TEMPER = 'TEMPER',
+    DAYS = 'DAYS',
+    SHORT_TERM_GOAL = 'SHORT_TERM_GOAL',
+    LONG_TERM_GOAL = 'LONG_TERM_GOAL',
+    SATISFACTION = 'SATISFACTION',
+    RESTART = 'RESTART'
+  }

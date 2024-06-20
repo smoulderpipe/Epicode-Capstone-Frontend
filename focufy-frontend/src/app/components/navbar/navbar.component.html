@@ -17,6 +17,9 @@
             <a class="nav-link" routerLinkActive="active" routerLink="/register">Register</a>
           </li>
           <li class="nav-item" *ngIf="(isLoggedIn$ | async)">
+            <a class="nav-link" routerLinkActive="active" routerLink="/survey">Survey</a>
+          </li>
+          <li class="nav-item" *ngIf="(isLoggedIn$ | async)">
             <a class="nav-link" routerLinkActive="active" (click)="logout()" style="cursor: pointer;">Logout</a>
           </li>
           

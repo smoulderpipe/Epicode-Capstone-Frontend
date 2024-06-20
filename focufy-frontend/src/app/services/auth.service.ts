@@ -25,7 +25,6 @@ export class AuthService {
           localStorage.setItem('access_token', token);
           this.tokenSubject.next(token);
 
-          // Decodifica il token JWT per ottenere l'ID utente
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             if (payload) {
@@ -78,4 +77,8 @@ export class AuthService {
     const storedUserId = localStorage.getItem('userId');
     return storedUserId ? parseInt(storedUserId, 10) : null;
   }
-}
+
+  getToken(): string | null {
+    return localStorage.getItem('access_token');
+  }
+} 

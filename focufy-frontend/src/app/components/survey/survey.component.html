@@ -1,0 +1,78 @@
+<div class="survey-container container m-5">
+    <h2>Survey Questions</h2>
+
+    <div *ngIf="questionsPage && currentQuestion">
+        <form [formGroup]="getCurrentFormGroup(currentQuestion)" (ngSubmit)="onSubmit()">
+            <div class="question-card">
+                <div *ngIf="currentQuestion.questionType === 'CHRONOTYPE' || currentQuestion.questionType === 'TEMPER'"
+                    class="question-details">
+                    <div><strong>{{ currentQuestion.questionText }}</strong></div>
+                    <div class="answers-list">
+                        <ul class="list-unstyled">
+                            <li *ngFor="let answer of answersMap[currentQuestion.id] || []">
+                                <input type="radio" [value]="answer.id"
+                                    [formControlName]="getFormControlName(currentQuestion)"
+                                    [attr.name]="'question' + currentQuestion.id">
+                                {{ answer.answerText }}
+                            </li>
+                        </ul>
+                        <p *ngIf="!answersMap[currentQuestion.id] || answersMap[currentQuestion.id].length === 0">No
+                            answers available.</p>
+                    </div>
+                </div>
+                <div *ngIf="currentQuestion.questionType === 'LONG_TERM_GOAL'" class="question-details">
+                    <div><strong>{{ currentQuestion.questionText }}</strong></div>
+                    <div class="answers-list">
+                        <input type="text" formControlName="ltGoalStringQuestion{{ currentQuestion.id }}"
+                            [attr.name]="'question' + currentQuestion.id" />
+                    </div>
+                </div>
+                <div *ngIf="currentQuestion.questionType === 'SHORT_TERM_GOAL'" class="question-details">
+                    <div><strong>{{ currentQuestion.questionText }}</strong></div>
+                    <div class="answers-list">
+                        <input type="text" formControlName="stGoalStringQuestion{{ currentQuestion.id }}"
+                            [attr.name]="'question' + currentQuestion.id" />
+                    </div>
+                </div>
+                
+
+                <div *ngIf="currentQuestion.questionType === 'DAYS'" class="question-details">
+                    <div><strong>{{ currentQuestion.questionText }}</strong></div>
+                    <div class="answers-list">
+                        <input type="number" formControlName="daysQuestion{{ currentQuestion.id }}"
+                            [attr.name]="'daysQuestion' + currentQuestion.id" />
+                    </div>
+                </div>
+                <div *ngIf="currentQuestion.questionType === 'SATISFACTION'" class="question-details">
+                    <div><strong>{{ currentQuestion.questionText }}</strong></div>
+                    <div class="answers-list">
+                        <input type="number" formControlName="satisfactionQuestion{{ currentQuestion.id }}"
+                            [attr.name]="'satisfactionQuestion' + currentQuestion.id" />
+                    </div>
+                </div>
+                <div *ngIf="currentQuestion.questionType === 'RESTART'" class="question-details">
+                    <div><strong>{{ currentQuestion.questionText }}</strong></div>
+                    <div class="answers-list">
+                        <ul class="list-unstyled">
+                            <li>
+                                <input type="radio" [value]="true"
+                                    formControlName="restartQuestion{{ currentQuestion.id }}"
+                                    [attr.name]="'restartQuestion' + currentQuestion.id"> Yes
+                            </li>
+                            <li>
+                                <input type="radio" [value]="false"
+                                    formControlName="restartQuestion{{ currentQuestion.id }}"
+                                    [attr.name]="'restartQuestion' + currentQuestion.id"> No
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button type="button" (click)="previousQuestion()"
+                    [disabled]="currentQuestionIndex === 0">Previous</button>
+                <button type="button" (click)="nextQuestion()" [disabled]="!isCurrentAnswerValid()">Next</button>
+            </div>
+        </form>
+    </div>
+</div>

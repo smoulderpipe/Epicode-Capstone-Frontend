@@ -45,34 +45,4 @@ export class LoginComponent implements OnInit{
   }
 
 
-  /* errorMessage: string | null = null;
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-  }
-
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
-      this.authService.login(username, password).subscribe({
-        next: token => {
-          console.log('Login effettuato con successo!', token);
-          this.router.navigate(['/home']);  // Redirigere alla home o ad un'altra pagina dopo il login
-        },
-        error: error => {
-          console.error('Errore durante il login:', error);
-          this.errorMessage = 'Credenziali non valide. Per favore riprova.';
-        }
-      });
-    }
-  } */
 }
