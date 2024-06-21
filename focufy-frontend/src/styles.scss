@@ -2,3 +2,53 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+
+.navbar-brand {
+    width: 50px;
+}
+
+h2 {
+    font-family: "Quattrocento", serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 3.5em;
+    line-height: 1em;
+}
+
+p, li {
+    font-family: "Jost", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.navbar li {
+    font-size: 1.5em;
+}
+
+button {
+    font-family: "Jost", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.paw-illustration-1dir {
+    transform: rotate(70deg);
+    width: 40px;
+}
+
+.paw-illustration-2dir {
+    transform: rotate(110deg);
+    width: 40px;
+}
+
+.how-container p{
+    line-height: 1.2em;
+
+}
+
+.how-container h3 {
+    font-size: 4em;
+}

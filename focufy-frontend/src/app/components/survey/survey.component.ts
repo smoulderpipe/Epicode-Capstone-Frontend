@@ -48,38 +48,7 @@ export class SurveyComponent implements OnInit {
         console.log('Questions loaded:', this.questionsPage);
 
         this.questionsPage.content.forEach(question => {
-          if (question.questionType === 'CHRONOTYPE') {
-            this.chronotypeFormControls[question.id] = new FormControl(null);
-            this.chronotypeForm.addControl(this.getFormControlName(question), this.chronotypeFormControls[question.id]);
-          } else if (question.questionType === 'TEMPER') {
-            this.temperFormControls[question.id] = new FormControl(null);
-            this.temperForm.addControl(this.getFormControlName(question), this.temperFormControls[question.id]);
-          } else if (question.questionType === 'LONG_TERM_GOAL') {
-            this.personalGoalsForm.addControl(
-              `ltGoalStringQuestion${question.id}`,
-              new FormControl(null)
-            );
-          } else if (question.questionType === 'SHORT_TERM_GOAL') {
-            this.personalGoalsForm.addControl(
-              `stGoalStringQuestion${question.id}`,
-              new FormControl(null)
-            );
-          } else if (question.questionType === 'DAYS') {
-            this.personalGoalsForm.addControl(
-              `daysQuestion${question.id}`,
-              new FormControl(null)
-            );
-          } else if (question.questionType === 'SATISFACTION') {
-            this.personalGoalsForm.addControl(
-              `satisfactionQuestion${question.id}`,
-              new FormControl(null)
-            );
-          } else if (question.questionType === 'RESTART') {
-            this.personalGoalsForm.addControl(
-              `restartQuestion${question.id}`,
-              new FormControl(null)
-            );
-          }
+          this.addFormControl(question);
           this.loadAnswersForQuestion(question.id);
         });
       },
@@ -87,6 +56,33 @@ export class SurveyComponent implements OnInit {
         console.log('Error loading questions:', error);
       }
     );
+  }
+
+  addFormControl(question: Question): void {
+    const controlName = this.getFormControlName(question);
+
+    switch (question.questionType) {
+      case 'CHRONOTYPE':
+        this.chronotypeFormControls[question.id] = new FormControl(null);
+        this.chronotypeForm.addControl(controlName, this.chronotypeFormControls[question.id]);
+        break;
+
+      case 'TEMPER':
+        this.temperFormControls[question.id] = new FormControl(null);
+        this.temperForm.addControl(controlName, this.temperFormControls[question.id]);
+        break;
+
+      case 'LONG_TERM_GOAL':
+      case 'SHORT_TERM_GOAL':
+      case 'DAYS':
+      case 'SATISFACTION':
+      case 'RESTART':
+        this.personalGoalsForm.addControl(controlName, new FormControl(null));
+        break;
+
+      default:
+        console.warn(`Unknown question type: ${question.questionType}`);
+    }
   }
 
   loadAnswersForQuestion(questionId: number): void {
@@ -194,61 +190,30 @@ export class SurveyComponent implements OnInit {
       default:
         throw new Error('Unknown question type');
     }
-
   }
 
   getFormControlName(question: Question): string {
-    switch (question.questionType) {
-      case 'CHRONOTYPE':
-        return `chronotype_${question.id}`;
-      case 'TEMPER':
-        return `temper_${question.id}`;
-      case 'LONG_TERM_GOAL':
-      return `ltGoalStringQuestion${question.id}`;
-      case 'SHORT_TERM_GOAL':
-      return `stGoalStringQuestion${question.id}`;
-      case 'DAYS':
-      return `daysQuestion${question.id}`;
-      case 'SATISFACTION':
-      return `satisfactionQuestion${question.id}`;
-      case 'RESTART':
-      return `restartQuestion${question.id}`;
-      default:
-        throw new Error(`Unsupported question type: ${question.questionType}`);
-    }
+    return `${question.questionType.toLowerCase()}Question${question.id}`;
   }
 
   isCurrentAnswerValid(): boolean {
     const currentQuestion = this.currentQuestion;
     const currentFormGroup = this.getCurrentFormGroup(currentQuestion);
+    const control = currentFormGroup?.get(this.getFormControlName(currentQuestion));
+
+    if (!control) return false;
 
     switch (currentQuestion.questionType) {
       case 'CHRONOTYPE':
       case 'TEMPER':
-        const control = currentFormGroup?.get(this.getFormControlName(currentQuestion));
-        return !!(control && control.value !== null && control.value !== '');
-
+        return control.value !== null && control.value !== '';
       case 'LONG_TERM_GOAL':
-        // For LONG_TERM_GOAL, validate directly from the personalGoalsForm
-        const ltGoalsStringControl = currentFormGroup?.get(`ltGoalStringQuestion${currentQuestion.id}`);
-        return !!(ltGoalsStringControl && ltGoalsStringControl.value !== null && ltGoalsStringControl.value.trim() !== '');
-
       case 'SHORT_TERM_GOAL':
-        const stGoalsStringControl = currentFormGroup?.get(`stGoalStringQuestion${currentQuestion.id}`);
-        return !!(stGoalsStringControl && stGoalsStringControl.value !== null && stGoalsStringControl.value.trim() !== '');
-
+        return control.value !== null && control.value.trim() !== '';
       case 'DAYS':
-        const daysControl = currentFormGroup?.get(`daysQuestion${currentQuestion.id}`);
-        return !!(daysControl && daysControl.value !== null);
-
       case 'SATISFACTION':
-        const satisfactionControl = currentFormGroup?.get(`satisfactionQuestion${currentQuestion.id}`);
-        return !!(satisfactionControl && satisfactionControl.value !== null);
-
       case 'RESTART':
-        const restartControl = currentFormGroup?.get(`restartQuestion${currentQuestion.id}`);
-        return !!(restartControl && restartControl.value !== null);
-
+        return control.value !== null;
       default:
         return false;
     }
