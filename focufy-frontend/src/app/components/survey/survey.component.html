@@ -8,13 +8,21 @@
       
       <h3><span>{{ userAvatarTemper.temperType}}</span>&nbsp;
       <span>{{ userAvatarChronotype.chronotypeType}}</span></h3>
-      <p>{{userAvatarUrl}}</p>
-      <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
+      <!-- <p>{{userAvatarUrl}}</p> -->
+       <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-5"><img [src]="userAvatarUrl" class="img-fluid"/></div>
+      
+        <div class="col-7 text-start">
+          <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
       <p>Their energy and ability to concentrate peaks in the {{userAvatarChronotypeMaxEnergyType}}.</p>
       <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
       <p>Inner strength: {{userAvatarTemperStrength}}</p>
       <p>Vulnerability: {{userAvatarTemperRisk}}</p>
-      <!-- <img [src]="userAvatarUrl" /> -->
+        </div>
+       </div>
+      
+      
+      
        
      <!--  <p>{{ userAvatarDescription }}</p> -->
       <a routerLink="/study-plan"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2">Discover your study plan</button></a>
