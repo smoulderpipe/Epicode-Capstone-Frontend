@@ -1,42 +1,50 @@
-<div class="survey-container container m-5">
-    <h2>Survey Questions</h2>
-  
+<div>
+
+  <div class="container m-5 p-5 text-center" id="survey-container">
+   
+
     <div *ngIf="questionsPage && currentQuestion">
-      <form [formGroup]="getCurrentFormGroup(currentQuestion)" (ngSubmit)="onSubmit()">
+      <form [formGroup]="getCurrentFormGroup(currentQuestion)" (ngSubmit)="onSubmit()" class="px-5">
         <div class="question-card">
-          <div class="question-details" *ngIf="currentQuestion.questionType !== 'SATISFACTION' && currentQuestion.questionType !== 'RESTART'">
-            <div><strong>{{ currentQuestion.questionText }}</strong></div>
+          <div class="question-details fs-5">
+            <div *ngIf="currentQuestion.questionType === 'CHRONOTYPE' || currentQuestion.questionType === 'TEMPER'">
+              <h5 class="fw-bold">Avatar Assessment</h5>
+            </div>
+            <div *ngIf="currentQuestion.questionType === 'LONG_TERM_GOAL' || currentQuestion.questionType === 'SHORT_TERM_GOAL' || currentQuestion.questionType === 'DAYS'">
+              <h5 class="fw-bold">Goal Assessment</h5>
+            </div>
+            <div *ngIf="currentQuestion.questionType !== 'SATISFACTION' && currentQuestion.questionType !== 'RESTART'">
+              <div>
+                <h4 class="fw-bold">{{ currentQuestion.questionText }}</h4>
+              </div>
             <!-- <div class="answers-list" *ngIf="currentQuestion.questionType !== 'RESTART'"> -->
-                <div class="answers-list">
+            <div class="answers-list">
               <ng-container [ngSwitch]="currentQuestion.questionType">
                 <ul class="list-unstyled" *ngSwitchCase="'CHRONOTYPE'">
                   <li *ngFor="let answer of answersMap[currentQuestion.id] || []">
-                    <input type="radio" [value]="answer.id"
-                           [formControlName]="getFormControlName(currentQuestion)"
-                           [attr.name]="'question' + currentQuestion.id">
+                    <input type="radio" [value]="answer.id" [formControlName]="getFormControlName(currentQuestion)"
+                      [attr.name]="'question' + currentQuestion.id">
                     {{ answer.answerText }}
                   </li>
                 </ul>
                 <ul class="list-unstyled" *ngSwitchCase="'TEMPER'">
                   <li *ngFor="let answer of answersMap[currentQuestion.id] || []">
-                    <input type="radio" [value]="answer.id"
-                           [formControlName]="getFormControlName(currentQuestion)"
-                           [attr.name]="'question' + currentQuestion.id">
+                    <input type="radio" [value]="answer.id" [formControlName]="getFormControlName(currentQuestion)"
+                      [attr.name]="'question' + currentQuestion.id">
                     {{ answer.answerText }}
                   </li>
                 </ul>
                 <input type="text" *ngSwitchCase="'LONG_TERM_GOAL'"
-                       [formControlName]="getFormControlName(currentQuestion)"
-                       [attr.name]="'question' + currentQuestion.id" />
+                  [formControlName]="getFormControlName(currentQuestion)"
+                  [attr.name]="'question' + currentQuestion.id" />
                 <input type="text" *ngSwitchCase="'SHORT_TERM_GOAL'"
-                       [formControlName]="getFormControlName(currentQuestion)"
-                       [attr.name]="'question' + currentQuestion.id" />
-                <input type="number" *ngSwitchCase="'DAYS'"
-                       [formControlName]="getFormControlName(currentQuestion)"
-                       [attr.name]="'daysQuestion' + currentQuestion.id" />
+                  [formControlName]="getFormControlName(currentQuestion)"
+                  [attr.name]="'question' + currentQuestion.id" />
+                <input type="number" *ngSwitchCase="'DAYS'" [formControlName]="getFormControlName(currentQuestion)"
+                  [attr.name]="'daysQuestion' + currentQuestion.id" />
                 <input type="number" *ngSwitchCase="'SATISFACTION'"
-                       [formControlName]="getFormControlName(currentQuestion)"
-                       [attr.name]="'satisfactionQuestion' + currentQuestion.id" />
+                  [formControlName]="getFormControlName(currentQuestion)"
+                  [attr.name]="'satisfactionQuestion' + currentQuestion.id" />
               </ng-container>
             </div>
             <!-- <div class="answers-list" *ngIf="currentQuestion.questionType === 'RESTART'">
@@ -54,11 +62,16 @@
               </ul>
             </div> -->
           </div>
+          </div>
         </div>
         <div class="button-group">
-          <button type="button" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
-          <button type="button" (click)="nextQuestion()" [disabled]="!isCurrentAnswerValid()">Next</button>
+          <button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 me-2"
+            (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"><i
+              class="bi bi-arrow-left"></i></button>
+          <button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2"
+            (click)="nextQuestion()" [disabled]="!isCurrentAnswerValid()"><i class="bi bi-arrow-right"></i></button>
         </div>
       </form>
     </div>
   </div>
+</div>

@@ -16,6 +16,15 @@ h2 {
     line-height: 1em;
 }
 
+h3 {
+    font-family: "Quattrocento", serif;
+    font-style: normal;
+    font-size:2.5em;
+}
+h4{
+    font-size: 1.5em;
+}
+
 p, li {
     font-family: "Jost", sans-serif;
     font-optical-sizing: auto;
@@ -52,3 +61,38 @@ button {
 .how-container h3 {
     font-size: 4em;
 }
+
+footer span {
+    font-size: 0.8em !important;
+}
+
+form label {
+    font-family: "Jost", sans-serif;
+    font-size: 1.2em;
+}
+
+form small {
+    color: #b30000;
+}
+
+.form-control {
+    border-radius: 0px;
+    border-bottom: 1px solid black;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#login-container, #survey-container{
+    min-height: 90vh;
+}
+
+input[type="radio"]:focus {
+    outline: max(2px, 0.15em) solid currentColor;
+    outline-offset: max(2px, 0.15em);
+  }
+
+  :root {
+    --form-control-color: rebeccapurple;
+  }
+  

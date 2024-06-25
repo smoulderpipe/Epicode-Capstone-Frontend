@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Answer } from 'src/app/models/answer';
+import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
+import { Answer, PersonalAnswerType } from 'src/app/models/answer';
+import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
 import { Page } from 'src/app/models/page';
 import { Question } from 'src/app/models/question';
-import { QuestionType } from 'src/app/models/questionType';
 import { AnswerService } from 'src/app/services/answer.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { SurveyService } from 'src/app/services/survey.service';
 
 @Component({
@@ -28,10 +30,15 @@ export class SurveyComponent implements OnInit {
 
   currentQuestionIndex: number = 0;
 
+  showAvatar: boolean = false;
+  userAvatarUrl: string = '';
+  userAvatarDescription: string = '';
+
   constructor(
     private surveyService: SurveyService,
     private answerService: AnswerService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -102,18 +109,22 @@ export class SurveyComponent implements OnInit {
   }
 
   nextQuestion(): void {
-    if (this.currentQuestionIndex < this.questionsPage.content.length - 1) {
-      const currentQuestion = this.currentQuestion;
-      const currentFormGroup = this.getCurrentFormGroup(currentQuestion);
-      if (currentFormGroup) {
-        const answerControl = currentFormGroup.get(this.getFormControlName(currentQuestion));
-        if (answerControl) {
-          const answerValue = answerControl.value;
-          this.saveAnswer(currentQuestion.id, answerValue);
-        }
+    const currentQuestion = this.currentQuestion;
+    const currentFormGroup = this.getCurrentFormGroup(currentQuestion);
+    if (currentFormGroup) {
+      const answerControl = currentFormGroup.get(this.getFormControlName(currentQuestion));
+      if (answerControl) {
+        const answerValue = answerControl.value;
+        this.saveAnswer(currentQuestion.id, answerValue);
       }
+    }
+
+    if (currentQuestion.questionType === 'DAYS') {
+      this.submitAnswers();
+    } else if (this.currentQuestionIndex < this.questionsPage.content.length - 1) {
       this.currentQuestionIndex++;
     }
+
     console.log('Next clicked. Current index:', this.currentQuestionIndex);
     console.log('Selected answers:', this.selectedAnswers);
   }
@@ -163,9 +174,156 @@ export class SurveyComponent implements OnInit {
         console.warn(`Unhandled question type: ${currentQuestion.questionType}`);
         break;
     }
-
-    console.log(`Answer saved for question ${questionId}:`, this.selectedAnswers[questionId]);
   }
+
+  submitAnswers(): void {
+    console.log('Selected answers:', this.selectedAnswers);
+    console.log('Text answers:', this.textAnswers);
+  
+    const userId = Number(this.authService.getUserId());
+  
+    if (isNaN(userId)) {
+      console.error('User ID is invalid. Cannot submit answers.');
+      return;
+    }
+  
+    const sharedAnswers: AssignSharedAnswer[] = [];
+    const personalAnswers: any[] = [];
+    const sharedAnswersObservables: Observable<Answer[]>[] = [];
+  
+    for (const questionId in this.selectedAnswers) {
+      const answer = this.selectedAnswers[questionId];
+      const question = this.questionsPage.content.find(q => q.id === +questionId);
+      if (question) {
+        switch (question.questionType) {
+          case 'CHRONOTYPE':
+          case 'TEMPER':
+            const observable = this.answerService.getSharedAnswersForQuestionId(+questionId).pipe(
+              catchError(error => {
+                console.error(`Error loading shared answers for question ${questionId}:`, error);
+                return of([] as Answer[]); // return an empty array if there is an error
+              })
+            );
+            sharedAnswersObservables.push(observable);
+            break;
+  
+          case 'DAYS':
+          case 'SATISFACTION':
+            personalAnswers.push({
+              questionId: +questionId,
+              answerText: answer,
+              userId: userId,
+              personalAnswerType: question.questionType
+            });
+            break;
+  
+          default:
+            break;
+        }
+      }
+    }
+  
+    for (const questionId in this.textAnswers) {
+      const answer = this.textAnswers[questionId];
+      const question = this.questionsPage.content.find(q => q.id === +questionId);
+      if (question) {
+        switch (question.questionType) {
+          case 'SHORT_TERM_GOAL':
+          case 'LONG_TERM_GOAL':
+            personalAnswers.push({
+              questionId: +questionId,
+              answerText: answer,
+              userId: userId, // Ensure userId is a number
+              personalAnswerType: question.questionType
+            });
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  
+    let hasErrors = false;
+    let errorMessage = '';
+  
+    sharedAnswersObservables.forEach((observable, index) => {
+      observable.subscribe(
+        answers => {
+          const questionId = Number(Object.keys(this.selectedAnswers)[index]);
+          const answer = this.selectedAnswers[questionId];
+          const matchingAnswer = answers.find(a => a.id === answer);
+          if (matchingAnswer) {
+            sharedAnswers.push({
+              questionId: questionId,
+              answerId: matchingAnswer.id
+            });
+          }
+        },
+        error => {
+          hasErrors = true;
+          errorMessage = `Error loading shared answers for this question`;
+          console.error(errorMessage);
+        }
+      );
+    });
+  
+    const allSharedObservablesComplete = new Promise((resolve) => {
+      if (sharedAnswersObservables.length === 0) {
+        resolve(true);
+      } else {
+        Promise.all(sharedAnswersObservables.map(obs => obs.toPromise())).then(() => {
+          resolve(true);
+        }).catch(() => {
+          resolve(false);
+        });
+      }
+    });
+  
+    allSharedObservablesComplete.then(sharedCompleted => {
+      if (hasErrors || !sharedCompleted) {
+        if (errorMessage) {
+          console.error('Error submitting answers:', errorMessage);
+        } else {
+          console.error('An error occurred while submitting answers.');
+        }
+        return;
+      }
+  
+      if (sharedAnswers.length > 0) {
+        this.answerService.assignSharedAnswersToUser(sharedAnswers)
+          .pipe(
+            catchError(error => {
+              console.error('Error assigning shared answers:', error);
+              return throwError('Something went wrong. Please try again later.');
+            })
+          )
+          .subscribe(
+            response => {
+              console.log('Shared answers assigned:', response);
+            }
+          );
+      }
+  
+      if (personalAnswers.length > 0) {
+        this.answerService.savePersonalAnswers(personalAnswers)
+          .pipe(
+            catchError(error => {
+              console.error('Error saving personal answers:', error);
+              return throwError('Something went wrong. Please try again later.');
+            })
+          )
+          .subscribe(
+            (response) => {
+              console.log('Personal answers saved:', response);
+              this.displayUserAvatar();
+            }
+          );
+      } else {
+        this.displayUserAvatar();
+      }
+    });
+  }
+
 
   getSavedAnswer(questionId: number): any {
     return this.selectedAnswers[questionId];
@@ -194,6 +352,13 @@ export class SurveyComponent implements OnInit {
 
   getFormControlName(question: Question): string {
     return `${question.questionType.toLowerCase()}Question${question.id}`;
+  }
+
+  displayUserAvatar(): void {
+    this.userAvatarUrl = 'path/to/avatar/image.png';
+    this.userAvatarDescription = 'Description of the avatar';
+
+    this.showAvatar = true;
   }
 
   isCurrentAnswerValid(): boolean {

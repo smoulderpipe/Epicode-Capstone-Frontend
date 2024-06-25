@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { Answer } from '../models/answer';
+import { AssignSharedAnswer } from '../models/assignSharedAnswer';
 
 @Injectable({
   providedIn: 'root'
@@ -27,34 +28,31 @@ export class AnswerService {
       return this.httpClient.get<Answer[]>(url, headers);
     }
   
-    assignSharedAnswerToUser(answerId: number): Observable<any> {
+    assignSharedAnswersToUser(assignSharedAnswers: AssignSharedAnswer[]): Observable<any> {
       const userId = this.authService.getUserId();
-      const url = `${this.baseUrl}/shared/${answerId}/assign/${userId}`;
+      const url = `${this.baseUrl}/shared/assign/${userId}`;
       const token = this.authService.getToken();
-  
+      
       const headers = {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         }
       };
-  
-      return this.httpClient.put<any>(url, {}, headers);
+    
+      return this.httpClient.put<any>(url, assignSharedAnswers, headers);
     }
   
-    submitTextAnswer(questionId: number, answerText: string): Observable<any> {
+    savePersonalAnswers(answers: any[]): Observable<any>{
       const userId = this.authService.getUserId();
-      const url = `${this.baseUrl}/shared/text/${questionId}/user/${userId}`;
+      const url = `${this.baseUrl}/users/${userId}/personal`;
       const token = this.authService.getToken();
-  
       const headers = {
         headers: {
           Authorization: `Bearer ${token}`
         }
       };
-  
-      const body = { answerText };
-  
-      return this.httpClient.post<any>(url, body, headers);
+      return this.httpClient.post<any>(url, answers, headers);
     }
   }
   

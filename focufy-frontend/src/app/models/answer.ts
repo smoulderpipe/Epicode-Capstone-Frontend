@@ -7,10 +7,22 @@ export enum PersonalAnswerType {
     SATISFACTION = 'SATISFACTION',
     RESTART = 'RESTART'
   }
+
+  export enum SharedAnswerType {
+    LION = 'LION',
+    BEAR = 'BEAR',
+    DOLPHIN = 'DOLPHIN',
+    WOLF = 'WOLF',
+    WHIMSICAL = 'WHIMSICAL',
+    TENACIOUS = 'TENACIOUS',
+    TACTICAL = 'TACTICAL',
+    GREEDY = 'GREEDY'
+  }
   
 export interface Answer{
     id: number;
     answerText: string;
     question: Question;
-    personalAnswerType: PersonalAnswerType; 
+    personalAnswerType: PersonalAnswerType;
+    sharedAnswerType: SharedAnswerType; 
 }
