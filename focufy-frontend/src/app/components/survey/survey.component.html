@@ -2,8 +2,17 @@
 
   <div class="container m-5 p-5 text-center" id="survey-container">
    
-
-    <div *ngIf="questionsPage && currentQuestion">
+    <div *ngIf="showAvatar">
+      <p>Your avatar type is:</p>
+      <!-- <img [src]="userAvatarUrl" /> -->
+       <p>{{userAvatarUrl}}</p>
+      <p>{{ userAvatarDescription }}</p>
+      <a routerLink="/study-plan"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2">See your brand new study plan</button></a>
+      <a class="btn p-0" role="button" routerLink="/login">
+        <button class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3">login</button>
+    </a>
+    </div>
+    <div *ngIf="questionsPage && currentQuestion && !showAvatar">
       <form [formGroup]="getCurrentFormGroup(currentQuestion)" (ngSubmit)="onSubmit()" class="px-5">
         <div class="question-card">
           <div class="question-details fs-5">
@@ -17,7 +26,7 @@
               <div>
                 <h4 class="fw-bold">{{ currentQuestion.questionText }}</h4>
               </div>
-            <!-- <div class="answers-list" *ngIf="currentQuestion.questionType !== 'RESTART'"> -->
+           
             <div class="answers-list">
               <ng-container [ngSwitch]="currentQuestion.questionType">
                 <ul class="list-unstyled" *ngSwitchCase="'CHRONOTYPE'">
@@ -47,20 +56,7 @@
                   [attr.name]="'satisfactionQuestion' + currentQuestion.id" />
               </ng-container>
             </div>
-            <!-- <div class="answers-list" *ngIf="currentQuestion.questionType === 'RESTART'">
-              <ul class="list-unstyled">
-                <li>
-                  <input type="radio" [value]="true"
-                         [formControlName]="getFormControlName(currentQuestion)"
-                         [attr.name]="'restartQuestion' + currentQuestion.id"> Yes
-                </li>
-                <li>
-                  <input type="radio" [value]="false"
-                         [formControlName]="getFormControlName(currentQuestion)"
-                         [attr.name]="'restartQuestion' + currentQuestion.id"> No
-                </li>
-              </ul>
-            </div> -->
+      
           </div>
           </div>
         </div>

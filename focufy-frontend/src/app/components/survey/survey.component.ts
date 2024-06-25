@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
 import { Answer, PersonalAnswerType } from 'src/app/models/answer';
 import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
@@ -8,6 +9,7 @@ import { Question } from 'src/app/models/question';
 import { AnswerService } from 'src/app/services/answer.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { SurveyService } from 'src/app/services/survey.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-survey',
@@ -35,10 +37,12 @@ export class SurveyComponent implements OnInit {
   userAvatarDescription: string = '';
 
   constructor(
+    private router: Router,
     private surveyService: SurveyService,
     private answerService: AnswerService,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -201,7 +205,7 @@ export class SurveyComponent implements OnInit {
             const observable = this.answerService.getSharedAnswersForQuestionId(+questionId).pipe(
               catchError(error => {
                 console.error(`Error loading shared answers for question ${questionId}:`, error);
-                return of([] as Answer[]); // return an empty array if there is an error
+                return of([] as Answer[]);
               })
             );
             sharedAnswersObservables.push(observable);
@@ -233,7 +237,7 @@ export class SurveyComponent implements OnInit {
             personalAnswers.push({
               questionId: +questionId,
               answerText: answer,
-              userId: userId, // Ensure userId is a number
+              userId: userId,
               personalAnswerType: question.questionType
             });
             break;
@@ -300,6 +304,7 @@ export class SurveyComponent implements OnInit {
           .subscribe(
             response => {
               console.log('Shared answers assigned:', response);
+              this.loadUserAvatar(userId);
             }
           );
       }
@@ -315,11 +320,11 @@ export class SurveyComponent implements OnInit {
           .subscribe(
             (response) => {
               console.log('Personal answers saved:', response);
-              this.displayUserAvatar();
+              this.loadUserAvatar(userId);
             }
           );
       } else {
-        this.displayUserAvatar();
+        this.loadUserAvatar(userId);
       }
     });
   }
@@ -354,12 +359,23 @@ export class SurveyComponent implements OnInit {
     return `${question.questionType.toLowerCase()}Question${question.id}`;
   }
 
-  displayUserAvatar(): void {
-    this.userAvatarUrl = 'path/to/avatar/image.png';
-    this.userAvatarDescription = 'Description of the avatar';
 
-    this.showAvatar = true;
-  }
+    loadUserAvatar(userId: number): void {
+      this.userService.getUserAvatar(userId)
+        .pipe(
+          catchError(error => {
+            console.error('Error loading user avatar:', error);
+            return of(null);
+          })
+        )
+        .subscribe(avatar => {
+          if (avatar) {
+            this.userAvatarUrl = avatar.image;
+            this.userAvatarDescription = avatar.description;
+            this.showAvatar = true;
+          }
+        });
+    }
 
   isCurrentAnswerValid(): boolean {
     const currentQuestion = this.currentQuestion;

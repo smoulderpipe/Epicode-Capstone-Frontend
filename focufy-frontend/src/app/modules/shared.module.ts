@@ -4,6 +4,7 @@ import { LoginComponent } from 'src/app/components/login/login.component';
 import { RegisterComponent } from 'src/app/components/register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SurveyComponent } from '../components/survey/survey.component';
+import { StudyPlanComponent } from '../components/study-plan/study-plan.component';
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule
@@ -11,11 +12,14 @@ import { SurveyComponent } from '../components/survey/survey.component';
   declarations: [
     LoginComponent,
     RegisterComponent,
-    SurveyComponent
+    SurveyComponent,
+    StudyPlanComponent
   ],
   exports: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    SurveyComponent,
+    StudyPlanComponent
   ]
 })
 export class SharedModule { }
