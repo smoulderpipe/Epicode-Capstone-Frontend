@@ -1,16 +1,16 @@
+<!-- <a routerLink="/register"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3">Discover your study plan</button></a>
+ -->
 <div>
-
+  
   <div class="container m-5 p-5 text-center" id="survey-container">
-   
+    
     <div *ngIf="showAvatar">
       <p>Your avatar type is:</p>
       <!-- <img [src]="userAvatarUrl" /> -->
        <p>{{userAvatarUrl}}</p>
       <p>{{ userAvatarDescription }}</p>
       <a routerLink="/study-plan"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2">See your brand new study plan</button></a>
-      <a class="btn p-0" role="button" routerLink="/login">
-        <button class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3">login</button>
-    </a>
+  
     </div>
     <div *ngIf="questionsPage && currentQuestion && !showAvatar">
       <form [formGroup]="getCurrentFormGroup(currentQuestion)" (ngSubmit)="onSubmit()" class="px-5">

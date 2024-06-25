@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
-import { Answer, PersonalAnswerType } from 'src/app/models/answer';
+import { Observable, catchError, of, throwError } from 'rxjs';
+import { Answer } from 'src/app/models/answer';
 import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
 import { Page } from 'src/app/models/page';
 import { Question } from 'src/app/models/question';
@@ -37,7 +36,6 @@ export class SurveyComponent implements OnInit {
   userAvatarDescription: string = '';
 
   constructor(
-    private router: Router,
     private surveyService: SurveyService,
     private answerService: AnswerService,
     private fb: FormBuilder,
@@ -399,4 +397,6 @@ export class SurveyComponent implements OnInit {
         return false;
     }
   }
+
 }
+

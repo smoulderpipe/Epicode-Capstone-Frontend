@@ -8,7 +8,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes), SharedModule ],
+  imports: [RouterModule.forChild(routes), SharedModule, RouterModule ],
   exports: [RouterModule]
 })
 export class StudyPlanRoutingModule { }

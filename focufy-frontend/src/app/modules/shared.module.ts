@@ -5,9 +5,10 @@ import { RegisterComponent } from 'src/app/components/register/register.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SurveyComponent } from '../components/survey/survey.component';
 import { StudyPlanComponent } from '../components/study-plan/study-plan.component';
+import { RouterModule } from '@angular/router';
 @NgModule({
   imports: [
-    CommonModule, ReactiveFormsModule, FormsModule
+    CommonModule, ReactiveFormsModule, FormsModule, RouterModule
   ],
   declarations: [
     LoginComponent,
