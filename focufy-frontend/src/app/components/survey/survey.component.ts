@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable, catchError, of, throwError } from 'rxjs';
 import { Answer } from 'src/app/models/answer';
 import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
+import { Avatar, Chronotype, Temper } from 'src/app/models/avatar';
 import { Page } from 'src/app/models/page';
 import { Question } from 'src/app/models/question';
 import { AnswerService } from 'src/app/services/answer.service';
@@ -34,6 +35,25 @@ export class SurveyComponent implements OnInit {
   showAvatar: boolean = false;
   userAvatarUrl: string = '';
   userAvatarDescription: string = '';
+  userAvatarChronotype: Chronotype = {
+    id: 0,
+    chronotypeType: '',
+    maxEnergyType: '',
+    description: ''
+  };
+  userAvatarTemper: Temper = {
+    id: 0,
+    temperType: '',
+    strengthType: '',
+    riskType: '',
+    description: ''
+  };
+  userAvatarTemperDescription: String = '';
+  userAvatarChronotypeDescription: String = '';
+  userAvatarTemperRisk: String = '';
+  userAvatarTemperStrength: String = '';
+  userAvatarChronotypeMaxEnergyType: String = '';
+
 
   constructor(
     private surveyService: SurveyService,
@@ -370,6 +390,13 @@ export class SurveyComponent implements OnInit {
           if (avatar) {
             this.userAvatarUrl = avatar.image;
             this.userAvatarDescription = avatar.description;
+            this.userAvatarChronotype = avatar.chronotype;
+            this.userAvatarTemper = avatar.temper;
+            this.userAvatarTemperDescription = avatar.temper.description;
+            this.userAvatarChronotypeDescription = avatar.chronotype.description;
+            this.userAvatarChronotypeMaxEnergyType = avatar.chronotype.maxEnergyType;
+            this.userAvatarTemperStrength = avatar.temper.strengthType;
+            this.userAvatarTemperRisk = avatar.temper.riskType;
             this.showAvatar = true;
           }
         });

@@ -1,15 +1,23 @@
-<!-- <a routerLink="/register"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3">Discover your study plan</button></a>
- -->
+
 <div>
   
   <div class="container m-5 p-5 text-center" id="survey-container">
     
     <div *ngIf="showAvatar">
       <p>Your avatar type is:</p>
+      
+      <h3><span>{{ userAvatarTemper.temperType}}</span>&nbsp;
+      <span>{{ userAvatarChronotype.chronotypeType}}</span></h3>
+      <p>{{userAvatarUrl}}</p>
+      <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
+      <p>Their energy and ability to concentrate peaks in the {{userAvatarChronotypeMaxEnergyType}}.</p>
+      <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
+      <p>Inner strength: {{userAvatarTemperStrength}}</p>
+      <p>Vulnerability: {{userAvatarTemperRisk}}</p>
       <!-- <img [src]="userAvatarUrl" /> -->
-       <p>{{userAvatarUrl}}</p>
-      <p>{{ userAvatarDescription }}</p>
-      <a routerLink="/study-plan"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2">See your brand new study plan</button></a>
+       
+     <!--  <p>{{ userAvatarDescription }}</p> -->
+      <a routerLink="/study-plan"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2">Discover your study plan</button></a>
   
     </div>
     <div *ngIf="questionsPage && currentQuestion && !showAvatar">
