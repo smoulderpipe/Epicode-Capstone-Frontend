@@ -1,1 +1,43 @@
-<p>study-plan works!</p>
+<div class="container m5">
+    <div *ngIf="!isLoading">
+      <div *ngIf="studyPlan">
+        <h1>Study Plan</h1>
+        <p><strong>Short Term Goal:</strong> {{ studyPlan.shortTermGoal }}</p>
+  
+        <div *ngFor="let day of studyPlan.days">
+          <h2>Day {{ day.id }}</h2>
+          <p><strong>Type:</strong> {{ day.type }}</p>
+          
+          <div *ngIf="day.type === 'StudyDay'">
+            <p><strong>Mantra:</strong> {{ day.mantra }}</p>
+            
+            <div *ngIf="day.activitySessions && day.activitySessions.length > 0">
+              <h3>Activity Sessions:</h3>
+              <div *ngFor="let session of day.activitySessions">
+                <p><strong>Session Type:</strong> {{ session.activitySessionType }}</p>
+                <p><strong>Start Time:</strong> {{ session.startTime }}</p>
+                <p><strong>Duration:</strong> {{ session.duration }} hours</p>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="day.type === 'CheckpointDay'">
+            <p>This is a checkpoint day.</p>
+          </div>
+          
+          <div *ngIf="day.type === 'DeadlineDay'">
+            <p>This is the deadline day.</p>
+          </div>
+        </div>
+      </div>
+  
+      <div *ngIf="!studyPlan">
+        <p>No study plan found for this user.</p>
+      </div>
+    </div>
+  
+    <div *ngIf="isLoading">
+      <p>Loading study plan...</p>
+      <!-- Aggiungi qui un spinner o un altro indicatore di caricamento, se necessario -->
+    </div>
+  </div>

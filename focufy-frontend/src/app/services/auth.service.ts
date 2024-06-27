@@ -10,7 +10,8 @@ export class AuthService {
   private readonly baseURL = 'http://localhost:8080/auth';
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
   token$ = this.tokenSubject.asObservable();
-  private loggedUserId: number | null = null;
+  /* private loggedUserId: number | null = null; */
+  private loggedUserId: number | null = this.getStoredUserId();
 
   constructor(private http: HttpClient) {}
 

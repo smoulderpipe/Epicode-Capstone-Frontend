@@ -463,6 +463,7 @@ export class SurveyComponent implements OnInit {
           ).subscribe((mantrasResponse) => {
             console.log('Mantras added to study plan:', mantrasResponse);
       
+            // Naviga verso la pagina dello studio solo dopo il completamento delle operazioni
             this.router.navigate(['/study-plan']);
           });
         });
