@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StudyPlan } from 'src/app/models/studyPlan';
+import { ActivitySession, StudyPlan } from 'src/app/models/studyPlan';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
@@ -11,7 +11,7 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 })
 export class StudyPlanComponent {
   studyPlan!: StudyPlan;
-  isLoading: boolean = true; // Aggiunto per gestire il caricamento
+  isLoading: boolean = true;
 
   constructor(private studyPlanService: StudyPlanService, private authService: AuthService) {}
 
@@ -21,20 +21,34 @@ export class StudyPlanComponent {
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (data) => {
           this.studyPlan = data;
-          this.isLoading = false; // Imposta isLoading a false quando il piano di studio è caricato correttamente
-          console.log('Study Plan:', this.studyPlan);
-          // Ora puoi utilizzare this.studyPlan per visualizzare i dati nel tuo template
+          this.isLoading = false;
         },
         (error) => {
           console.error('Error fetching study plan:', error);
-          this.isLoading = false; // Gestisci l'errore impostando isLoading a false
-          // Gestisci l'errore appropriatamente nel tuo componente
+          this.isLoading = false;
         }
       );
     } else {
       console.error('User ID not found');
-      this.isLoading = false; // Gestisci l'errore impostando isLoading a false
-      // Gestisci l'errore appropriatamente nel tuo componente
+      this.isLoading = false;
     }
   }
+
+  compareSessions(session1: ActivitySession, session2: ActivitySession): number {
+    if (session1.startTime < session2.startTime) {
+      return -1;
+    } else if (session1.startTime > session2.startTime) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  formatStartTime(startTime: string): string {
+    const [hours, minutes] = startTime.split(':').slice(0, 2);
+    return `${hours}:${minutes}`;
+  }
+
+
+ 
 }

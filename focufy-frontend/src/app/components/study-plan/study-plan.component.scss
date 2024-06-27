@@ -1,0 +1,28 @@
+.session-study {
+    background-color: rgb(255, 151, 119); /* Esempio di colore per lo session type 'study' */
+  }
+  
+  .session-rest {
+    background-color: rgb(148, 230, 249); /* Esempio di colore per lo session type 'rest' */
+  }
+  
+  .session-fun {
+    background-color: rgb(225, 255, 134); /* Esempio di colore per lo session type 'fun' */
+  }
+
+  .activity-session {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+
+  .mantra-text {
+        font-family: "Quattrocento", serif;
+        font-style: italic;
+        font-size:1.5em;
+        line-height: 1.3em;
+  }
+
+  .sessiondetails .fakebtn {
+    border: 1px solid black;
+  }
