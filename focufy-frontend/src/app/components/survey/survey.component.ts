@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, catchError, of, throwError } from 'rxjs';
 import { Answer } from 'src/app/models/answer';
 import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
@@ -60,7 +61,8 @@ export class SurveyComponent implements OnInit {
     private answerService: AnswerService,
     private fb: FormBuilder,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -422,6 +424,53 @@ export class SurveyComponent implements OnInit {
         return control.value !== null;
       default:
         return false;
+    }
+  }
+
+  createStudyPlanAndAssociateMantras(): void {
+    const userId = this.authService.getUserId();
+    if (userId !== null) {
+      // Recupera lo shortTermGoal dalle risposte dell'utente
+      const shortTermGoalQuestion = this.questionsPage.content.find(question => question.questionType === 'SHORT_TERM_GOAL');
+      const shortTermGoalQuestionId = shortTermGoalQuestion?.id;
+      const shortTermGoal = shortTermGoalQuestionId ? this.textAnswers[shortTermGoalQuestionId] : null;
+  
+      // Recupera numberOfDays dalle risposte dell'utente
+      const daysQuestion = this.questionsPage.content.find(question => question.questionType === 'DAYS');
+      const daysQuestionId = daysQuestion?.id;
+      const numberOfDays = daysQuestionId ? this.selectedAnswers[daysQuestionId] : null;
+  
+      // Verifica se entrambi i valori sono stati recuperati correttamente
+      if (shortTermGoal !== null && numberOfDays !== null) {
+        const studyPlanDTO = {
+          shortTermGoal: shortTermGoal,
+          numberOfDays: numberOfDays
+        };
+  
+        this.answerService.createStudyPlan(userId, studyPlanDTO).pipe(
+          catchError(error => {
+            console.error('Error creating study plan:', error);
+            return throwError('Error creating study plan. Please try again later.');
+          })
+        ).subscribe((studyPlanResponse) => {
+          console.log('Study plan created:', studyPlanResponse);
+          
+          this.answerService.addMantrasToStudyPlan(userId).pipe(
+            catchError(error => {
+              console.error('Error adding mantras to study plan:', error);
+              return throwError('Error adding mantras to study plan. Please try again later.');
+            })
+          ).subscribe((mantrasResponse) => {
+            console.log('Mantras added to study plan:', mantrasResponse);
+      
+            this.router.navigate(['/study-plan']);
+          });
+        });
+      } else {
+        console.error('Unable to fetch shortTermGoal or numberOfDays from user responses.');
+      }
+    } else {
+      console.error('UserId is null. Unable to create study plan or add mantras.');
     }
   }
 

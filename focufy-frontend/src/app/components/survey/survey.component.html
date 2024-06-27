@@ -8,7 +8,6 @@
       
       <h3><span>{{ userAvatarTemper.temperType}}</span>&nbsp;
       <span>{{ userAvatarChronotype.chronotypeType}}</span></h3>
-      <!-- <p>{{userAvatarUrl}}</p> -->
        <div class="row d-flex justify-content-center align-items-center">
         <div class="col-5"><img [src]="userAvatarUrl" class="img-fluid"/></div>
       
@@ -21,11 +20,7 @@
         </div>
        </div>
       
-      
-      
-       
-     <!--  <p>{{ userAvatarDescription }}</p> -->
-      <a routerLink="/study-plan"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2">Discover your study plan</button></a>
+      <a routerLink="/study-plan"><button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2" (click)="createStudyPlanAndAssociateMantras()">Discover your study plan</button></a>
   
     </div>
     <div *ngIf="questionsPage && currentQuestion && !showAvatar">
