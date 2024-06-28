@@ -1,0 +1,37 @@
+.conceal-radio {
+    float: left;
+    margin: 0 5px 0 0;
+    width: 230px;
+    height: 120px;
+    position: relative;
+  }
+  
+  .conceal-radio label,
+  .conceal-radio input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .conceal-radio input[type="radio"] {
+    opacity: 0.011;
+    z-index: 100;
+  }
+  
+  .conceal-radio input[type="radio"]:checked + label {
+    background: #20b8be;
+    border-radius: 4px;
+  }
+  
+  .conceal-radio label {
+    cursor: pointer;
+    z-index: 90;
+    line-height: 1.2em;
+  }
+  
+  #answer-list li{
+    width: 35% !important;
+  }

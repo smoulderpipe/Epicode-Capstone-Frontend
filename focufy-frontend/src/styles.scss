@@ -87,12 +87,4 @@ form small {
     min-height: 90vh;
 }
 
-input[type="radio"]:focus {
-    outline: max(2px, 0.15em) solid currentColor;
-    outline-offset: max(2px, 0.15em);
-  }
 
-  :root {
-    --form-control-color: rebeccapurple;
-  }
-  

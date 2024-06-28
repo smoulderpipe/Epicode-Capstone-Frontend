@@ -1,6 +1,7 @@
 
 <div>
   
+  
   <div class="container m-5 p-5 text-center" id="survey-container">
     
     <div *ngIf="showAvatar">
@@ -38,20 +39,24 @@
                 <h4 class="fw-bold">{{ currentQuestion.questionText }}</h4>
               </div>
            
-            <div class="answers-list">
+            <div class="answers-list" id="answer-list">
               <ng-container [ngSwitch]="currentQuestion.questionType">
-                <ul class="list-unstyled" *ngSwitchCase="'CHRONOTYPE'">
-                  <li *ngFor="let answer of answersMap[currentQuestion.id] || []">
+                <ul class="list-unstyled row justify-content-center" *ngSwitchCase="'CHRONOTYPE'">
+                  <li class="justify-content-center d-flex mb-3" *ngFor="let answer of answersMap[currentQuestion.id] || []">
+                    <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
                     <input type="radio" [value]="answer.id" [formControlName]="getFormControlName(currentQuestion)"
                       [attr.name]="'question' + currentQuestion.id">
-                    {{ answer.answerText }}
+                      <label class="d-flex align-items-center justify-content-center p-3">{{ answer.answerText }}</label>
+                    </div>
                   </li>
                 </ul>
-                <ul class="list-unstyled" *ngSwitchCase="'TEMPER'">
-                  <li *ngFor="let answer of answersMap[currentQuestion.id] || []">
-                    <input type="radio" [value]="answer.id" [formControlName]="getFormControlName(currentQuestion)"
+                <ul class="list-unstyled row justify-content-center" *ngSwitchCase="'TEMPER'">
+                  <li class="justify-content-center d-flex mb-3" *ngFor="let answer of answersMap[currentQuestion.id] || []">
+                    <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
+                    <input class="me-2" type="radio" [value]="answer.id" [formControlName]="getFormControlName(currentQuestion)"
                       [attr.name]="'question' + currentQuestion.id">
-                    {{ answer.answerText }}
+                  <label class="d-flex align-items-center justify-content-center p-3"> {{ answer.answerText }}</label>
+                </div>
                   </li>
                 </ul>
                 <input type="text" *ngSwitchCase="'LONG_TERM_GOAL'"

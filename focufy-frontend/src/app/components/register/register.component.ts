@@ -45,8 +45,8 @@ export class RegisterComponent implements OnInit {
       this.http.post(this.baseUrl, user)
         .subscribe(
           response => {
-            console.log('Utente creato con successo:', response);
-            alert('Grazie per esserti registrato!');
+            console.log('User successfully created:', response);
+            alert('Thank you for your registration!');
             window.location.href = "/login";
           },
           error => {
@@ -54,19 +54,19 @@ export class RegisterComponent implements OnInit {
               const errorMessage = error.error;
               const regex = /Email.*is already in use\./i;
               if (regex.test(errorMessage)) {
-                alert('Email già registrata. Prova con un altro indirizzo email.');
+                alert('This e-mail is already in use. Try with a different e-mail address.');
               } else {
-                console.error('Errore nella creazione dell utente:', error);
-                alert('Si è verificato un errore, riprovare più tardi');
+                console.error('Error while creating user:', error);
+                alert('An error occurred, try again later');
               }
             } else {
-              console.error('Errore nella creazione dell utente:', error);
-              alert('Si è verificato un errore, riprovare più tardi');
+              console.error('Error while creating user:', error);
+              alert('An error occurred, try again later');
             }
           }
         );
     } else {
-      console.error('Il form non è valido!');
+      console.error('The form is not valid!');
     }
   }
 

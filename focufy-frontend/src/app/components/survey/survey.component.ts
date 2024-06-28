@@ -107,6 +107,8 @@ export class SurveyComponent implements OnInit {
       case 'SHORT_TERM_GOAL':
       case 'DAYS':
       case 'SATISFACTION':
+      case 'CHECKPOINT':
+      case 'DEADLINE':
       case 'RESTART':
         this.personalGoalsForm.addControl(controlName, new FormControl(null));
         break;
