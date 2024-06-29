@@ -3,7 +3,12 @@
     <div *ngIf="!isLoading">
       <div *ngIf="studyPlan">
         <h2>Study Plan</h2>
-        <p class="fs-5"><span class="btn btn-dark rounded-0 text-uppercase fs-5"> {{ studyPlan.shortTermGoal }} </span> is your proximal goal.</p>
+        <p class="fs-5">
+          <span class="btn btn-dark rounded-0 text-uppercase fs-5">
+            {{ studyPlan.shortTermGoal }}
+          </span>
+          is your proximal goal.
+        </p>
 
         <div *ngFor="let day of studyPlan.days" [id]="day.name" class="p5">
           
@@ -19,8 +24,10 @@
                     <p class="my-0 fs-4"><i></i> {{ session.activitySessionType }}</p>
                     <div class="row sessiondetails">
                       <div class="col d-flex">
-                        <span class="me-2 my-0 d-flex"><i class="d-flex align-items-center">from about</i> <span class="fs-5 ms-2 bg-light px-3 py-1 rounded-pill fakebtn">{{formatStartTime(session.startTime) }}</span></span>
-                        <span class="my-0 d-flex"><i class="d-flex align-items-center">for about</i> <span class="fs-5 ms-2 me-1 bg-light px-3 py-1 rounded-pill fakebtn">{{ session.duration }} hours</span></span>
+                        <span class="me-2 my-0 d-flex"><i class="d-flex align-items-center">from about</i> 
+                        <span class="fs-5 ms-2 bg-light px-3 py-1 rounded-pill fakebtn">{{formatStartTime(session.startTime) }}</span></span>
+                        <span class="my-0 d-flex"><i class="d-flex align-items-center">for about</i> 
+                        <span class="fs-5 ms-2 me-1 bg-light px-3 py-1 rounded-pill fakebtn">{{ session.duration }} hours</span></span>
                       </div>
                     </div>
                   </div>
@@ -39,10 +46,16 @@
               <ul>
                 <li *ngFor="let question of day.questions">
                   {{ question.questionText }}
-                  <input type="radio"/>Yes
-                  <input type="radio"/>No
+                  <ng-container *ngIf="question.questionType === 'CHECKPOINT'">
+                    <input type="radio" name="answer-{{question.id}}" (change)="onAnswerChange(day, question, true)" />Yes
+                    <input type="radio" name="answer-{{question.id}}" (change)="onAnswerChange(day, question, false)" />No
+                  </ng-container>
+                  <ng-container *ngIf="question.questionType === 'RESTART'">
+                    <button (click)="onRestartAnswer(day, question)">Restart</button>
+                  </ng-container>
                 </li>
               </ul>
+              <button (click)="submitAnswers(day)">Submit Answers</button>
             </div>
           </div>
 
@@ -52,10 +65,16 @@
               <ul>
                 <li *ngFor="let question of day.questions">
                   {{ question.questionText }}
-                  <input type="radio"/>Yes
-                  <input type="radio"/>No
+                  <ng-container *ngIf="question.questionType === 'DEADLINE'">
+                    <input type="radio" name="answer-{{question.id}}" (change)="onAnswerChange(day, question, true)" />Yes
+                    <input type="radio" name="answer-{{question.id}}" (change)="onAnswerChange(day, question, false)" />No
+                  </ng-container>
+                  <ng-container *ngIf="question.questionType === 'RESTART'">
+                    <button (click)="onRestartAnswer(day, question)">Restart</button>
+                  </ng-container>
                 </li>
               </ul>
+              <button (click)="submitAnswers(day)">Submit Answers</button>
             </div>
           </div>
         </div>

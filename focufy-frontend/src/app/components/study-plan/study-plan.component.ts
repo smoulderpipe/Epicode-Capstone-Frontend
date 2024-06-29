@@ -1,5 +1,7 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
-import { ActivitySession, StudyPlan } from 'src/app/models/studyPlan';
+import { Question } from 'src/app/models/question';
+import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
+import { AnswerService } from 'src/app/services/answer.service';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
@@ -14,8 +16,13 @@ export class StudyPlanComponent implements AfterViewInit, AfterViewChecked {
   today: string = new Date().toISOString().split('T')[0];
   isLoading: boolean = true;
   isDataLoaded: boolean = false;
+  answers: { [key: number]: boolean } = {};  // Per salvare le risposte dell'utente
 
-  constructor(private studyPlanService: StudyPlanService, private authService: AuthService) {}
+  constructor(
+    private studyPlanService: StudyPlanService, 
+    private authService: AuthService, 
+    private answerService: AnswerService
+  ) {}
 
   ngOnInit(): void {
     const userId = this.authService.getUserId();
@@ -82,5 +89,61 @@ export class StudyPlanComponent implements AfterViewInit, AfterViewChecked {
     } else {
       console.log("Today day not found:", this.today);  // Log per verificare
     }
+  }
+
+  onAnswerChange(day: Day, question: Question, answer: boolean) {
+    this.answers[question.id] = answer;
+  }
+
+  onRestartAnswer(day: Day, question: Question) {
+    const restartAnswer = {
+      questionId: question.id,
+      answerText: 'Restart',
+      personalAnswerType: 'RESTART'
+    };
+
+    this.answerService.savePersonalAnswers([restartAnswer]).subscribe(
+      (response) => {
+        console.log('Restart answer submitted successfully', response);
+      },
+      (error) => {
+        console.error('Error submitting restart answer', error);
+      }
+    );
+  }
+
+  submitAnswers(day: Day) {
+    const checkpointQuestions = day.questions!.filter(question =>
+      question.questionType === 'CHECKPOINT' || question.questionType === 'DEADLINE'
+    );
+    
+    const validQuestions = checkpointQuestions.filter(question => question.id != null);
+
+    console.log('Valid checkpoint questions:', validQuestions);
+    
+    if (validQuestions.length !== checkpointQuestions.length) {
+      console.error('Non tutte le domande hanno un id valido:', checkpointQuestions);
+      return;
+    }
+    
+    const personalAnswers = validQuestions.map(question => ({
+      answerText: this.answers[question.id!] ? 'true' : 'false',
+      questionId: question.id!,
+      personalAnswerType: question.questionType === 'CHECKPOINT' ? 'CHECKPOINT' : 'DEADLINE',
+      userId: this.authService.getUserId()  // Chiamata corretta del metodo getUserId()
+    }));
+
+    console.log('Sending personal answers:', personalAnswers);  // Log per verificare
+    
+    this.answerService.savePersonalAnswers(personalAnswers).subscribe(
+      (response) => {
+        console.log('Answers submitted successfully', response);
+        // Aggiungi qui la logica per gestire la risposta positiva, se necessario
+      },
+      (error) => {
+        console.error('Error submitting answers', error);
+        // Aggiungi qui la logica per gestire l'errore, se necessario
+      }
+    );
   }
 }
