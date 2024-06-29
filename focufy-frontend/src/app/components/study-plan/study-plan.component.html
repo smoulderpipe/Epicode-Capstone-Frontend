@@ -1,75 +1,73 @@
 <div>
-    <div class="container m5 p-5">
-      <div *ngIf="!isLoading">
-        <div *ngIf="studyPlan">
-          <h2>Study Plan</h2>
-          <p class="fs-5"><span class="btn btn-dark rounded-0 text-uppercase fs-5"> {{ studyPlan.shortTermGoal }} </span> is your proximal goal.</p>
-    
-          <div *ngFor="let day of studyPlan.days" class="p5">
-            
-            <!-- <p><strong>Type:</strong> {{ day.type }}</p> -->
-            
-            <div *ngIf="day.type === 'StudyDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
-                
-                <div class="col">
-                    <div *ngIf="day.activitySessions && day.activitySessions.length > 0">
-                        <div *ngFor="let session of day.activitySessions.slice().sort(compareSessions)">
-                            <div [ngClass]="{
-                              'session-study': session.activitySessionType === 'STUDY',
-                              'session-rest': session.activitySessionType === 'REST',
-                              'session-fun': session.activitySessionType === 'FUN'
-                            }" [style.height.px]="session.duration * 30" class="activity-session p-3">
-                              <p class="my-0 fs-4"><i></i> {{ session.activitySessionType }}</p>
-                              <div class="row sessiondetails">
-                                <div class="col d-flex">
-                              <span class="me-2 my-0 d-flex"><i class="d-flex align-items-center">from about</i> <span class="fs-5 ms-2 bg-light px-3 py-1 rounded-pill fakebtn">{{formatStartTime(session.startTime) }}</span></span>
-                              <span class="my-0 d-flex"><i class="d-flex align-items-center">for about</i> <span class="fs-5 ms-2 me-1 bg-light px-3 py-1 rounded-pill fakebtn">{{ session.duration }} hours</span></span>
-                            </div>
-                            </div>
-                            </div>
-                          </div>
+  <div class="container m5 p-5">
+    <div *ngIf="!isLoading">
+      <div *ngIf="studyPlan">
+        <h2>Study Plan</h2>
+        <p class="fs-5"><span class="btn btn-dark rounded-0 text-uppercase fs-5"> {{ studyPlan.shortTermGoal }} </span> is your proximal goal.</p>
+
+        <div *ngFor="let day of studyPlan.days" [id]="day.name" class="p5">
+          
+          <div *ngIf="day.type === 'StudyDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
+            <div class="col">
+              <div *ngIf="day.activitySessions && day.activitySessions.length > 0">
+                <div *ngFor="let session of day.activitySessions.slice().sort(compareSessions)">
+                  <div [ngClass]="{
+                    'session-study': session.activitySessionType === 'STUDY',
+                    'session-rest': session.activitySessionType === 'REST',
+                    'session-fun': session.activitySessionType === 'FUN'
+                  }" [style.height.px]="session.duration * 30" class="activity-session p-3">
+                    <p class="my-0 fs-4"><i></i> {{ session.activitySessionType }}</p>
+                    <div class="row sessiondetails">
+                      <div class="col d-flex">
+                        <span class="me-2 my-0 d-flex"><i class="d-flex align-items-center">from about</i> <span class="fs-5 ms-2 bg-light px-3 py-1 rounded-pill fakebtn">{{formatStartTime(session.startTime) }}</span></span>
+                        <span class="my-0 d-flex"><i class="d-flex align-items-center">for about</i> <span class="fs-5 ms-2 me-1 bg-light px-3 py-1 rounded-pill fakebtn">{{ session.duration }} hours</span></span>
                       </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="col">
-                    <h3 class="fw-bold">{{ day.name }}</h3>
-                    <p class="mantra-text"> &ldquo;{{ day.mantra }}&rdquo; </p>
-                </div>
-              
-              
-              
-            </div>
-            
-            <div *ngIf="day.type === 'CheckpointDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
-              <div class="col">
-                <h3>Checkpoint {{ day.name }}</h3>
-                <ul>
-                  <li *ngFor="let question of day.questions">
-                    {{ question.questionText }}
-                  </li>
-                </ul>
               </div>
             </div>
-  
-            <div *ngIf="day.type === 'DeadlineDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
-              <div class="col">
-                <h3>Deadline {{ day.name }}</h3>
-                <ul>
-                  <li *ngFor="let question of day.questions">
-                    {{ question.questionText }}
-                  </li>
-                </ul>
-              </div>
+            <div class="col">
+              <h3 class="fw-bold">{{ day.name }}</h3>
+              <p class="mantra-text"> &ldquo;{{ day.mantra }}&rdquo; </p>
+            </div>
+          </div>
+          
+          <div *ngIf="day.type === 'CheckpointDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
+            <div class="col">
+              <h3>Checkpoint {{ day.name }}</h3>
+              <ul>
+                <li *ngFor="let question of day.questions">
+                  {{ question.questionText }}
+                  <input type="radio"/>Yes
+                  <input type="radio"/>No
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div *ngIf="day.type === 'DeadlineDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
+            <div class="col">
+              <h3>Deadline {{ day.name }}</h3>
+              <ul>
+                <li *ngFor="let question of day.questions">
+                  {{ question.questionText }}
+                  <input type="radio"/>Yes
+                  <input type="radio"/>No
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-  
-        <div *ngIf="!studyPlan">
-          <p>No study plan found for this user.</p>
-        </div>
       </div>
-  
-      <div *ngIf="isLoading">
-        <p>Loading study plan...</p>
+
+      <div *ngIf="!studyPlan">
+        <p>No study plan found for this user.</p>
       </div>
     </div>
+
+    <div *ngIf="isLoading">
+      <p>Loading study plan...</p>
+    </div>
   </div>
+</div>

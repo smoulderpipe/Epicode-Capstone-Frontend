@@ -21,6 +21,7 @@ export interface Day {
   mantra?: Mantra;
   activitySessions?: ActivitySession[];
   questions?: Question[];
-  name: string; 
+  name: string;
+  date: string;
 }
 

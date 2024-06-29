@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivitySession, StudyPlan } from 'src/app/models/studyPlan';
 
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,9 +9,11 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
   templateUrl: './study-plan.component.html',
   styleUrls: ['./study-plan.component.scss']
 })
-export class StudyPlanComponent {
+export class StudyPlanComponent implements AfterViewInit, AfterViewChecked {
   studyPlan!: StudyPlan;
+  today: string = new Date().toISOString().split('T')[0];
   isLoading: boolean = true;
+  isDataLoaded: boolean = false;
 
   constructor(private studyPlanService: StudyPlanService, private authService: AuthService) {}
 
@@ -22,6 +24,7 @@ export class StudyPlanComponent {
         (data) => {
           this.studyPlan = data;
           this.isLoading = false;
+          this.isDataLoaded = true;
         },
         (error) => {
           console.error('Error fetching study plan:', error);
@@ -31,6 +34,19 @@ export class StudyPlanComponent {
     } else {
       console.error('User ID not found');
       this.isLoading = false;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.isDataLoaded) {
+      this.scrollToToday();
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.isDataLoaded) {
+      this.scrollToToday();
+      this.isDataLoaded = false;  // Assicura che lo scroll avvenga solo una volta
     }
   }
 
@@ -49,6 +65,22 @@ export class StudyPlanComponent {
     return `${hours}:${minutes}`;
   }
 
-
- 
+  scrollToToday() {
+    const todayDay = this.studyPlan.days.find(day => day.date === this.today);
+    if (todayDay) {
+      const element = document.getElementById(todayDay.name);
+      if (element) {
+        console.log("Scrolling to:", todayDay.name);  // Log per verificare
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementPosition - 300,
+          behavior: 'smooth'
+        });
+      } else {
+        console.log("Element not found:", todayDay.name);  // Log per verificare
+      }
+    } else {
+      console.log("Today day not found:", this.today);  // Log per verificare
+    }
+  }
 }
