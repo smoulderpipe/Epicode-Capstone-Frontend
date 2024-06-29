@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, catchError, of, throwError } from 'rxjs';
+import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
 import { Answer } from 'src/app/models/answer';
 import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
 import { Avatar, Chronotype, Temper } from 'src/app/models/avatar';
@@ -203,20 +203,16 @@ export class SurveyComponent implements OnInit {
   }
 
   submitAnswers(): void {
-    console.log('Selected answers:', this.selectedAnswers);
-    console.log('Text answers:', this.textAnswers);
-  
     const userId = Number(this.authService.getUserId());
-  
     if (isNaN(userId)) {
       console.error('User ID is invalid. Cannot submit answers.');
       return;
     }
-  
+
     const sharedAnswers: AssignSharedAnswer[] = [];
     const personalAnswers: any[] = [];
     const sharedAnswersObservables: Observable<Answer[]>[] = [];
-  
+
     for (const questionId in this.selectedAnswers) {
       const answer = this.selectedAnswers[questionId];
       const question = this.questionsPage.content.find(q => q.id === +questionId);
@@ -232,7 +228,7 @@ export class SurveyComponent implements OnInit {
             );
             sharedAnswersObservables.push(observable);
             break;
-  
+
           case 'DAYS':
           case 'SATISFACTION':
             personalAnswers.push({
@@ -242,13 +238,13 @@ export class SurveyComponent implements OnInit {
               personalAnswerType: question.questionType
             });
             break;
-  
+
           default:
             break;
         }
       }
     }
-  
+
     for (const questionId in this.textAnswers) {
       const answer = this.textAnswers[questionId];
       const question = this.questionsPage.content.find(q => q.id === +questionId);
@@ -268,13 +264,14 @@ export class SurveyComponent implements OnInit {
         }
       }
     }
-  
+
     let hasErrors = false;
     let errorMessage = '';
-  
-    sharedAnswersObservables.forEach((observable, index) => {
-      observable.subscribe(
-        answers => {
+
+    // Utilizza forkJoin per gestire le richieste asincrone delle risposte condivise
+    forkJoin(sharedAnswersObservables).subscribe(
+      (responses: Answer[][]) => {
+        responses.forEach((answers, index) => {
           const questionId = Number(Object.keys(this.selectedAnswers)[index]);
           const answer = this.selectedAnswers[questionId];
           const matchingAnswer = answers.find(a => a.id === answer);
@@ -284,71 +281,58 @@ export class SurveyComponent implements OnInit {
               answerId: matchingAnswer.id
             });
           }
-        },
-        error => {
-          hasErrors = true;
-          errorMessage = `Error loading shared answers for this question`;
-          console.error(errorMessage);
-        }
-      );
-    });
-  
-    const allSharedObservablesComplete = new Promise((resolve) => {
-      if (sharedAnswersObservables.length === 0) {
-        resolve(true);
-      } else {
-        Promise.all(sharedAnswersObservables.map(obs => obs.toPromise())).then(() => {
-          resolve(true);
-        }).catch(() => {
-          resolve(false);
         });
-      }
-    });
-  
-    allSharedObservablesComplete.then(sharedCompleted => {
-      if (hasErrors || !sharedCompleted) {
-        if (errorMessage) {
-          console.error('Error submitting answers:', errorMessage);
-        } else {
-          console.error('An error occurred while submitting answers.');
+
+        // Dopo aver completato le richieste delle risposte condivise, gestisci il salvataggio
+        if (sharedAnswers.length > 0) {
+          this.answerService.assignSharedAnswersToUser(sharedAnswers)
+            .pipe(
+              catchError(error => {
+                hasErrors = true;
+                errorMessage = `Error assigning shared answers: ${error.message}`;
+                console.error(errorMessage);
+                return throwError('Something went wrong. Please try again later.');
+              })
+            )
+            .subscribe(
+              response => {
+                console.log('Shared answers assigned:', response);
+                this.loadUserAvatar(userId);
+              },
+              error => {
+                console.error('Subscription error:', error);
+                // Gestisci qui l'errore HTTP, ad esempio mostrando un messaggio all'utente
+              }
+            );
         }
-        return;
+
+        // Gestisci le risposte personali
+        if (personalAnswers.length > 0) {
+          this.answerService.savePersonalAnswers(personalAnswers)
+            .pipe(
+              catchError(error => {
+                hasErrors = true;
+                errorMessage = `Error saving personal answers: ${error.message}`;
+                console.error(errorMessage);
+                return throwError('Something went wrong. Please try again later.');
+              })
+            )
+            .subscribe(
+              (response) => {
+                console.log('Personal answers saved:', response);
+                this.loadUserAvatar(userId);
+              }
+            );
+        } else {
+          this.loadUserAvatar(userId);
+        }
+      },
+      error => {
+        hasErrors = true;
+        errorMessage = `Error loading shared answers: ${error.message}`;
+        console.error(errorMessage);
       }
-  
-      if (sharedAnswers.length > 0) {
-        this.answerService.assignSharedAnswersToUser(sharedAnswers)
-          .pipe(
-            catchError(error => {
-              console.error('Error assigning shared answers:', error);
-              return throwError('Something went wrong. Please try again later.');
-            })
-          )
-          .subscribe(
-            response => {
-              console.log('Shared answers assigned:', response);
-              this.loadUserAvatar(userId);
-            }
-          );
-      }
-  
-      if (personalAnswers.length > 0) {
-        this.answerService.savePersonalAnswers(personalAnswers)
-          .pipe(
-            catchError(error => {
-              console.error('Error saving personal answers:', error);
-              return throwError('Something went wrong. Please try again later.');
-            })
-          )
-          .subscribe(
-            (response) => {
-              console.log('Personal answers saved:', response);
-              this.loadUserAvatar(userId);
-            }
-          );
-      } else {
-        this.loadUserAvatar(userId);
-      }
-    });
+    );
   }
 
 
@@ -382,29 +366,29 @@ export class SurveyComponent implements OnInit {
   }
 
 
-    loadUserAvatar(userId: number): void {
-      this.userService.getUserAvatar(userId)
-        .pipe(
-          catchError(error => {
-            console.error('Error loading user avatar:', error);
-            return of(null);
-          })
-        )
-        .subscribe(avatar => {
-          if (avatar) {
-            this.userAvatarUrl = avatar.image;
-            this.userAvatarDescription = avatar.description;
-            this.userAvatarChronotype = avatar.chronotype;
-            this.userAvatarTemper = avatar.temper;
-            this.userAvatarTemperDescription = avatar.temper.description;
-            this.userAvatarChronotypeDescription = avatar.chronotype.description;
-            this.userAvatarChronotypeMaxEnergyType = avatar.chronotype.maxEnergyType;
-            this.userAvatarTemperStrength = avatar.temper.strengthType;
-            this.userAvatarTemperRisk = avatar.temper.riskType;
-            this.showAvatar = true;
-          }
-        });
-    }
+  loadUserAvatar(userId: number): void {
+    this.userService.getUserAvatar(userId)
+      .pipe(
+        catchError(error => {
+          console.error('Error loading user avatar:', error);
+          return of(null);
+        })
+      )
+      .subscribe(avatar => {
+        if (avatar) {
+          this.userAvatarUrl = avatar.image;
+          this.userAvatarDescription = avatar.description;
+          this.userAvatarChronotype = avatar.chronotype;
+          this.userAvatarTemper = avatar.temper;
+          this.userAvatarTemperDescription = avatar.temper.description;
+          this.userAvatarChronotypeDescription = avatar.chronotype.description;
+          this.userAvatarChronotypeMaxEnergyType = avatar.chronotype.maxEnergyType;
+          this.userAvatarTemperStrength = avatar.temper.strengthType;
+          this.userAvatarTemperRisk = avatar.temper.riskType;
+          this.showAvatar = true;
+        }
+      });
+  }
 
   isCurrentAnswerValid(): boolean {
     const currentQuestion = this.currentQuestion;
@@ -436,19 +420,19 @@ export class SurveyComponent implements OnInit {
       const shortTermGoalQuestion = this.questionsPage.content.find(question => question.questionType === 'SHORT_TERM_GOAL');
       const shortTermGoalQuestionId = shortTermGoalQuestion?.id;
       const shortTermGoal = shortTermGoalQuestionId ? this.textAnswers[shortTermGoalQuestionId] : null;
-  
+
       // Recupera numberOfDays dalle risposte dell'utente
       const daysQuestion = this.questionsPage.content.find(question => question.questionType === 'DAYS');
       const daysQuestionId = daysQuestion?.id;
       const numberOfDays = daysQuestionId ? this.selectedAnswers[daysQuestionId] : null;
-  
+
       // Verifica se entrambi i valori sono stati recuperati correttamente
       if (shortTermGoal !== null && numberOfDays !== null) {
         const studyPlanDTO = {
           shortTermGoal: shortTermGoal,
           numberOfDays: numberOfDays
         };
-  
+
         this.answerService.createStudyPlan(userId, studyPlanDTO).pipe(
           catchError(error => {
             console.error('Error creating study plan:', error);
@@ -456,7 +440,7 @@ export class SurveyComponent implements OnInit {
           })
         ).subscribe((studyPlanResponse) => {
           console.log('Study plan created:', studyPlanResponse);
-          
+
           this.answerService.addMantrasToStudyPlan(userId).pipe(
             catchError(error => {
               console.error('Error adding mantras to study plan:', error);
@@ -464,7 +448,7 @@ export class SurveyComponent implements OnInit {
             })
           ).subscribe((mantrasResponse) => {
             console.log('Mantras added to study plan:', mantrasResponse);
-      
+
             // Naviga verso la pagina dello studio solo dopo il completamento delle operazioni
             this.router.navigate(['/study-plan']);
           });

@@ -31,7 +31,7 @@
                       </div>
                 </div>
                 <div class="col">
-                    <h3 class="fw-bold">Day {{ day.id }}</h3>
+                    <h3 class="fw-bold">{{ day.name }}</h3>
                     <p class="mantra-text"> &ldquo;{{ day.mantra }}&rdquo; </p>
                 </div>
               
@@ -39,21 +39,35 @@
               
             </div>
             
-            <div *ngIf="day.type === 'CheckpointDay'">
-              <p>This is a checkpoint day.</p>
+            <div *ngIf="day.type === 'CheckpointDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
+              <div class="col">
+                <h3>Checkpoint {{ day.name }}</h3>
+                <ul>
+                  <li *ngFor="let question of day.questions">
+                    {{ question.questionText }}
+                  </li>
+                </ul>
+              </div>
             </div>
-            
-            <div *ngIf="day.type === 'DeadlineDay'">
-              <p>This is the deadline day.</p>
+  
+            <div *ngIf="day.type === 'DeadlineDay'" class="row border border-1 border-black my-5 pt-3 pb-1">
+              <div class="col">
+                <h3>Deadline {{ day.name }}</h3>
+                <ul>
+                  <li *ngFor="let question of day.questions">
+                    {{ question.questionText }}
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-    
+  
         <div *ngIf="!studyPlan">
           <p>No study plan found for this user.</p>
         </div>
       </div>
-    
+  
       <div *ngIf="isLoading">
         <p>Loading study plan...</p>
       </div>

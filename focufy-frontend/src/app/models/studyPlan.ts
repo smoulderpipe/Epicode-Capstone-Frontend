@@ -1,3 +1,5 @@
+import { Question } from "./question";
+
 export interface StudyPlan {
     shortTermGoal: string;
     days: Day[];
@@ -18,5 +20,7 @@ export interface Day {
   type: 'StudyDay' | 'CheckpointDay' | 'DeadlineDay';
   mantra?: Mantra;
   activitySessions?: ActivitySession[];
+  questions?: Question[];
+  name: string; 
 }
 
