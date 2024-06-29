@@ -2,6 +2,8 @@
   <div class="container m5 p-5">
     <div *ngIf="!isLoading">
       <div *ngIf="studyPlan">
+        <div class="row">
+          <div class="col">
         <h2>Study Plan</h2>
         <p class="fs-5">
           <span class="btn btn-dark rounded-0 text-uppercase fs-5">
@@ -9,6 +11,8 @@
           </span>
           is your proximal goal.
         </p>
+      </div>
+    <div class="col text-end pe-0"><p class="fs-3">Welcome back, <span class="text-capitalize fw-bold">{{user?.name}}</span></p></div></div>
 
         <div *ngFor="let day of studyPlan.days" [id]="day.name" class="p5">
           

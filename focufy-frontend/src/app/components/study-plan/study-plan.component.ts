@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { Question } from 'src/app/models/question';
 import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
@@ -11,12 +12,13 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
   templateUrl: './study-plan.component.html',
   styleUrls: ['./study-plan.component.scss']
 })
-export class StudyPlanComponent implements AfterViewInit, AfterViewChecked {
+export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
   studyPlan!: StudyPlan;
   today: string = new Date().toISOString().split('T')[0];
   isLoading: boolean = true;
   isDataLoaded: boolean = false;
   answers: { [key: number]: boolean } = {};  // Per salvare le risposte dell'utente
+  user: { name: string } | null = null;  // Proprietà per memorizzare i dati dell'utente
 
   constructor(
     private studyPlanService: StudyPlanService, 
@@ -27,6 +29,15 @@ export class StudyPlanComponent implements AfterViewInit, AfterViewChecked {
   ngOnInit(): void {
     const userId = this.authService.getUserId();
     if (userId !== null) {
+      this.authService.getUserDetails(userId).subscribe(
+        (userDetails) => {
+          this.user = userDetails;  // Assumi che il servizio fornisca i dettagli dell'utente
+        },
+        (error) => {
+          console.error('Error fetching user details:', error);
+        }
+      );
+
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (data) => {
           this.studyPlan = data;
@@ -127,7 +138,7 @@ export class StudyPlanComponent implements AfterViewInit, AfterViewChecked {
     }
     
     const personalAnswers = validQuestions.map(question => ({
-      answerText: this.answers[question.id!] ? 'true' : 'false',
+      answerText: this.answers[question.id!] ? 'true' : 'false', // 'true' se Yes, 'false' se No
       questionId: question.id!,
       personalAnswerType: question.questionType === 'CHECKPOINT' ? 'CHECKPOINT' : 'DEADLINE',
       userId: this.authService.getUserId()  // Chiamata corretta del metodo getUserId()
@@ -146,4 +157,6 @@ export class StudyPlanComponent implements AfterViewInit, AfterViewChecked {
       }
     );
   }
+
+  
 }

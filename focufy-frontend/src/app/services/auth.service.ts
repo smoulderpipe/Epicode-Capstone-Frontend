@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { User } from '../models/user';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly baseURL = 'http://localhost:8080/auth';
+  private readonly baseUrl = environment.baseUrl;
+
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
   token$ = this.tokenSubject.asObservable();
   /* private loggedUserId: number | null = null; */
@@ -18,7 +21,7 @@ export class AuthService {
   login(email: string, password: string): Observable<string> {
     const loginData = { email, password };
 
-    return this.http.post<any>(`${this.baseURL}/login`, loginData, { responseType: 'text' as 'json' }).pipe(
+    return this.http.post<any>(`${this.baseUrl}/auth/login`, loginData, { responseType: 'text' as 'json' }).pipe(
       map(response => {
         const token = response;
 
@@ -51,7 +54,7 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.baseURL}/logout`, {}).pipe(
+    return this.http.post<void>(`${this.baseUrl}/logout`, {}).pipe(
       map(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
@@ -81,5 +84,25 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('access_token');
+  }
+
+  getUserDetails(userId: number): Observable<User> {
+    const url = `${this.baseUrl}/api/users/${userId}`;
+    const token = this.getToken();
+  
+    if (!token) {
+      throw new Error('Token not available');
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http.get<User>(url, { headers }).pipe(
+      catchError(error => {
+        console.error('Errore nel recupero dei dettagli dell\'utente:', error);
+        return throwError('Errore nel recupero dei dettagli dell\'utente');
+      })
+    );
   }
 } 
