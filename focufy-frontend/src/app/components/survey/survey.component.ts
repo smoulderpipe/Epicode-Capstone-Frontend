@@ -7,6 +7,7 @@ import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
 import { Avatar, Chronotype, Temper } from 'src/app/models/avatar';
 import { Page } from 'src/app/models/page';
 import { Question } from 'src/app/models/question';
+import { UpdateLongTermGoal } from 'src/app/models/updateLongTermGoal';
 import { AnswerService } from 'src/app/services/answer.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { SurveyService } from 'src/app/services/survey.service';
@@ -54,7 +55,6 @@ export class SurveyComponent implements OnInit {
   userAvatarTemperRisk: String = '';
   userAvatarTemperStrength: String = '';
   userAvatarChronotypeMaxEnergyType: String = '';
-
 
   constructor(
     private surveyService: SurveyService,
@@ -208,11 +208,11 @@ export class SurveyComponent implements OnInit {
       console.error('User ID is invalid. Cannot submit answers.');
       return;
     }
-
+  
     const sharedAnswers: AssignSharedAnswer[] = [];
     const personalAnswers: any[] = [];
     const sharedAnswersObservables: Observable<Answer[]>[] = [];
-
+  
     for (const questionId in this.selectedAnswers) {
       const answer = this.selectedAnswers[questionId];
       const question = this.questionsPage.content.find(q => q.id === +questionId);
@@ -228,7 +228,7 @@ export class SurveyComponent implements OnInit {
             );
             sharedAnswersObservables.push(observable);
             break;
-
+  
           case 'DAYS':
           case 'SATISFACTION':
             personalAnswers.push({
@@ -238,13 +238,13 @@ export class SurveyComponent implements OnInit {
               personalAnswerType: question.questionType
             });
             break;
-
+  
           default:
             break;
         }
       }
     }
-
+  
     for (const questionId in this.textAnswers) {
       const answer = this.textAnswers[questionId];
       const question = this.questionsPage.content.find(q => q.id === +questionId);
@@ -264,10 +264,10 @@ export class SurveyComponent implements OnInit {
         }
       }
     }
-
+  
     let hasErrors = false;
     let errorMessage = '';
-
+  
     // Utilizza forkJoin per gestire le richieste asincrone delle risposte condivise
     forkJoin(sharedAnswersObservables).subscribe(
       (responses: Answer[][]) => {
@@ -282,7 +282,7 @@ export class SurveyComponent implements OnInit {
             });
           }
         });
-
+  
         // Dopo aver completato le richieste delle risposte condivise, gestisci il salvataggio
         if (sharedAnswers.length > 0) {
           this.answerService.assignSharedAnswersToUser(sharedAnswers)
@@ -298,6 +298,7 @@ export class SurveyComponent implements OnInit {
               response => {
                 console.log('Shared answers assigned:', response);
                 this.loadUserAvatar(userId);
+                this.updateUserLongTermGoalIfNeeded(userId); // Chiamare qui l'aggiornamento del goal a lungo termine
               },
               error => {
                 console.error('Subscription error:', error);
@@ -305,7 +306,7 @@ export class SurveyComponent implements OnInit {
               }
             );
         }
-
+  
         // Gestisci le risposte personali
         if (personalAnswers.length > 0) {
           this.answerService.savePersonalAnswers(personalAnswers)
@@ -321,10 +322,12 @@ export class SurveyComponent implements OnInit {
               (response) => {
                 console.log('Personal answers saved:', response);
                 this.loadUserAvatar(userId);
+                this.updateUserLongTermGoalIfNeeded(userId); // Chiamare qui l'aggiornamento del goal a lungo termine
               }
             );
         } else {
           this.loadUserAvatar(userId);
+          this.updateUserLongTermGoalIfNeeded(userId); // Chiamare qui l'aggiornamento del goal a lungo termine
         }
       },
       error => {
@@ -335,6 +338,26 @@ export class SurveyComponent implements OnInit {
     );
   }
 
+  updateUserLongTermGoalIfNeeded(userId: number): void {
+    const longTermGoalQuestion = this.questionsPage.content.find(question => question.questionType === 'LONG_TERM_GOAL');
+    const longTermGoalQuestionId = longTermGoalQuestion?.id;
+    const longTermGoal = longTermGoalQuestionId ? this.textAnswers[longTermGoalQuestionId] : null;
+  
+    if (longTermGoal) {
+      const updateDTO: UpdateLongTermGoal = {
+        longTermGoal: longTermGoal
+      };
+  
+      this.userService.updateUserLongTermGoal(userId, updateDTO)
+        .subscribe(response => {
+          console.log('Long term goal updated:', response);
+          // Gestisci la risposta dal backend se necessario
+        }, error => {
+          console.error('Error updating long term goal:', error);
+          // Gestisci gli errori se necessario
+        });
+    }
+  }
 
   getSavedAnswer(questionId: number): any {
     return this.selectedAnswers[questionId];
@@ -364,7 +387,6 @@ export class SurveyComponent implements OnInit {
   getFormControlName(question: Question): string {
     return `${question.questionType.toLowerCase()}Question${question.id}`;
   }
-
 
   loadUserAvatar(userId: number): void {
     this.userService.getUserAvatar(userId)
@@ -460,6 +482,4 @@ export class SurveyComponent implements OnInit {
       console.error('UserId is null. Unable to create study plan or add mantras.');
     }
   }
-
 }
-
