@@ -19,19 +19,36 @@
   .conceal-radio input[type="radio"] {
     opacity: 0.011;
     z-index: 100;
+    transition: 0.2s;
+    cursor: pointer;
+    color: black;
   }
   
   .conceal-radio input[type="radio"]:checked + label {
-    background: #20b8be;
-    border-radius: 4px;
+    background: black !important;
+    color: white !important;
+    border-radius: 0px;
+    transition: 0.2s;
+  }
+
+  .conceal-radio input[type="radio"]:hover + label {
+    background: #DCDCDC;
+    color: black;
+    border-radius: 0px;
+    transition: 0.2s;
   }
   
   .conceal-radio label {
     cursor: pointer;
     z-index: 90;
     line-height: 1.2em;
+    transition: 0.2s;
+    color: black;
   }
   
   #answer-list li{
-    width: 35% !important;
+    width: 250px;
   }
+#answer-list ul {
+  width: 600px;
+}
