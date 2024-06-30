@@ -1,9 +1,7 @@
-import { HttpHeaders } from '@angular/common/http';
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { Question } from 'src/app/models/question';
 import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
 import { AnswerService } from 'src/app/services/answer.service';
-
 import { AuthService } from 'src/app/services/auth.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
 
@@ -17,8 +15,9 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   today: string = new Date().toISOString().split('T')[0];
   isLoading: boolean = true;
   isDataLoaded: boolean = false;
-  answers: { [key: number]: boolean } = {};  // Per salvare le risposte dell'utente
-  user: { name: string } | null = null;  // Proprietà per memorizzare i dati dell'utente
+  answers: { [key: number]: boolean } = {};
+  user: { name: string } | null = null;
+  submissionStatus: { [key: string]: boolean } = {};
 
   constructor(
     private studyPlanService: StudyPlanService, 
@@ -31,7 +30,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     if (userId !== null) {
       this.authService.getUserDetails(userId).subscribe(
         (userDetails) => {
-          this.user = userDetails;  // Assumi che il servizio fornisca i dettagli dell'utente
+          this.user = userDetails;
         },
         (error) => {
           console.error('Error fetching user details:', error);
@@ -64,7 +63,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   ngAfterViewChecked(): void {
     if (this.isDataLoaded) {
       this.scrollToToday();
-      this.isDataLoaded = false;  // Assicura che lo scroll avvenga solo una volta
+      this.isDataLoaded = false;  // Ensure scroll happens only once
     }
   }
 
@@ -86,20 +85,34 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   scrollToToday() {
     const todayDay = this.studyPlan.days.find(day => day.date === this.today);
     if (todayDay) {
-      const element = document.getElementById(todayDay.name);
-      if (element) {
-        console.log("Scrolling to:", todayDay.name);  // Log per verificare
-        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({
-          top: elementPosition - 300,
-          behavior: 'smooth'
-        });
+      const accordionIndex = this.studyPlan.days.findIndex(day => day.date === this.today);
+      if (accordionIndex !== -1) {
+        const accordionId = `#collapse-${accordionIndex}`;
+        const accordionElement = document.querySelector(accordionId);
+        if (accordionElement) {
+          console.log("Scrolling to:", todayDay.name);
+  
+          // Calcola la posizione desiderata meno 300px
+          const desiredPosition = accordionElement.getBoundingClientRect().top + window.scrollY - 300;
+  
+          // Effettua lo scroll alla posizione desiderata
+          window.scrollTo({
+            top: desiredPosition,
+            behavior: 'smooth'
+          });
+        } else {
+          console.log("Accordion element not found:", accordionId);
+        }
       } else {
-        console.log("Element not found:", todayDay.name);  // Log per verificare
+        console.log("Accordion index not found for today:", this.today);
       }
     } else {
-      console.log("Today day not found:", this.today);  // Log per verificare
+      console.log("Today day not found:", this.today);
     }
+  }
+
+  isToday(day: Day): boolean {
+    return day.date === this.today;
   }
 
   onAnswerChange(day: Day, question: Question, answer: boolean) {
@@ -127,36 +140,34 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     const checkpointQuestions = day.questions!.filter(question =>
       question.questionType === 'CHECKPOINT' || question.questionType === 'DEADLINE'
     );
-    
+
     const validQuestions = checkpointQuestions.filter(question => question.id != null);
 
     console.log('Valid checkpoint questions:', validQuestions);
-    
+
     if (validQuestions.length !== checkpointQuestions.length) {
-      console.error('Non tutte le domande hanno un id valido:', checkpointQuestions);
+      console.error('Not all questions have valid IDs:', checkpointQuestions);
       return;
     }
-    
+
     const personalAnswers = validQuestions.map(question => ({
-      answerText: this.answers[question.id!] ? 'true' : 'false', // 'true' se Yes, 'false' se No
+      answerText: this.answers[question.id!] ? 'true' : 'false',
       questionId: question.id!,
       personalAnswerType: question.questionType === 'CHECKPOINT' ? 'CHECKPOINT' : 'DEADLINE',
-      userId: this.authService.getUserId()  // Chiamata corretta del metodo getUserId()
+      userId: this.authService.getUserId()
     }));
 
-    console.log('Sending personal answers:', personalAnswers);  // Log per verificare
-    
+    console.log('Sending personal answers:', personalAnswers);
+
     this.answerService.savePersonalAnswers(personalAnswers).subscribe(
       (response) => {
         console.log('Answers submitted successfully', response);
-        // Aggiungi qui la logica per gestire la risposta positiva, se necessario
+        this.submissionStatus[day.name] = true;
       },
       (error) => {
         console.error('Error submitting answers', error);
-        // Aggiungi qui la logica per gestire l'errore, se necessario
+        this.submissionStatus[day.name] = false;
       }
     );
   }
-
-  
 }

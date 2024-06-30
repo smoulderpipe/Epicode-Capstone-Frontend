@@ -17,12 +17,79 @@
   }
 
   .mantra-text {
-        font-family: "Quattrocento", serif;
+        /* font-family: "Quattrocento", serif; */
         font-style: italic;
         font-size:1.5em;
+        font-weight: 300;
         line-height: 1.3em;
   }
 
   .sessiondetails .fakebtn {
     border: 1px solid black;
   }
+
+  .conceal-radio {
+    float: right;
+    margin: 0 5px 0 0;
+    width: 70px;
+    height: 40px;
+    position: relative;
+    top: -8px;
+    cursor: pointer;
+  }
+  
+  .conceal-radio label,
+  .conceal-radio input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  .conceal-radio input[type="radio"] {
+    opacity: 0.011;
+    z-index: 100;
+    cursor: pointer;
+  }
+  
+  .conceal-radio input[type="radio"]:checked + label {
+    background: black !important;
+    color: white;
+    border-radius: 0px;
+    transition: 0.2s;
+  }
+
+  .conceal-radio input[type="radio"]:hover + label {
+    background: #DCDCDC;
+    border-radius: 0px;
+    transition: 0.2s;
+  }
+  
+  .conceal-radio label {
+    cursor: pointer;
+    z-index: 90;
+    line-height: 1.2em;
+  }
+  
+  #answer-list li{
+    width: 35% !important;
+  }
+
+  #avatarFit {
+    display: none;
+    height: 200px;
+    width: 200px;
+    border: 2px dashed black;
+  }
+
+  #avatarFit:hover {
+    background: #DCDCDC;
+  }
+
+  .accordion-button:focus {
+    /* box-shadow: 0px 0px 3px 1px black; */
+    box-shadow: none;
+}
+  
