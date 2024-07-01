@@ -1,5 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CheckpointAnswer, DeadlineAnswer } from 'src/app/models/answer';
 import { Question } from 'src/app/models/question';
 import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
@@ -26,7 +27,8 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     private fb: FormBuilder,
     private studyPlanService: StudyPlanService,
     private authService: AuthService,
-    private answerService: AnswerService
+    private answerService: AnswerService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -145,19 +147,46 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.answers[question.id] = answer;
   }
 
-  onRestartAnswer(day: Day, question: Question) {
-    const restartAnswer = {
-      questionId: question.id,
-      answerText: 'Restart',
-      personalAnswerType: 'RESTART'
-    };
+  confirmRestart(day: any, question: any) {
+    const confirmation = confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
+    if (confirmation) {
+      this.onRestartAnswer(day, question);
+    } else {
+    }
+  }
 
-    this.answerService.savePersonalAnswers([restartAnswer]).subscribe(
+  onRestartAnswer(day: Day, question: Question) {
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      console.error('User ID not found');
+      return;
+    }
+  
+    const answers: any[] = [];
+  
+    if (day.questions) {
+      day.questions.forEach(question => {
+        const restartAnswer = {
+          questionId: question.id,
+          answerText: 'Restart',
+          personalAnswerType: 'RESTART',
+          userId: userId
+        };
+        answers.push(restartAnswer);
+      });
+    } else {
+      console.error('No questions found for the day');
+      return;
+    }
+  
+    this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
-        console.log('Restart answer submitted successfully', response);
+        console.log('Restart answers submitted successfully', response);
+        this.router.navigate(['/survey']);
       },
       (error) => {
-        console.error('Error submitting restart answer', error);
+        console.error('Error submitting restart answers', error);
+        this.router.navigate(['/survey']);
       }
     );
   }

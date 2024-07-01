@@ -106,7 +106,7 @@
                   <div class="col p-3 d-flex justify-content-center align-items-center">
                     <p *ngFor="let question of day.questions">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
-                        <button (click)="onRestartAnswer(day, question)" class="text-uppercase btn rounded-pill d-block"
+                        <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block"
                           id="avatarFit">Your avatar doesn't fit you anymore?</button>
                       </ng-container>
                     </p>
@@ -151,7 +151,7 @@
                   <div class="col p-3 d-flex justify-content-center align-items-center">
                     <p *ngFor="let question of day.questions">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
-                        <button (click)="onRestartAnswer(day, question)" class="text-uppercase btn rounded-pill d-block"
+                        <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block"
                           id="avatarFit">Your avatar doesn't fit you anymore?</button>
                       </ng-container>
                     </p>
