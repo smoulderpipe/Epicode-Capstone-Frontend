@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit{
     this.isLoggedIn$.subscribe(loggedIn => {
       console.log('Is logged in:', loggedIn);
       if (loggedIn) {
-        this.userId = this.authService.getUserId(); // Assicurati che userId sia inizializzato correttamente
+        this.userId = this.authService.getUserId();
       }
     });
   }

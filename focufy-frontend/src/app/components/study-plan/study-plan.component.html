@@ -1,4 +1,4 @@
-<div>
+<div class="d-flex justify-content-center">
   <div class="container m-5 p-5">
     <div *ngIf="!isLoading">
       <div *ngIf="studyPlan">
@@ -15,26 +15,30 @@
           <div class="col text-end">
             <p class="fs-3 mb-0">Welcome back, <span class="text-capitalize fw-bold">{{ user?.name }}</span></p>
             <a class="btn p-0" role="button" routerLink="/profile">
-            <button class="text-uppercase btn btn-dark rounded-pill px-5 py-3 mt-1">check your profile <i class="bi bi-arrow-right ms-2"></i></button>
-          </a>
+              <button class="text-uppercase btn btn-dark rounded-pill px-5 py-3 mt-1">
+                check your profile <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </a>
           </div>
         </div>
 
         <div class="accordion" id="studyPlanAccordion">
           <div *ngFor="let day of studyPlan.days; let i = index" class="accordion-item border-0 mb-3">
             <h2 class="accordion-header border-0" id="heading-{{ i }}">
-              <button class="accordion-button bg-light border border-1 border-black rounded-0 text-black" type="button" 
+              <button class="accordion-button bg-light border border-1 border-black rounded-0 text-black" type="button"
                       [class.show]="isToday(day)"
                       [attr.aria-expanded]="isToday(day)"
-                      data-bs-toggle="collapse" 
-                      [attr.data-bs-target]="'#collapse-' + i" 
+                      data-bs-toggle="collapse"
+                      [attr.data-bs-target]="'#collapse-' + i"
                       [attr.aria-controls]="'collapse-' + i">
-                {{ day.name }} - {{day.date | date:'longDate'}}
+                {{ day.name }} - {{day.date | date:'fullDate'}}
               </button>
             </h2>
             <div [id]="'collapse-' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading-' + i"
                  [class.show]="isToday(day)" aria-labelledby="headingOne" data-bs-parent="#studyPlanAccordion">
               <div class="accordion-body border-start border-end border-bottom border-1 border-black p-5">
+
+                <!-- Study Day -->
                 <div *ngIf="day.type === 'StudyDay'" class="row border border-1 border-black my-1 pt-3 pb-1">
                   <div class="col">
                     <h3 class="fw-bold">{{ day.name }} - Study</h3>
@@ -47,14 +51,14 @@
                           'session-study': session.activitySessionType === 'STUDY',
                           'session-rest': session.activitySessionType === 'REST',
                           'session-fun': session.activitySessionType === 'FUN'
-                        }" [style.height.px]="session.duration * 30" class="activity-session p-3">
+                        }" class="activity-session p-3">
+                          <!-- [style.height.px]="session.duration * 30" -->
                           <p class="my-0 fs-4"><i></i> {{ session.activitySessionType }}</p>
                           <div class="row sessiondetails">
                             <div class="col d-flex">
                               <span class="me-2 my-0 d-flex"><i class="d-flex align-items-center">from about</i>
-                                <span
-                                  class="fs-5 ms-2 bg-light px-3 py-1 rounded-pill fakebtn">{{ formatStartTime(session.startTime)
-                                  }}</span></span>
+                                <span class="fs-5 ms-2 bg-light px-3 py-1 rounded-pill fakebtn">{{ formatStartTime(session.startTime)
+                                }}</span></span>
                               <span class="my-0 d-flex"><i class="d-flex align-items-center">for about</i>
                                 <span class="fs-5 ms-2 me-1 bg-light px-3 py-1 rounded-pill fakebtn">{{ session.duration }}
                                   hours</span></span>
@@ -64,86 +68,97 @@
                       </div>
                     </div>
                   </div>
-                  
                 </div>
 
+                <!-- Checkpoint Day -->
                 <div *ngIf="day.type === 'CheckpointDay'" class="row border border-1 border-black my-0 pt-3 pb-3">
                   <h3 class="fw-bold">{{ day.name }} - Checkpoint</h3>
                   <div class="col">
-                    <div class="ps-3 pe-3 pb-3 border border-1 border-black">
-                      <p *ngFor="let question of day.questions" class="my-4">
-                        <ng-container *ngIf="question.questionType === 'CHECKPOINT'">
-                          {{ question.questionText }}
-                          <div class="conceal-radio d-flex justify-content-center border border-1 border-black mb-2">
-                            <input class="me-2" type="radio" name="answer-{{ question.id }}"
-                                   (change)="onAnswerChange(day, question, false)" />
-                            <label class="d-flex align-items-center justify-content-center p-3"> No</label>
-                          </div>
-                          <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
-                            <input class="me-2" type="radio" name="answer-{{ question.id }}"
-                                   (change)="onAnswerChange(day, question, true)" />
-                            <label class="d-flex align-items-center justify-content-center p-3"> Yes</label>
-                          </div>
-                        </ng-container>
-                      </p>
-
-                      <button (click)="submitAnswers(day)"
-                              class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">Submit
-                        Answers
-                      </button>
-
-                      <!-- Messaggio di conferma -->
-                      <p *ngIf="submissionStatus[day.name]" class="mt-3 mb-0 text-success text-center">Answers
-                        correctly submitted</p>
-                    </div>
+                    <form [formGroup]="formGroup" (ngSubmit)="submitAnswers(day)">
+                      <div class="ps-3 pe-3 pb-3 border border-1 border-black">
+                        <p *ngFor="let question of day.questions" class="my-4">
+                          <ng-container *ngIf="question.questionType === 'CHECKPOINT'">
+                            {{ question.questionText }}
+                            <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
+                              <input class="me-2" type="radio"
+                                     [formControlName]="question.id.toString()"
+                                     [value]="true"
+                                     (change)="onAnswerChange(day, question, true)" />
+                              <label class="d-flex align-items-center justify-content-center p-3"> Yes</label>
+                            </div>
+                            <div class="conceal-radio d-flex justify-content-center border border-1 border-black mb-2">
+                              <input class="me-2" type="radio"
+                                     [formControlName]="question.id.toString()"
+                                     [value]="false"
+                                     (change)="onAnswerChange(day, question, false)" />
+                              <label class="d-flex align-items-center justify-content-center p-3"> No</label>
+                            </div>
+                          </ng-container>
+                        </p>
+                        
+                        <button type="submit"
+                                [disabled]="!canSubmitAnswers(day)"
+                                class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">
+                          Submit Answers
+                        </button>
+                        
+                        <!-- Messaggio di conferma -->
+                        <p *ngIf="submissionStatus[day.name]" class="mt-3 mb-0 text-success text-center">Answers correctly submitted</p>
+                      </div>
+                    </form>
                   </div>
                   <div class="col p-3 d-flex justify-content-center align-items-center">
                     <p *ngFor="let question of day.questions">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
                         <button (click)="onRestartAnswer(day, question)"
-                                class="text-uppercase btn rounded-pill d-block" id="avatarFit">Your avatar doesn't
-                          fit you anymore?</button>
+                                class="text-uppercase btn rounded-pill d-block" id="avatarFit">Your avatar doesn't fit you anymore?</button>
                       </ng-container>
                     </p>
                   </div>
                 </div>
 
+                <!-- Deadline Day -->
                 <div *ngIf="day.type === 'DeadlineDay'" class="row border border-1 border-black my-0 pt-3 pb-3">
-                  <h3> {{ day.name }} - Deadline</h3>
+                  <h3>{{ day.name }} - Deadline</h3>
                   <div class="col">
-                    <div class="ps-3 pe-3 pb-3 border border-1 border-black">
-                      <p *ngFor="let question of day.questions" class="my-4">
-                        <ng-container *ngIf="question.questionType === 'DEADLINE'">
-                          {{ question.questionText }}
-                          <div class="conceal-radio d-flex justify-content-center border border-1 border-black mb-2">
-                            <input class="me-2" type="radio" name="answer-{{ question.id }}"
-                                   (change)="onAnswerChange(day, question, false)" />
-                            <label class="d-flex align-items-center justify-content-center p-3"> No</label>
-                          </div>
-                          <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
-                            <input class="me-2" type="radio" name="answer-{{ question.id }}"
-                                   (change)="onAnswerChange(day, question, true)" />
-                            <label class="d-flex align-items-center justify-content-center p-3"> Yes</label>
-                          </div>
-                        </ng-container>
-                      </p>
-
-                      <button (click)="submitAnswers(day)"
-                              class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">Submit
-                        Answers
-                      </button>
-
-                      <!-- Messaggio di conferma -->
-                      <p *ngIf="submissionStatus[day.name]" class="mt-3 mb-0 text-success text-center">Answers
-                        correctly submitted</p>
-                    </div>
+                    <form [formGroup]="formGroup" (ngSubmit)="submitAnswers(day)">
+                      <div class="ps-3 pe-3 pb-3 border border-1 border-black">
+                        <p *ngFor="let question of day.questions" class="my-4">
+                          <ng-container *ngIf="question.questionType === 'DEADLINE'">
+                            {{ question.questionText }}
+                            <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
+                              <input class="me-2" type="radio"
+                                     [formControlName]="question.id.toString()"
+                                     [value]="true"
+                                     (change)="onAnswerChange(day, question, true)" />
+                              <label class="d-flex align-items-center justify-content-center p-3"> Yes</label>
+                            </div>
+                            <div class="conceal-radio d-flex justify-content-center border border-1 border-black mb-2">
+                              <input class="me-2" type="radio"
+                                     [formControlName]="question.id.toString()"
+                                     [value]="false"
+                                     (change)="onAnswerChange(day, question, false)" />
+                              <label class="d-flex align-items-center justify-content-center p-3"> No</label>
+                            </div>
+                          </ng-container>
+                        </p>
+                        
+                        <button type="submit"
+                                [disabled]="!canSubmitAnswers(day)"
+                                class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">
+                          Submit Answers
+                        </button>
+                        
+                        <!-- Messaggio di conferma -->
+                        <p *ngIf="submissionStatus[day.name]" class="mt-3 mb-0 text-success text-center">Answers correctly submitted</p>
+                      </div>
+                    </form>
                   </div>
                   <div class="col p-3 d-flex justify-content-center align-items-center">
                     <p *ngFor="let question of day.questions">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
                         <button (click)="onRestartAnswer(day, question)"
-                                class="text-uppercase btn rounded-pill d-block" id="avatarFit">Your avatar doesn't
-                          fit you anymore?</button>
+                                class="text-uppercase btn rounded-pill d-block" id="avatarFit">Your avatar doesn't fit you anymore?</button>
                       </ng-container>
                     </p>
                   </div>

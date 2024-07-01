@@ -1,16 +1,17 @@
-<div>
+<div class="d-flex justify-content-center">
     <div class="container m-5 p-5">
         <div *ngIf="user && avatar">
             <div class="row">
+                <div class="col">
 
-                <div class="d-flex justify-content-between align-items-center px-0">
+                <div class="d-flex justify-content-between align-items-center">
                     <h2 class="pb-1">Hi, <span class="text-capitalize">{{ user.name }}.</span></h2>
                     <p class="mb-0 fs-4 text-center">you're a <span class="text-uppercase fw-bold">{{
                             avatar.temper.temperType }} {{ avatar.chronotype.chronotypeType }} </span></p>
                 </div>
 
                 <div class="profile-card border border-1 border-black">
-                    <div class="row p-3">
+                    <div class="row p-3 mx-3">
                         <div class="col-4">
                             <div class="pe-4"><img [src]="avatar.image" alt="Avatar Image"
                                     class="text-info img-fluid" /></div>
@@ -21,31 +22,17 @@
                             <p>Being <i>{{avatar.temper.temperType}}</i>, {{
                                 avatar.temper.description }}</p>
                                 <div class="d-flex justify-content-between pb-3">
-                            <p class="mb-0">Peak energy <span class="btn-light border border-1 border-black px-1">{{
+                            <p class="mb-0">Peak energy <span class="btn-light border border-1 border-black px-2">{{
                                     avatar.chronotype.maxEnergyType }}</span></p>
-                            <p class="mb-0">Strength <span class="btn-light border border-1 border-black px-1">{{
+                            <p class="mb-0">Strength <span class="btn-light border border-1 border-black px-2">{{
                                     avatar.temper.strengthType }}</span></p>
-                            <p class="mb-0">Risk <span class="btn-light border border-1 border-black px-1">{{
+                            <p class="mb-0">Risk <span class="btn-light border border-1 border-black px-2">{{
                                     avatar.temper.riskType }}</span></p>
                                     </div>
                                     <div class="d-flex justify-content-between mt-3 align-items-center"><i>Your avatar doesn't fit you anymore?</i>
                                     <button class="text-uppercase btn btn-dark rounded-pill d-block px-3" id="avatarFit">Restart your journey</button></div>
                         </div>
                     </div>
-                   <!--  <div class="row">
-                        <div class="col-4">
-                            <p class="mb-0 mt-3">Current study plan</p>
-                            <p class="text-uppercase">{{ studyPlan?.shortTermGoal }}</p>
-                            <p class="mb-0">Long term goal</p>
-                            <p class="text-info text-uppercase">{{ user.longTermGoal }}</p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 mt-3">Email</p>
-                            <p class="text-uppercase">{{ user.email }}</p>
-                            <p class="mb-0">Password</p>
-                            <p class="text-info text-uppercase">*********</p>
-                        </div>
-                    </div> -->
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center px-0 mt-5">
@@ -56,41 +43,31 @@
                     <div class="row p-3">
                         
                         <div class="col pt-3">
-                            <div class="d-flex justify-content-between pb-3">
-                                <p class="mb-0">Current goal <span class="text-uppercase btn-light border border-1 border-black px-1">{{
+                            <div class="d-flex justify-content-start pb-3">
+                                <p class="mb-0 me-3">Current goal <span class="text-uppercase btn-light border border-1 border-black px-2">{{
                                         studyPlan?.shortTermGoal }}</span></p>
-                                <p class="mb-0">Long term goal <span class="btn-light border border-1 border-black px-1">{{
+                                <p class="mb-0">Long term goal <span class="text-uppercase btn-light border border-1 border-black px-2">{{
                                         user.longTermGoal }}</span></p>
                                 
                                         </div>
-                            <p>The <i>{{ avatar.chronotype.chronotypeType }}</i> chronotypes {{
-                                avatar.chronotype.description }}</p>
-                            <p>Being <i>{{avatar.temper.temperType}}</i>, {{
-                                avatar.temper.description }}</p>
+                            <p class="mb-0 text-decoration-underline">ARE YOU STUDYING ENOUGH?</p>
+                            <p>Based on your answers, your’re likely (NOT?) studying enough</p>
+                            <p class="mb-0 text-decoration-underline">ARE YOU HAVING ENOUGH FUN?</p>
+                            <p>Based on your answers, your’ve likely (NOT?) had enough fun</p>
+                            <p class="mb-0 text-decoration-underline">ARE YOU SLEEPING ENOUGH?</p>
+                            <p>Based on your answers, your’re likely (NOT?) sleeping enough</p>
                                 
-                                    <div class="d-flex justify-content-between mt-3 align-items-center"><i>Your avatar doesn't fit you anymore?</i>
-                                    <button class="text-uppercase btn btn-dark rounded-pill d-block px-3" id="avatarFit">Restart your journey</button></div>
-                        </div>
-                        <div class="col-4">
-                            <div class="pe-4"><img [src]="avatar.image" alt="Avatar Image"
-                                    class="text-info img-fluid" /></div>
+                                    
+                                    <a role="button" routerLink="/study-plan" class="text-decoration-none"><button class="text-uppercase btn btn-dark rounded-pill d-block px-3" id="avatarFit">Check your study plan</button></a></div>
+                   
+                        <div class="col-4 d-flex align-items-center justify-content-end">
+                            <div class="pe-4"><button
+                                class="text-uppercase btn rounded-pill d-block" id="studyPlanFit">Wrong study plan?</button></div>
                         </div>
                     </div>
-                   <!--  <div class="row">
-                        <div class="col-4">
-                            <p class="mb-0 mt-3">Current study plan</p>
-                            <p class="text-uppercase">{{ studyPlan?.shortTermGoal }}</p>
-                            <p class="mb-0">Long term goal</p>
-                            <p class="text-info text-uppercase">{{ user.longTermGoal }}</p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 mt-3">Email</p>
-                            <p class="text-uppercase">{{ user.email }}</p>
-                            <p class="mb-0">Password</p>
-                            <p class="text-info text-uppercase">*********</p>
-                        </div>
-                    </div> -->
+               
                 </div>
+            </div>
             </div>
         </div>
     </div>

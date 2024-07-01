@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, catchError, forkJoin, of, throwError } from 'rxjs';
 import { Answer } from 'src/app/models/answer';
 import { AssignSharedAnswer } from 'src/app/models/assignSharedAnswer';
-import { Avatar, Chronotype, Temper } from 'src/app/models/avatar';
+import { Chronotype, Temper } from 'src/app/models/avatar';
 import { Page } from 'src/app/models/page';
 import { Question } from 'src/app/models/question';
 import { UpdateLongTermGoal } from 'src/app/models/updateLongTermGoal';
@@ -298,16 +298,14 @@ export class SurveyComponent implements OnInit {
               response => {
                 console.log('Shared answers assigned:', response);
                 this.loadUserAvatar(userId);
-                this.updateUserLongTermGoalIfNeeded(userId); // Chiamare qui l'aggiornamento del goal a lungo termine
+                this.updateUserLongTermGoalIfNeeded(userId);
               },
               error => {
                 console.error('Subscription error:', error);
-                // Gestisci qui l'errore HTTP, ad esempio mostrando un messaggio all'utente
               }
             );
         }
   
-        // Gestisci le risposte personali
         if (personalAnswers.length > 0) {
           this.answerService.savePersonalAnswers(personalAnswers)
             .pipe(
@@ -322,12 +320,12 @@ export class SurveyComponent implements OnInit {
               (response) => {
                 console.log('Personal answers saved:', response);
                 this.loadUserAvatar(userId);
-                this.updateUserLongTermGoalIfNeeded(userId); // Chiamare qui l'aggiornamento del goal a lungo termine
+                this.updateUserLongTermGoalIfNeeded(userId);
               }
             );
         } else {
           this.loadUserAvatar(userId);
-          this.updateUserLongTermGoalIfNeeded(userId); // Chiamare qui l'aggiornamento del goal a lungo termine
+          this.updateUserLongTermGoalIfNeeded(userId);
         }
       },
       error => {
@@ -351,10 +349,8 @@ export class SurveyComponent implements OnInit {
       this.userService.updateUserLongTermGoal(userId, updateDTO)
         .subscribe(response => {
           console.log('Long term goal updated:', response);
-          // Gestisci la risposta dal backend se necessario
         }, error => {
           console.error('Error updating long term goal:', error);
-          // Gestisci gli errori se necessario
         });
     }
   }
@@ -438,17 +434,13 @@ export class SurveyComponent implements OnInit {
   createStudyPlanAndAssociateMantras(): void {
     const userId = this.authService.getUserId();
     if (userId !== null) {
-      // Recupera lo shortTermGoal dalle risposte dell'utente
       const shortTermGoalQuestion = this.questionsPage.content.find(question => question.questionType === 'SHORT_TERM_GOAL');
       const shortTermGoalQuestionId = shortTermGoalQuestion?.id;
       const shortTermGoal = shortTermGoalQuestionId ? this.textAnswers[shortTermGoalQuestionId] : null;
-
-      // Recupera numberOfDays dalle risposte dell'utente
       const daysQuestion = this.questionsPage.content.find(question => question.questionType === 'DAYS');
       const daysQuestionId = daysQuestion?.id;
       const numberOfDays = daysQuestionId ? this.selectedAnswers[daysQuestionId] : null;
 
-      // Verifica se entrambi i valori sono stati recuperati correttamente
       if (shortTermGoal !== null && numberOfDays !== null) {
         const studyPlanDTO = {
           shortTermGoal: shortTermGoal,
@@ -470,8 +462,6 @@ export class SurveyComponent implements OnInit {
             })
           ).subscribe((mantrasResponse) => {
             console.log('Mantras added to study plan:', mantrasResponse);
-
-            // Naviga verso la pagina dello studio solo dopo il completamento delle operazioni
             this.router.navigate(['/study-plan']);
           });
         });

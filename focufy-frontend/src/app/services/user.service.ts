@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Avatar } from '../models/avatar'; // Crea questo modello con i dettagli dell'avatar
+import { Avatar } from '../models/avatar';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import { User } from '../models/user';

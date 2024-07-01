@@ -1,4 +1,5 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Question } from 'src/app/models/question';
 import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
 import { AnswerService } from 'src/app/services/answer.service';
@@ -18,8 +19,10 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   answers: { [key: number]: boolean } = {};
   user: { name: string } | null = null;
   submissionStatus: { [key: string]: boolean } = {};
+  formGroup!: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private studyPlanService: StudyPlanService, 
     private authService: AuthService, 
     private answerService: AnswerService
@@ -36,12 +39,14 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
           console.error('Error fetching user details:', error);
         }
       );
-
+  
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (data) => {
           this.studyPlan = data;
           this.isLoading = false;
           this.isDataLoaded = true;
+          this.initializeForm();
+          this.loadSavedAnswers();
         },
         (error) => {
           console.error('Error fetching study plan:', error);
@@ -51,6 +56,13 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     } else {
       console.error('User ID not found');
       this.isLoading = false;
+    }
+  }
+  
+  loadSavedAnswers() {
+    const storedAnswers = localStorage.getItem('checkpointAnswers');
+    if (storedAnswers) {
+      this.answers = JSON.parse(storedAnswers);
     }
   }
 
@@ -63,14 +75,28 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   ngAfterViewChecked(): void {
     if (this.isDataLoaded) {
       this.scrollToToday();
-      this.isDataLoaded = false;  // Ensure scroll happens only once
+      this.isDataLoaded = false; 
     }
+  }
+
+  initializeForm(): void {
+    const group: any = {};
+    this.studyPlan.days.forEach(day => {
+      if (day.questions) {
+        day.questions.forEach(question => {
+          if (question.questionType === 'DEADLINE' || question.questionType === 'CHECKPOINT') {
+            group[question.id] = ['', Validators.required];
+          }
+        });
+      }
+    });
+    this.formGroup = this.fb.group(group);
   }
 
   compareSessions(session1: ActivitySession, session2: ActivitySession): number {
     if (session1.startTime < session2.startTime) {
       return -1;
-    } else if (session1.startTime > session2.startTime) {
+    } else if (session1.startTime > session1.startTime) {
       return 1;
     } else {
       return 0;
@@ -92,10 +118,8 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
         if (accordionElement) {
           console.log("Scrolling to:", todayDay.name);
   
-          // Calcola la posizione desiderata meno 300px
           const desiredPosition = accordionElement.getBoundingClientRect().top + window.scrollY - 300;
   
-          // Effettua lo scroll alla posizione desiderata
           window.scrollTo({
             top: desiredPosition,
             behavior: 'smooth'
@@ -116,6 +140,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   onAnswerChange(day: Day, question: Question, answer: boolean) {
+    this.answers[question.id] = false;
     this.answers[question.id] = answer;
   }
 
@@ -136,33 +161,37 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     );
   }
 
+  canSubmitAnswers(day: Day): boolean {
+    if (!day.questions) return false;
+  
+    const questions = day.questions.filter(question => question.questionType === 'DEADLINE' || question.questionType === 'CHECKPOINT');
+    return questions.every(question => {
+      const control = this.formGroup.get(question.id.toString());
+      return control?.valid && control?.value !== '';
+    });
+  }
+  
+
   submitAnswers(day: Day) {
-    const checkpointQuestions = day.questions!.filter(question =>
+    if (!day.questions) return;
+  
+    const checkpointQuestions = day.questions.filter(question =>
       question.questionType === 'CHECKPOINT' || question.questionType === 'DEADLINE'
     );
-
-    const validQuestions = checkpointQuestions.filter(question => question.id != null);
-
-    console.log('Valid checkpoint questions:', validQuestions);
-
-    if (validQuestions.length !== checkpointQuestions.length) {
-      console.error('Not all questions have valid IDs:', checkpointQuestions);
-      return;
-    }
-
-    const personalAnswers = validQuestions.map(question => ({
-      answerText: this.answers[question.id!] ? 'true' : 'false',
-      questionId: question.id!,
+  
+    const personalAnswers = checkpointQuestions.map(question => ({
+      answerText: this.answers[question.id] ? 'true' : 'false',
+      questionId: question.id,
       personalAnswerType: question.questionType === 'CHECKPOINT' ? 'CHECKPOINT' : 'DEADLINE',
       userId: this.authService.getUserId()
     }));
-
-    console.log('Sending personal answers:', personalAnswers);
-
+  
     this.answerService.savePersonalAnswers(personalAnswers).subscribe(
       (response) => {
         console.log('Answers submitted successfully', response);
         this.submissionStatus[day.name] = true;
+        localStorage.removeItem('checkpointAnswers');
+        this.answers = {};
       },
       (error) => {
         console.error('Error submitting answers', error);
@@ -170,4 +199,5 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       }
     );
   }
+  
 }

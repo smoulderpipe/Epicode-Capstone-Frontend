@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -37,11 +36,9 @@ export class LoginComponent implements OnInit{
         next: (token) => {
           console.log('Login effettuato con successo:', token);
 
-          // Ottieni l'ID dell'utente dall'AuthService
           const userId = this.authService.getUserId();
 
           if (userId) {
-            // Controlla se l'utente ha un piano di studio assegnato
             this.studyPlanService.getStudyPlan(userId).subscribe({
               next: (studyPlan) => {
                 if (studyPlan) {

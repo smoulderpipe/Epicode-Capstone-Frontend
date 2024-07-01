@@ -22,7 +22,7 @@ export class StudyPlanService {
     return this.http.get<StudyPlan>(url, { headers }).pipe(
       map(studyPlan => {
         if (studyPlan && studyPlan.days) {
-          studyPlan.days.sort((a, b) => a.id - b.id); // Ordinamento per ID ascendente
+          studyPlan.days.sort((a, b) => a.id - b.id);
         }
         return studyPlan;
       })

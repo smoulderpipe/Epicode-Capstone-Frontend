@@ -16,27 +16,30 @@ export class SurveyService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  getQuestions(page: number = 0, size: number = 17, sortBy: string = 'id', questionTypes: QuestionType[] = [QuestionType.CHRONOTYPE, QuestionType.TEMPER, QuestionType.SHORT_TERM_GOAL, QuestionType.LONG_TERM_GOAL, QuestionType.DAYS, QuestionType.SATISFACTION, QuestionType.RESTART]): Observable<Page<Question>> {
+  getQuestions(page: number = 0, size: number = 17, sortBy: string = 'id',
+    questionTypes: QuestionType[] =
+      [QuestionType.CHRONOTYPE, QuestionType.TEMPER, QuestionType.SHORT_TERM_GOAL, QuestionType.LONG_TERM_GOAL,
+      QuestionType.DAYS, QuestionType.SATISFACTION, QuestionType.RESTART]): Observable<Page<Question>> {
 
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
       .set('sortBy', sortBy)
-      .set('questionTypes', questionTypes.join(',')); 
+      .set('questionTypes', questionTypes.join(','));
 
     const token = this.authService.getToken();
 
     const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`
-      });
+      'Authorization': `Bearer ${token}`
+    });
 
     return this.http.get<Page<Question>>(this.baseUrl, { params, headers })
-    .pipe(
+      .pipe(
         catchError(error => {
-            console.log('Error while requesting questions:', error);
-            throw error;
+          console.log('Error while requesting questions:', error);
+          throw error;
         })
-    );
+      );
   }
 
 }
