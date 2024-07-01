@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/logout`, {}).pipe(
+    return this.http.post<void>(`${this.baseUrl}/auth/logout`, {}).pipe(
       map(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');

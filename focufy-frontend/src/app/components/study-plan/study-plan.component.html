@@ -120,7 +120,7 @@
                    <form [formGroup]="formGroup" (ngSubmit)="submitDeadlineAnswers(day)">
                       
                       <div class="ps-3 pe-3 pb-3 border border-1 border-black">
-                        <p *ngFor="let question of day.questions" class="my-4">
+                        <div *ngIf="hasAnswers(day)"><p *ngFor="let question of day.questions" class="my-4">
                           <ng-container *ngIf="question.questionType === 'DEADLINE'">
                             {{ question.questionText }}
                             
@@ -144,7 +144,9 @@
 
                         <!-- Messaggio di conferma -->
                         <p *ngIf="submissionStatus[day.name] === true" class="mt-3 mb-0 text-success text-center">Answers
-                          correctly submitted</p>
+                          correctly submitted</p></div>
+                          <div *ngIf="!hasAnswers(day)">Ciaone</div>
+                        
                       </div>
                     </form>
                   </div>

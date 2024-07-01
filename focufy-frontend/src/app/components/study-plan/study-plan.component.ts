@@ -222,14 +222,16 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       checkpointDayId: day.id,
       userId: userId
     }));
-  
+
+    
     this.answerService.saveCheckpointAnswers(day.id, answers).subscribe(
       (response) => {
         console.log('Checkpoint answers submitted successfully', response);
         this.submissionStatus[day.name] = true;
+    console.log('Submission status:', this.submissionStatus);
         localStorage.removeItem('checkpointAnswers');
         this.answers = {};
-        console.log('Submission status:', this.submissionStatus);
+        
       },
       (error) => {
         console.error('Error submitting checkpoint answers', error);
@@ -237,6 +239,8 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
         console.log('Submission status:', this.submissionStatus);
       }
     );
+
+    
   }
 
   submitDeadlineAnswers(day: Day) {
@@ -273,5 +277,21 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     );
   }
 
+  hasAnswers(day: Day): boolean {
+    if (!day || !day.questions) {
+      return false;
+    }
+    
+    return day.questions.some(question => {
+      // Check if there are answers for this question
+      // Implement necessary logic to check saved answers in frontend
+      return true;
+    });
+  }
+
+  getAnswerText(questionId: number): string {
+    // Implement logic to retrieve answer text based on questionId
+    return ''; // Placeholder, replace with actual logic
+  }
 
 }

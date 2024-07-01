@@ -98,7 +98,33 @@ export class AnswerService {
     return throwError('Something bad happened; please try again later.');
   }
 
-  
+  getAnswerText(questionId: number): Observable<string> {
+    const url = `${this.baseUrl}/questions/${questionId}`;
+    const headers = this.getHeaders();
+    return this.httpClient.get<Answer>(url, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error retrieving answer:', error);
+        return throwError('Error retrieving answer');
+      }),
+      map((response: Answer) => response.answerText)
+    );
+  }
+
+  getCheckpointAnswersByDay(checkpointDayId: number): Observable<CheckpointAnswer[]> {
+    const url = `${this.baseUrl}/checkpoint/${checkpointDayId}`;
+    const headers = this.getHeaders();
+    return this.httpClient.get<CheckpointAnswer[]>(url, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getDeadlineAnswersByDay(deadlineDayId: number): Observable<DeadlineAnswer[]> {
+    const url = `${this.baseUrl}/deadline/${deadlineDayId}`;
+    const headers = this.getHeaders();
+    return this.httpClient.get<DeadlineAnswer[]>(url, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   }
   
