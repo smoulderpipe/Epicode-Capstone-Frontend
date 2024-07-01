@@ -1,5 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CheckpointAnswer, DeadlineAnswer } from 'src/app/models/answer';
 import { Question } from 'src/app/models/question';
 import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
 import { AnswerService } from 'src/app/services/answer.service';
@@ -23,10 +24,10 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   constructor(
     private fb: FormBuilder,
-    private studyPlanService: StudyPlanService, 
-    private authService: AuthService, 
+    private studyPlanService: StudyPlanService,
+    private authService: AuthService,
     private answerService: AnswerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const userId = this.authService.getUserId();
@@ -39,7 +40,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
           console.error('Error fetching user details:', error);
         }
       );
-  
+
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (data) => {
           this.studyPlan = data;
@@ -58,7 +59,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.isLoading = false;
     }
   }
-  
+
   loadSavedAnswers() {
     const storedAnswers = localStorage.getItem('checkpointAnswers');
     if (storedAnswers) {
@@ -75,7 +76,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   ngAfterViewChecked(): void {
     if (this.isDataLoaded) {
       this.scrollToToday();
-      this.isDataLoaded = false; 
+      this.isDataLoaded = false;
     }
   }
 
@@ -117,9 +118,9 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
         const accordionElement = document.querySelector(accordionId);
         if (accordionElement) {
           console.log("Scrolling to:", todayDay.name);
-  
+
           const desiredPosition = accordionElement.getBoundingClientRect().top + window.scrollY - 300;
-  
+
           window.scrollTo({
             top: desiredPosition,
             behavior: 'smooth'
@@ -163,41 +164,85 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   canSubmitAnswers(day: Day): boolean {
     if (!day.questions) return false;
-  
+
     const questions = day.questions.filter(question => question.questionType === 'DEADLINE' || question.questionType === 'CHECKPOINT');
     return questions.every(question => {
       const control = this.formGroup.get(question.id.toString());
       return control?.valid && control?.value !== '';
     });
   }
-  
 
-  submitAnswers(day: Day) {
+
+  submitCheckpointAnswers(day: Day) {
+    console.log('Submitting checkpoint answers for day:', day);
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      console.error('User ID not found');
+      return;
+    }
+  
     if (!day.questions) return;
   
     const checkpointQuestions = day.questions.filter(question =>
-      question.questionType === 'CHECKPOINT' || question.questionType === 'DEADLINE'
+      question.questionType === 'CHECKPOINT'
     );
   
-    const personalAnswers = checkpointQuestions.map(question => ({
-      answerText: this.answers[question.id] ? 'true' : 'false',
+    const answers: CheckpointAnswer[] = checkpointQuestions.map(question => ({
       questionId: question.id,
-      personalAnswerType: question.questionType === 'CHECKPOINT' ? 'CHECKPOINT' : 'DEADLINE',
-      userId: this.authService.getUserId()
+      answerText: this.formGroup.get(question.id.toString())?.value || '',
+      checkpointDayId: day.id,
+      userId: userId
     }));
   
-    this.answerService.savePersonalAnswers(personalAnswers).subscribe(
+    this.answerService.saveCheckpointAnswers(day.id, answers).subscribe(
       (response) => {
-        console.log('Answers submitted successfully', response);
+        console.log('Checkpoint answers submitted successfully', response);
         this.submissionStatus[day.name] = true;
         localStorage.removeItem('checkpointAnswers');
         this.answers = {};
+        console.log('Submission status:', this.submissionStatus);
       },
       (error) => {
-        console.error('Error submitting answers', error);
+        console.error('Error submitting checkpoint answers', error);
+        this.submissionStatus[day.name] = false;
+        console.log('Submission status:', this.submissionStatus);
+      }
+    );
+  }
+
+  submitDeadlineAnswers(day: Day) {
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      console.error('User ID not found');
+      return;
+    }
+  
+    if (!day.questions) return;
+  
+    const deadlineQuestions = day.questions.filter(question =>
+      question.questionType === 'DEADLINE'
+    );
+  
+    const answers: DeadlineAnswer[] = deadlineQuestions.map(question => ({
+      questionId: question.id,
+      answerText: this.formGroup.get(question.id.toString())?.value || '',
+      deadlineDayId: day.id,
+      userId: userId
+    }));
+  
+    this.answerService.saveDeadlineAnswers(day.id, answers).subscribe(
+      (response) => {
+        console.log('Deadline answers submitted successfully', response);
+        this.submissionStatus[day.name] = true;
+        localStorage.removeItem('deadlineAnswers');
+        this.answers = {};
+      },
+      (error) => {
+        console.error('Error submitting deadline answers', error);
         this.submissionStatus[day.name] = false;
       }
     );
   }
-  
+
+
 }

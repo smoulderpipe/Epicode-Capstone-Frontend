@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
-import { Observable, catchError, throwError } from 'rxjs';
-import { Answer } from '../models/answer';
+import { Observable, catchError, map, throwError } from 'rxjs';
+import { Answer, CheckpointAnswer, DeadlineAnswer } from '../models/answer';
 import { AssignSharedAnswer } from '../models/assignSharedAnswer';
 
 @Injectable({
@@ -43,6 +43,28 @@ export class AnswerService {
     );
   }
 
+  saveCheckpointAnswers(dayId: number, answers: CheckpointAnswer[]): Observable<any> {
+    const userId = this.authService.getUserId();
+    const url = `${this.baseUrl}/users/${userId}/checkpoint`;
+    const headers = this.getHeaders();
+    console.log('saveCheckpointAnswers called for day', dayId, answers);
+    
+    return this.httpClient.post<any>(url, answers, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  saveDeadlineAnswers(dayId: number, answers: DeadlineAnswer[]): Observable<any> {
+    const userId = this.authService.getUserId();
+    const url = `${this.baseUrl}/users/${userId}/deadline`;
+    const headers = this.getHeaders();
+    console.log('savedeadlineAnswers called for day', dayId, answers);
+    
+    return this.httpClient.post<any>(url, answers, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   createStudyPlan(userId: number, studyPlanDTO: any): Observable<any> {
     const url = `${environment.baseUrl}/api/users/${userId}/studyplans`;
     const token = this.authService.getToken();
@@ -75,5 +97,8 @@ export class AnswerService {
     console.error('Error in API call:', error);
     return throwError('Something bad happened; please try again later.');
   }
+
+  
+
   }
   

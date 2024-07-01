@@ -20,6 +20,21 @@ export enum PersonalAnswerType {
     TACTICAL = 'TACTICAL',
     GREEDY = 'GREEDY'
   }
+
+  export interface CheckpointAnswer {
+    questionId: number;
+    answerText: string;
+    checkpointDayId: number;
+}
+
+export interface DeadlineAnswer {
+  questionId: number;
+  answerText: string;
+  deadlineDayId: number;
+}
+
+
+
   
 export interface Answer{
     id: number;
