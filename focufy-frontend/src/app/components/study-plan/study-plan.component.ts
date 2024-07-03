@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CheckpointAnswer, DeadlineAnswer } from 'src/app/models/answer';
+import { CDAnswerType, CheckpointAnswer, DeadlineAnswer } from 'src/app/models/answer';
 import { Question } from 'src/app/models/question';
 import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
 import { AnswerService } from 'src/app/services/answer.service';
@@ -202,47 +202,63 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
 
   submitCheckpointAnswers(day: Day) {
-    console.log('Submitting checkpoint answers for day:', day);
-    const userId = this.authService.getUserId();
-    if (!userId) {
-      console.error('User ID not found');
-      return;
+  console.log('Submitting checkpoint answers for day:', day);
+  const userId = this.authService.getUserId();
+  if (!userId) {
+    console.error('User ID not found');
+    return;
+  }
+
+  if (!day.questions) return;
+
+  const checkpointQuestions = day.questions.filter(question =>
+    question.questionType === 'CHECKPOINT'
+  );
+
+  const answers: CheckpointAnswer[] = checkpointQuestions.map((question, index) => {
+    let cdAnswerType: CDAnswerType;
+
+    // Assegna il tipo in base all'indice (0 -> STUDY, 1 -> FUN, 2 -> REST)
+    switch (index % 3) {
+      case 0:
+        cdAnswerType = CDAnswerType.STUDY;
+        break;
+      case 1:
+        cdAnswerType = CDAnswerType.FUN;
+        break;
+      case 2:
+        cdAnswerType = CDAnswerType.REST;
+        break;
+      default:
+        cdAnswerType = CDAnswerType.STUDY; // Gestione di default, se necessario
+        break;
     }
-  
-    if (!day.questions) return;
-  
-    const checkpointQuestions = day.questions.filter(question =>
-      question.questionType === 'CHECKPOINT'
-    );
-  
-    const answers: CheckpointAnswer[] = checkpointQuestions.map(question => ({
+
+    return {
       questionId: question.id,
       answerText: this.formGroup.get(question.id.toString())?.value || '',
       checkpointDayId: day.id,
-      userId: userId
-    }));
+      userId: userId,
+      answerType: cdAnswerType
+    };
+  });
 
-    
-    this.answerService.saveCheckpointAnswers(day.id, answers).subscribe(
-      (response) => {
-        console.log('Checkpoint answers submitted successfully', response);
-        this.submissionStatus[day.name] = true;
-    console.log('Submission status:', this.submissionStatus);
-        localStorage.removeItem('checkpointAnswers');
-        this.answers = {};
-        
-      },
-      (error) => {
-        console.error('Error submitting checkpoint answers', error);
-        this.submissionStatus[day.name] = false;
-        console.log('Submission status:', this.submissionStatus);
-      }
-    );
-
-    
-  }
+  this.answerService.saveCheckpointAnswers(day.id, answers).subscribe(
+    (response) => {
+      console.log('Checkpoint answers submitted successfully', response);
+      this.submissionStatus[day.name] = true;
+      localStorage.removeItem('checkpointAnswers');
+      this.answers = {};
+    },
+    (error) => {
+      console.error('Error submitting checkpoint answers', error);
+      this.submissionStatus[day.name] = false;
+    }
+  );
+}
 
   submitDeadlineAnswers(day: Day) {
+    console.log('Submitting deadline answers for day:', day);
     const userId = this.authService.getUserId();
     if (!userId) {
       console.error('User ID not found');
@@ -255,12 +271,33 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       question.questionType === 'DEADLINE'
     );
   
-    const answers: DeadlineAnswer[] = deadlineQuestions.map(question => ({
-      questionId: question.id,
-      answerText: this.formGroup.get(question.id.toString())?.value || '',
-      deadlineDayId: day.id,
-      userId: userId
-    }));
+    const answers: DeadlineAnswer[] = deadlineQuestions.map((question, index) => {
+      let cdAnswerType: CDAnswerType;
+  
+      // Assegna il tipo in base all'indice (0 -> STUDY, 1 -> FUN, 2 -> REST)
+      switch (index % 3) {
+        case 0:
+          cdAnswerType = CDAnswerType.STUDY;
+          break;
+        case 1:
+          cdAnswerType = CDAnswerType.FUN;
+          break;
+        case 2:
+          cdAnswerType = CDAnswerType.REST;
+          break;
+        default:
+          cdAnswerType = CDAnswerType.STUDY; // Gestione di default, se necessario
+          break;
+      }
+  
+      return {
+        questionId: question.id,
+        answerText: this.formGroup.get(question.id.toString())?.value || '',
+        deadlineDayId: day.id,
+        userId: userId,
+        answerType: cdAnswerType
+      };
+    });
   
     this.answerService.saveDeadlineAnswers(day.id, answers).subscribe(
       (response) => {

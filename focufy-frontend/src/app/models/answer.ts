@@ -21,16 +21,24 @@ export enum PersonalAnswerType {
     GREEDY = 'GREEDY'
   }
 
+  export enum CDAnswerType {
+    STUDY = 'STUDY',
+    FUN = 'FUN',
+    REST = 'REST'
+  }
+
   export interface CheckpointAnswer {
     questionId: number;
     answerText: string;
     checkpointDayId: number;
+    answerType: CDAnswerType;
 }
 
 export interface DeadlineAnswer {
   questionId: number;
   answerText: string;
   deadlineDayId: number;
+  answerType: CDAnswerType;
 }
 
 
@@ -41,5 +49,6 @@ export interface Answer{
     answerText: string;
     question: Question;
     personalAnswerType: PersonalAnswerType;
-    sharedAnswerType: SharedAnswerType; 
+    sharedAnswerType: SharedAnswerType;
+    
 }
