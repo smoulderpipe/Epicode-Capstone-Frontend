@@ -99,13 +99,12 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   compareSessions(session1: ActivitySession, session2: ActivitySession): number {
     if (session1.startTime < session2.startTime) {
       return -1;
-    } else if (session1.startTime > session1.startTime) {
+    } else if (session1.startTime > session2.startTime) {
       return 1;
     } else {
       return 0;
     }
   }
-
   formatStartTime(startTime: string): string {
     const [hours, minutes] = startTime.split(':').slice(0, 2);
     return `${hours}:${minutes}`;
@@ -283,15 +282,10 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
     
     return day.questions.some(question => {
-      // Check if there are answers for this question
-      // Implement necessary logic to check saved answers in frontend
       return true;
     });
   }
 
-  getAnswerText(questionId: number): string {
-    // Implement logic to retrieve answer text based on questionId
-    return ''; // Placeholder, replace with actual logic
-  }
+  
 
 }

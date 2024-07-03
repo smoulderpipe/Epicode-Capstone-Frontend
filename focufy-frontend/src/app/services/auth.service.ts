@@ -11,9 +11,8 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private readonly baseUrl = environment.baseUrl;
 
-  private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
+  private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('access_token'));
   token$ = this.tokenSubject.asObservable();
-  /* private loggedUserId: number | null = null; */
   private loggedUserId: number | null = this.getStoredUserId();
 
   constructor(private http: HttpClient) {}
@@ -56,7 +55,7 @@ export class AuthService {
   logout(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/auth/logout`, {}).pipe(
       map(() => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('access_token');
         localStorage.removeItem('userId');
         this.tokenSubject.next(null);
         this.loggedUserId = null;
@@ -70,7 +69,7 @@ export class AuthService {
   }
 
   isLoggedIn(): Observable<boolean> {
-    return this.tokenSubject.pipe(map(token => !!token));
+    return this.token$.pipe(map(token => !!token));
   }
 
   getUserId(): number | null {

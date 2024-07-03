@@ -8,8 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit{
-
+export class NavbarComponent implements OnInit {
   isLoggedIn$!: Observable<boolean>;
   userId: number | null = null;
 
@@ -21,6 +20,8 @@ export class NavbarComponent implements OnInit{
       console.log('Is logged in:', loggedIn);
       if (loggedIn) {
         this.userId = this.authService.getUserId();
+      } else {
+        this.userId = null;
       }
     });
   }
@@ -36,5 +37,4 @@ export class NavbarComponent implements OnInit{
       }
     });
   }
-
 }
