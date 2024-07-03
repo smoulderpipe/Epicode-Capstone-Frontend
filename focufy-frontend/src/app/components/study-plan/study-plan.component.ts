@@ -143,7 +143,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   onAnswerChange(day: Day, question: Question, answer: boolean) {
     console.log('Changing answer for question', question.id, 'to', answer);
-    this.answers[question.id] = answer; // Store boolean value directly
+    this.answers[question.id] = answer;
   }
 
   confirmRestart(day: any, question: any) {
@@ -218,7 +218,6 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   const answers: CheckpointAnswer[] = checkpointQuestions.map((question, index) => {
     let cdAnswerType: CDAnswerType;
 
-    // Assegna il tipo in base all'indice (0 -> STUDY, 1 -> FUN, 2 -> REST)
     switch (index % 3) {
       case 0:
         cdAnswerType = CDAnswerType.STUDY;
@@ -230,7 +229,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
         cdAnswerType = CDAnswerType.REST;
         break;
       default:
-        cdAnswerType = CDAnswerType.STUDY; // Gestione di default, se necessario
+        cdAnswerType = CDAnswerType.STUDY;
         break;
     }
 
@@ -274,7 +273,6 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     const answers: DeadlineAnswer[] = deadlineQuestions.map((question, index) => {
       let cdAnswerType: CDAnswerType;
   
-      // Assegna il tipo in base all'indice (0 -> STUDY, 1 -> FUN, 2 -> REST)
       switch (index % 3) {
         case 0:
           cdAnswerType = CDAnswerType.STUDY;
@@ -286,7 +284,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
           cdAnswerType = CDAnswerType.REST;
           break;
         default:
-          cdAnswerType = CDAnswerType.STUDY; // Gestione di default, se necessario
+          cdAnswerType = CDAnswerType.STUDY;
           break;
       }
   
