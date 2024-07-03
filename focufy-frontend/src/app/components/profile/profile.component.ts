@@ -17,7 +17,10 @@ export class ProfileComponent implements OnInit {
   user: User | null = null;
   avatar: Avatar | null = null;
   studyPlan: StudyPlan | null = null;
-  
+  isStudyEnough: boolean | null = null;
+  isFunEnough: boolean | null = null;
+  isRestEnough: boolean | null = null;
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -58,6 +61,9 @@ export class ProfileComponent implements OnInit {
 
       this.getCheckpointAnswers(userId);
       this.getDeadlineAnswers(userId);
+      this.getFunAnswers(userId);
+      this.getRestAnswers(userId);
+      this.getSleepingAnswers(userId);
     }
   }
 
@@ -65,6 +71,7 @@ export class ProfileComponent implements OnInit {
     this.answerService.getCheckpointAnswersByTypeAndUserId('STUDY', userId).subscribe(
       (checkpointAnswers) => {
         console.log('Checkpoint answers:', checkpointAnswers);
+        this.isMajorityOfStudyAnswersTrue(checkpointAnswers, 'STUDY'); // Call function to check majority for STUDY
       },
       (error) => {
         console.error('Error fetching checkpoint answers:', error);
@@ -76,6 +83,7 @@ export class ProfileComponent implements OnInit {
     this.answerService.getDeadlineAnswersByTypeAndUserId('STUDY', userId).subscribe(
       (deadlineAnswers) => {
         console.log('Deadline answers:', deadlineAnswers);
+        this.isMajorityOfStudyAnswersTrue(deadlineAnswers, 'STUDY'); // Call function to check majority for STUDY
       },
       (error) => {
         console.error('Error fetching deadline answers:', error);
@@ -83,11 +91,145 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  getFunAnswers(userId: number) {
+    this.answerService.getCheckpointAnswersByTypeAndUserId('FUN', userId).subscribe(
+      (funAnswers) => {
+        console.log('Fun answers:', funAnswers);
+        this.isMajorityOfFunAnswersTrue(funAnswers, 'FUN'); // Call function to check majority for FUN
+      },
+      (error) => {
+        console.error('Error fetching fun answers:', error);
+      }
+    );
+  }
+
+  getRestAnswers(userId: number) {
+    this.answerService.getDeadlineAnswersByTypeAndUserId('REST', userId).subscribe(
+      (restAnswers) => {
+        console.log('Rest answers:', restAnswers);
+        this.isMajorityOfStudyAnswersTrue(restAnswers, 'REST'); // Call function to check majority for REST
+      },
+      (error) => {
+        console.error('Error fetching rest answers:', error);
+      }
+    );
+  }
+
+  getSleepingAnswers(userId: number) {
+    this.answerService.getDeadlineAnswersByTypeAndUserId('REST', userId).subscribe(
+      (sleepingAnswers) => {
+        console.log('Sleeping answers:', sleepingAnswers);
+        this.isMajorityOfSleepingAnswersTrue(sleepingAnswers); // Call function to check majority for SLEEP
+      },
+      (error) => {
+        console.error('Error fetching sleeping answers:', error);
+      }
+    );
+  }
+
+  isMajorityOfStudyAnswersTrue(answers: any[], type: string) {
+    if (answers.length === 0) {
+      this.setAnswerType(type, null);
+      return;
+    }
+
+    let trueCount = 0;
+    let falseCount = 0;
+
+    answers.forEach(answer => {
+      if (answer.answerText === 'true') {
+        trueCount++;
+      } else if (answer.answerText === 'false') {
+        falseCount++;
+      }
+    });
+
+    if (trueCount > falseCount) {
+      this.setAnswerType(type, true);
+    } else if (falseCount > trueCount) {
+      this.setAnswerType(type, false);
+    } else {
+      this.setAnswerType(type, false);
+    }
+  }
+
+  isMajorityOfFunAnswersTrue(answers: any[], type: string) {
+    if (answers.length === 0) {
+      this.setAnswerType(type, null);
+      return;
+    }
+
+    let trueCount = 0;
+    let falseCount = 0;
+
+    answers.forEach(answer => {
+      if (answer.answerText === 'true') {
+        trueCount++;
+      } else if (answer.answerText === 'false') {
+        falseCount++;
+      }
+    });
+
+    if (trueCount > falseCount) {
+      this.setAnswerType(type, true);
+    } else if (falseCount > trueCount) {
+      this.setAnswerType(type, false);
+    } else {
+      this.setAnswerType(type, false);
+    }
+  }
+
+  isMajorityOfSleepingAnswersTrue(answers: any[]) {
+    if (answers.length === 0) {
+      this.isRestEnough = null;
+      return;
+    }
+
+    // Count true and false answers
+    let trueCount = 0;
+    let falseCount = 0;
+
+    answers.forEach(answer => {
+      if (answer.answerText === 'true') {
+        trueCount++;
+      } else if (answer.answerText === 'false') {
+        falseCount++;
+      }
+    });
+
+    // Determine majority
+    if (trueCount > falseCount) {
+      this.isRestEnough = true;
+    } else if (falseCount > trueCount) {
+      this.isRestEnough = false;
+    } else {
+      this.isRestEnough = false; // Handle tie case
+    }
+  }
+
+  setAnswerType(type: string, value: boolean | null) {
+    switch (type) {
+      case 'STUDY':
+        this.isStudyEnough = value;
+        break;
+      case 'FUN':
+        this.isFunEnough = value;
+        break;
+      case 'REST':
+        this.isRestEnough = value;
+        break;
+      default:
+        console.warn(`Unsupported answer type: ${type}`);
+        break;
+    }
+  }
+
   confirmRestart() {
     const confirmation = confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
     if (confirmation) {
       this.onRestartAnswer();
     } else {
+      // Handle cancel
     }
   }
 
@@ -97,9 +239,8 @@ export class ProfileComponent implements OnInit {
       console.error('User ID not found');
       return;
     }
-  
+
     const answers: any[] = [];
-  
     this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
         console.log('Restart answers submitted successfully', response);

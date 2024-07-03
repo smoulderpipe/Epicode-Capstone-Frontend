@@ -142,8 +142,8 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   onAnswerChange(day: Day, question: Question, answer: boolean) {
-    this.answers[question.id] = false;
-    this.answers[question.id] = answer;
+    console.log('Changing answer for question', question.id, 'to', answer);
+    this.answers[question.id] = answer; // Store boolean value directly
   }
 
   confirmRestart(day: any, question: any) {
@@ -236,7 +236,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     return {
       questionId: question.id,
-      answerText: this.formGroup.get(question.id.toString())?.value || '',
+      answerText: (this.formGroup.get(question.id.toString())?.value as boolean).toString(), // Convert boolean to string
       checkpointDayId: day.id,
       userId: userId,
       answerType: cdAnswerType
@@ -292,7 +292,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   
       return {
         questionId: question.id,
-        answerText: this.formGroup.get(question.id.toString())?.value || '',
+        answerText: (this.formGroup.get(question.id.toString())?.value as boolean).toString(),
         deadlineDayId: day.id,
         userId: userId,
         answerType: cdAnswerType
