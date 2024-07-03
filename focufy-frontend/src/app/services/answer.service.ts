@@ -126,5 +126,17 @@ export class AnswerService {
     );
   }
 
+  getCheckpointAnswersByTypeAndUserId(cdAnswerType: string, userId: number): Observable<CheckpointAnswer[]> {
+    const url = `${this.baseUrl}/users/${userId}/checkpoint/${cdAnswerType}`;
+    const headers = this.getHeaders();
+    return this.httpClient.get<CheckpointAnswer[]>(url, {headers});
+  }
+
+  getDeadlineAnswersByTypeAndUserId(cdAnswerType: string, userId: number): Observable<DeadlineAnswer[]> {
+    const url = `${this.baseUrl}/users/${userId}/deadline/${cdAnswerType}`;
+    const headers = this.getHeaders();
+    return this.httpClient.get<DeadlineAnswer[]>(url, {headers});
+  }
+
   }
   

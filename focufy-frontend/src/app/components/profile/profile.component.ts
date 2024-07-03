@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Avatar } from 'src/app/models/avatar';
-import { Question } from 'src/app/models/question';
 import { StudyPlan } from 'src/app/models/studyPlan';
 import { User } from 'src/app/models/user';
 import { AnswerService } from 'src/app/services/answer.service';
@@ -56,7 +55,32 @@ export class ProfileComponent implements OnInit {
           console.error('Error fetching study plan:', error);
         }
       );
+
+      this.getCheckpointAnswers(userId);
+      this.getDeadlineAnswers(userId);
     }
+  }
+
+  getCheckpointAnswers(userId: number) {
+    this.answerService.getCheckpointAnswersByTypeAndUserId('STUDY', userId).subscribe(
+      (checkpointAnswers) => {
+        console.log('Checkpoint answers:', checkpointAnswers);
+      },
+      (error) => {
+        console.error('Error fetching checkpoint answers:', error);
+      }
+    );
+  }
+
+  getDeadlineAnswers(userId: number) {
+    this.answerService.getDeadlineAnswersByTypeAndUserId('STUDY', userId).subscribe(
+      (deadlineAnswers) => {
+        console.log('Deadline answers:', deadlineAnswers);
+      },
+      (error) => {
+        console.error('Error fetching deadline answers:', error);
+      }
+    );
   }
 
   confirmRestart() {
@@ -64,7 +88,6 @@ export class ProfileComponent implements OnInit {
     if (confirmation) {
       this.onRestartAnswer();
     } else {
-      // Azioni da eseguire se l'utente annulla l'operazione
     }
   }
 
@@ -76,9 +99,6 @@ export class ProfileComponent implements OnInit {
     }
   
     const answers: any[] = [];
-  
-    // Esegui la logica per costruire le risposte basate sulla domanda
-    // Se non hai bisogno di question qui, non c'è bisogno di utilizzarla
   
     this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
