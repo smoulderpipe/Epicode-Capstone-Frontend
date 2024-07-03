@@ -1,0 +1,24 @@
+#logo {
+    width: 170px !important;
+}
+
+li, a {
+    font-size: 1.1em;
+    
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    text-decoration: underline;
+}
+
+.navbar-light {
+    background: rgba(255,255,255,0.9) !important;
+}
+
+.nav-link {
+    color: black;
+}
+
+a:hover {
+    text-decoration: underline;
+}

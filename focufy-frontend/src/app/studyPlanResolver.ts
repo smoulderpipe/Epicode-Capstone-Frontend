@@ -17,7 +17,6 @@ export class StudyPlanResolver implements Resolve<StudyPlan> {
     if (userId !== null) {
       return this.studyPlanService.getStudyPlan(userId);
     } else {
-      // Ritorna un observable vuoto o gestisci diversamente il caso in cui userId è null
       return throwError("User ID not found");
     }
   }

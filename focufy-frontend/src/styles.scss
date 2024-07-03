@@ -3,33 +3,66 @@
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
+body {
+    background: linear-gradient( 45deg, #a1e6ff,#d1b57c,#b5fffb );
+    animation: gradient 12s ease infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
 
 .navbar-brand {
     width: 50px;
 }
 
+@media screen and (max-width: 640px) {
+    
+}
+
 h2 {
-    font-family: "Quattrocento", serif;
+    font-family: "Rasa", serif;
+    /* font-family: "Piazzolla", serif; */
+    /* font-family: "Quattrocento", serif; */
     font-weight: 700;
-    font-style: normal;
-    font-size: 3.5em;
+    font-style: italic;
+    font-size: 4em;
     line-height: 1em;
 }
 
 h3 {
-    font-family: "Quattrocento", serif;
+    font-family: "Rasa", serif;
+    /* font-family: "Quattrocento", serif; */
     font-style: normal;
+    font-weight: 700;
     font-size:2.5em;
 }
 h4{
     font-size: 1.5em;
 }
 
-p, li {
-    font-family: "Jost", sans-serif;
+p, li, label {
+    font-family: "Red Hat Text", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;
+    font-weight:400;
     font-style: normal;
+}
+
+span {
+    font-family: "Red Hat Text", sans-serif;
+}
+
+button {
+    font-family: "Red Hat Text", sans-serif !important;
 }
 
 .navbar li {
@@ -37,7 +70,6 @@ p, li {
 }
 
 button {
-    font-family: "Jost", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -67,7 +99,6 @@ footer span {
 }
 
 form label {
-    font-family: "Jost", sans-serif;
     font-size: 1.2em;
 }
 
@@ -83,7 +114,7 @@ form small {
     border-right: 0px;
 }
 
-#login-container, #survey-container{
+#survey-container{
     min-height: 90vh;
 }
 

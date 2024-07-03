@@ -1,13 +1,19 @@
 .session-study {
-    background-color: rgb(255, 151, 119);
+  background: radial-gradient(#a1e6ff, #c4d5fb, #b5fffb);
+animation: gradient 6s infinite;
+background-size: 400% 400%;
   }
   
   .session-rest {
-    background-color: rgb(148, 230, 249);
+    background: radial-gradient(#ccff98, #afdec4, #ffb5fa);
+    animation: gradient 6s infinite;
+background-size: 400% 400%;
   }
   
   .session-fun {
-     background-color: rgb(225, 255, 134);
+    background: radial-gradient(#ffd298, #fbc4c4, #b5fffb);
+    animation: gradient 6s infinite;
+background-size: 400% 400%;
  }
 
   .activity-session {
@@ -90,5 +96,9 @@
   .accordion-button:focus {
     /* box-shadow: 0px 0px 3px 1px black; */
     box-shadow: none;
+}
+
+.accordion-body {
+  background: rgba(255,255,255,0.7);
 }
   

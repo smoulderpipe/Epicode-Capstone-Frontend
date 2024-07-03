@@ -235,7 +235,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     return {
       questionId: question.id,
-      answerText: (this.formGroup.get(question.id.toString())?.value as boolean).toString(), // Convert boolean to string
+      answerText: (this.formGroup.get(question.id.toString())?.value as boolean).toString(),
       checkpointDayId: day.id,
       userId: userId,
       answerType: cdAnswerType
@@ -320,7 +320,5 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       return true;
     });
   }
-
-  
 
 }

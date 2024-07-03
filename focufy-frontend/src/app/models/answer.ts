@@ -41,9 +41,6 @@ export interface DeadlineAnswer {
   answerType: CDAnswerType;
 }
 
-
-
-  
 export interface Answer{
     id: number;
     answerText: string;

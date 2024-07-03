@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
     private studyPlanService: StudyPlanService,
     private answerService: AnswerService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const userId = this.authService.getUserId();
@@ -71,7 +71,7 @@ export class ProfileComponent implements OnInit {
     this.answerService.getCheckpointAnswersByTypeAndUserId('STUDY', userId).subscribe(
       (checkpointAnswers) => {
         console.log('Checkpoint answers:', checkpointAnswers);
-        this.isMajorityOfStudyAnswersTrue(checkpointAnswers, 'STUDY'); // Call function to check majority for STUDY
+        this.isMajorityOfStudyAnswersTrue(checkpointAnswers, 'STUDY');
       },
       (error) => {
         console.error('Error fetching checkpoint answers:', error);
@@ -83,7 +83,7 @@ export class ProfileComponent implements OnInit {
     this.answerService.getDeadlineAnswersByTypeAndUserId('STUDY', userId).subscribe(
       (deadlineAnswers) => {
         console.log('Deadline answers:', deadlineAnswers);
-        this.isMajorityOfStudyAnswersTrue(deadlineAnswers, 'STUDY'); // Call function to check majority for STUDY
+        this.isMajorityOfStudyAnswersTrue(deadlineAnswers, 'STUDY');
       },
       (error) => {
         console.error('Error fetching deadline answers:', error);
@@ -95,7 +95,7 @@ export class ProfileComponent implements OnInit {
     this.answerService.getCheckpointAnswersByTypeAndUserId('FUN', userId).subscribe(
       (funAnswers) => {
         console.log('Fun answers:', funAnswers);
-        this.isMajorityOfFunAnswersTrue(funAnswers, 'FUN'); // Call function to check majority for FUN
+        this.isMajorityOfFunAnswersTrue(funAnswers, 'FUN');
       },
       (error) => {
         console.error('Error fetching fun answers:', error);
@@ -107,7 +107,7 @@ export class ProfileComponent implements OnInit {
     this.answerService.getDeadlineAnswersByTypeAndUserId('REST', userId).subscribe(
       (restAnswers) => {
         console.log('Rest answers:', restAnswers);
-        this.isMajorityOfStudyAnswersTrue(restAnswers, 'REST'); // Call function to check majority for REST
+        this.isMajorityOfStudyAnswersTrue(restAnswers, 'REST');
       },
       (error) => {
         console.error('Error fetching rest answers:', error);
@@ -119,7 +119,7 @@ export class ProfileComponent implements OnInit {
     this.answerService.getDeadlineAnswersByTypeAndUserId('REST', userId).subscribe(
       (sleepingAnswers) => {
         console.log('Sleeping answers:', sleepingAnswers);
-        this.isMajorityOfSleepingAnswersTrue(sleepingAnswers); // Call function to check majority for SLEEP
+        this.isMajorityOfSleepingAnswersTrue(sleepingAnswers);
       },
       (error) => {
         console.error('Error fetching sleeping answers:', error);
@@ -185,7 +185,6 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    // Count true and false answers
     let trueCount = 0;
     let falseCount = 0;
 
@@ -197,13 +196,12 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    // Determine majority
     if (trueCount > falseCount) {
       this.isRestEnough = true;
     } else if (falseCount > trueCount) {
       this.isRestEnough = false;
     } else {
-      this.isRestEnough = false; // Handle tie case
+      this.isRestEnough = false;
     }
   }
 
@@ -229,7 +227,6 @@ export class ProfileComponent implements OnInit {
     if (confirmation) {
       this.onRestartAnswer();
     } else {
-      // Handle cancel
     }
   }
 

@@ -5,6 +5,19 @@
     border: 2px dashed black;
   }
 
+  #studyPlanFit {
+    transition: 0.2s;
+  }
+
   #studyPlanFit:hover {
-    background: #DCDCDC;
+    background: white;
+    transition: 0.2s;
+  }
+
+  .profile-card, .stats-card{
+    background: rgba(255,255,255,0.7);
+  }
+
+  .simil-h3 {
+    font-family: "Rasa", serif;
   }
