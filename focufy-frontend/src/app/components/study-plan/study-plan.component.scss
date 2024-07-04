@@ -1,23 +1,24 @@
 .session-study {
-  background: radial-gradient(#a1e6ff, #c4d5fb, #b5fffb);
+  background: radial-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.3), rgba(255,255,255,0.5));
+
 animation: gradient 6s infinite;
 background-size: 400% 400%;
   }
   
   .session-rest {
-    background: radial-gradient(#ccff98, #afdec4, #ffb5fa);
+    background: radial-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.3), rgba(255,255,255,0.5));
     animation: gradient 6s infinite;
 background-size: 400% 400%;
   }
   
   .session-fun {
-    background: radial-gradient(#ffd298, #fbc4c4, #b5fffb);
+    background: radial-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.3), rgba(255,255,255,0.5));
     animation: gradient 6s infinite;
 background-size: 400% 400%;
  }
 
   .activity-session {
-    border: 1px solid #ccc;
+    border: 2px dashed white;
     margin-bottom: 10px;
     padding: 10px;
   }
@@ -86,11 +87,12 @@ background-size: 400% 400%;
     display: none;
     height: 200px;
     width: 200px;
-    border: 2px dashed black;
+    border: 2px dashed white;
   }
 
   #avatarFit:hover {
-    background: #DCDCDC;
+    background: rgba(0,0,0);
+    color: white;
   }
 
   .accordion-button:focus {
@@ -98,7 +100,51 @@ background-size: 400% 400%;
     box-shadow: none;
 }
 
-.accordion-body {
-  background: rgba(255,255,255,0.7);
+/* .accordion-body, .accordion-body .collapsed, .accordion-body .collapsing, .accordion-collapse {
+  background: rgba(255,255,255,0.3);
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px 1px rgba(255,255,255,0) !important;
+} */
+
+.accordion-body .single-day {
+  background: rgba(255,255,255,0.4) !important;
+  box-shadow: 0px 0px 10px 5px rgba(255,255,255,0.9) !important;
 }
-  
+
+.accordion-body {
+  padding-bottom: 5px !important;
+}
+
+.accordion-button, .accordion-button .collapsed {
+  background: rgba(255,255,255,0.4) !important;
+  /* border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important; */
+  border-radius: 20px !important;
+  box-shadow: 0px 0px 10px 5px rgba(255,255,255,0.9) !important;
+}
+
+.accordion-item {
+  background: transparent;
+  /* box-shadow: 0px 0px 10px 5px rgba(255,255,255,0.9); */
+  /* border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important; */
+  border-radius: 20px !important;
+}
+
+h2 {
+  line-height: 0.8em;
+}
+
+h3 {
+  font-family: "Red Hat Text", sans-serif;
+  font-style: normal !important;
+  font-size: 2em;
+}
+
+.mantra-text {
+  font-family: "Piazzolla", serif;
+}
+
+.checkpoint-form-container, .deadline-form-container {
+  border: 2px dashed white;
+}

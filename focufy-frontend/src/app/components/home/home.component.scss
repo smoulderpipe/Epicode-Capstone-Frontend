@@ -1,10 +1,13 @@
 .dashed-col {
     border: 2px dashed black;
+    box-shadow: 0px 0px 10px 5px rgba(255,255,255,0.9);
   }
 .how-container h3 {
     line-height: 1em;
 }
 
 #whatsFocufy, .intro-container {
-    background: rgba(255,255,255,0.7) !important;
+    background: rgba(255,255,255,0.4) !important;
+    box-shadow: 0px 0px 20px 10px rgba(255,255,255,0.9);
+    border-radius: 20px;
 }

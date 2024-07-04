@@ -4,20 +4,20 @@
   <div class="container m-5 p-5 text-center" id="survey-container">
 
     <div *ngIf="showAvatar">
-      <p>Your avatar type is:</p>
+      <p class="mb-0">Your avatar type is:</p>
 
-      <h3><span>{{ userAvatarTemper.temperType}}</span>&nbsp;
-        <span>{{ userAvatarChronotype.chronotypeType}}</span>
+      <h3 class="mb-4"><span class="text-capitalize">{{ userAvatarTemper.temperType}}</span>&nbsp;
+        <span class="text-capitalize">{{ userAvatarChronotype.chronotypeType}}</span>
       </h3>
-      <div class="row d-flex justify-content-center align-items-center">
+      <div class="row p-4 d-flex justify-content-center align-items-center avatar-card mb-4">
         <div class="col-5"><img [src]="userAvatarUrl" class="img-fluid" /></div>
 
         <div class="col-7 text-start">
           <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
-          <p>Their energy and ability to concentrate peaks in the {{userAvatarChronotypeMaxEnergyType}}.</p>
+          <p>Their energy and ability to concentrate peaks in the <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarChronotypeMaxEnergyType}}</span></p>
           <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
-          <p>Inner strength: {{userAvatarTemperStrength}}</p>
-          <p>Vulnerability: {{userAvatarTemperRisk}}</p>
+          <p>Inner strength: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperStrength}}</span></p>
+          <p>Vulnerability: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperRisk}}</span></p>
         </div>
       </div>
 
@@ -31,11 +31,11 @@
         <div class="question-card">
           <div class="question-details fs-5">
             <div *ngIf="currentQuestion.questionType === 'CHRONOTYPE' || currentQuestion.questionType === 'TEMPER'">
-              <h5 class="fw-bold">Avatar Assessment</h5>
+              <h5 class="text-uppercase">Avatar Assessment</h5>
             </div>
             <div
               *ngIf="currentQuestion.questionType === 'LONG_TERM_GOAL' || currentQuestion.questionType === 'SHORT_TERM_GOAL' || currentQuestion.questionType === 'DAYS'">
-              <h5 class="fw-bold">Goal Assessment</h5>
+              <h5 class="text-uppercase">Goal Assessment</h5>
             </div>
             <div *ngIf="currentQuestion.questionType !== 'SATISFACTION' && currentQuestion.questionType !== 'RESTART'">
               <div>
@@ -47,10 +47,10 @@
                   <ul class="list-unstyled row justify-content-center px-5" *ngSwitchCase="'CHRONOTYPE'">
                     <li class="justify-content-center d-flex mb-3"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
-                      <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
+                      <div class="conceal-radio d-flex justify-content-center">
                         <input type="radio" [value]="answer.id" [formControlName]="getFormControlName(currentQuestion)"
                           [attr.name]="'question' + currentQuestion.id">
-                        <label class="d-flex align-items-center justify-content-center p-3">{{ answer.answerText
+                        <label class="d-flex align-items-center justify-content-center p-3 fs-5">{{ answer.answerText
                           }}</label>
                       </div>
                     </li>
@@ -58,11 +58,11 @@
                   <ul class="list-unstyled row justify-content-center" *ngSwitchCase="'TEMPER'">
                     <li class="justify-content-center d-flex mb-3"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
-                      <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
+                      <div class="conceal-radio d-flex justify-content-center">
                         <input class="me-2" type="radio" [value]="answer.id"
                           [formControlName]="getFormControlName(currentQuestion)"
                           [attr.name]="'question' + currentQuestion.id">
-                        <label class="d-flex align-items-center justify-content-center p-3"> {{ answer.answerText
+                        <label class="d-flex align-items-center justify-content-center p-3 fs-5"> {{ answer.answerText
                           }}</label>
                       </div>
                     </li>

@@ -2,9 +2,9 @@
   <div class="container m-5 p-5">
     <div *ngIf="!isLoading">
       <div *ngIf="studyPlan">
-        <div class="row">
+        <div class="row mb-3">
           <div class="col">
-            <h2 class="pb-1">Your current<br> study plan</h2>
+            <h2 class="pb-3">Your current<br> study plan</h2>
             <p class="fs-5">
               <span class="btn btn-light border border-1 border-black rounded-0 text-uppercase fs-5">
                 {{ studyPlan.shortTermGoal }}
@@ -23,21 +23,21 @@
         </div>
 
         <div class="accordion" id="studyPlanAccordion">
-          <div *ngFor="let day of studyPlan.days; let i = index" class="accordion-item border-0 mb-3">
+          <div *ngFor="let day of studyPlan.days; let i = index" class="accordion-item border-0 mb-4">
             <h2 class="accordion-header border-0" id="heading-{{ i }}">
-              <button class="accordion-button bg-light border border-1 border-black rounded-0 text-black" type="button"
+              <button class="accordion-button rounded-0 text-black fs-6" type="button"
                 [class.show]="isToday(day)" [attr.aria-expanded]="isToday(day)" data-bs-toggle="collapse"
                 [attr.data-bs-target]="'#collapse-' + i" [attr.aria-controls]="'collapse-' + i">
-                {{ day.name }} - {{day.date | date:'fullDate'}}
+                <b>{{ day.name }}</b> &nbsp; - {{day.date | date:'fullDate'}}
               </button>
             </h2>
             <div [id]="'collapse-' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading-' + i"
               [class.show]="isToday(day)" aria-labelledby="headingOne" data-bs-parent="#studyPlanAccordion">
-              <div class="accordion-body border-start border-end border-bottom border-1 border-black p-5">
+              <div class="accordion-body p-4">
 
                 <!-- Study Day -->
-                <div *ngIf="day.type === 'StudyDay'" class="row border border-1 border-black my-1 pt-3 pb-1">
-                  <div class="col align-content-center">
+                <div *ngIf="day.type === 'StudyDay'" class="row single-day my-1 pt-3 pb-1">
+                  <div class="col align-content-center px-5">
                     <h3 class="fw-bold fst-italic text-center">{{ day.name }} - Study</h3>
                     <p class="mantra-text text-center"> &ldquo;{{ day.mantra }}&rdquo; </p>
                   </div>
@@ -48,17 +48,17 @@
                           'session-study': session.activitySessionType === 'STUDY',
                           'session-rest': session.activitySessionType === 'REST',
                           'session-fun': session.activitySessionType === 'FUN'
-                        }" class="activity-session border border-1 border-black p-3">
+                        }" class="activity-session p-3">
                           <!-- [style.height.px]="session.duration * 30" -->
                           <p class="my-0 fs-4"><i></i> {{ session.activitySessionType }}</p>
                           <div class="row sessiondetails">
                             <div class="col d-flex">
                               <span class="me-2 my-0 d-flex"><i class="d-flex align-items-center">from about</i>
-                                <span class="fs-5 ms-2 bg-light px-3 py-1 rounded-pill fakebtn">{{
+                                <span class="fs-5 ms-2 bg-light px-2 py-1 fakebtn">{{
                                   formatStartTime(session.startTime)
                                   }}</span></span>
                               <span class="my-0 d-flex"><i class="d-flex align-items-center">for about</i>
-                                <span class="fs-5 ms-2 me-1 bg-light px-3 py-1 rounded-pill fakebtn">{{ session.duration
+                                <span class="fs-5 ms-2 me-1 bg-light px-2 py-1 fakebtn">{{ session.duration
                                   }}
                                   hours</span></span>
                             </div>
@@ -70,11 +70,12 @@
                 </div>
 
                 <!-- Checkpoint Day -->
-                <div *ngIf="day.type === 'CheckpointDay'" class="row border border-1 border-black my-0 pt-3 pb-3">
-                  <h3 class="fw-bold">{{ day.name }} - Checkpoint</h3>
-                  <div class="col">
+                <div *ngIf="day.type === 'CheckpointDay'" class="row single-day my-0 pt-5 pb-5">
+                  
+                  <div class="col ps-5">
+                    <h3 class="fw-bold text-center">{{ day.name }} - Checkpoint</h3>
                     <form [formGroup]="formGroup" (ngSubmit)="submitCheckpointAnswers(day)">
-                      <div class="ps-3 pe-3 pb-3 border border-1 border-black">
+                      <div class="checkpoint-form-container p-3">
                         <p *ngFor="let question of day.questions" class="my-4">
                           <ng-container *ngIf="question.questionType === 'CHECKPOINT'">
                             {{ question.questionText }}
@@ -106,8 +107,10 @@
                       </div>
                     </form>
                   </div>
-                  <div class="col p-3 d-flex justify-content-center align-items-center">
-                    <p *ngFor="let question of day.questions">
+                  <div class="col p-0">
+                    <h3 class="fw-bold text-center mt-3">&nbsp;</h3>
+
+                    <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
                         <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block"
                           id="avatarFit">Your avatar doesn't fit you anymore?</button>
@@ -117,12 +120,13 @@
                 </div>
 
                 <!-- Deadline Day -->
-                <div *ngIf="day.type === 'DeadlineDay'" class="row border border-1 border-black my-0 pt-3 pb-3">
-                  <h3 class="fw-bold">{{ day.name }} - Deadline</h3>
-                  <div class="col">
+                <div *ngIf="day.type === 'DeadlineDay'" class="row single-day my-0 pt-5 pb-5">
+                  
+                  <div class="col ps-5">
+                    <h3 class="fw-bold text-center">{{ day.name }} - Deadline</h3>
                     <form [formGroup]="formGroup" (ngSubmit)="submitDeadlineAnswers(day)">
 
-                      <div class="ps-3 pe-3 pb-3 border border-1 border-black">
+                      <div class="p-3 deadline-form-container">
                         <div *ngIf="hasAnswers(day)">
                           <p *ngFor="let question of day.questions" class="my-4">
                             <ng-container *ngIf="question.questionType === 'DEADLINE'">
@@ -157,10 +161,12 @@
                       </div>
                     </form>
                   </div>
-                  <div class="col p-3 d-flex justify-content-center align-items-center">
-                    <p *ngFor="let question of day.questions">
+                  <div class="col p-0">
+                    <h3 class="fw-bold text-center mt-3">&nbsp;</h3>
+
+                    <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
-                        <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block"
+                        <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block mt-4"
                           id="avatarFit">Your avatar doesn't fit you anymore?</button>
                       </ng-container>
                     </p>

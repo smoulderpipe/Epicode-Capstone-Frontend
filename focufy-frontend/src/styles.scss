@@ -4,7 +4,7 @@
 @import 'bootstrap/scss/bootstrap';
 
 body {
-    background: linear-gradient( 45deg, #a1e6ff,#d1b57c,#b5fffb );
+    background: linear-gradient(45deg, #a1e6ff, #dedd9e, #b5fffb);
     animation: gradient 12s ease infinite;
     background-size: 400% 400%;
 }
@@ -30,8 +30,8 @@ body {
 }
 
 h2 {
-    font-family: "Rasa", serif;
-    /* font-family: "Piazzolla", serif; */
+    /* font-family: "Rasa", serif; */
+    font-family: "Piazzolla", serif;
     /* font-family: "Quattrocento", serif; */
     font-weight: 700;
     font-style: italic;
@@ -40,7 +40,7 @@ h2 {
 }
 
 h3 {
-    font-family: "Rasa", serif;
+    font-family: "Piazzolla", serif;
     /* font-family: "Quattrocento", serif; */
     font-style: normal;
     font-weight: 700;
@@ -48,6 +48,7 @@ h3 {
 }
 h4{
     font-size: 1.5em;
+    font-family: "Piazzolla", serif;
 }
 
 p, li, label {
