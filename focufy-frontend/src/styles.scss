@@ -1,5 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
@@ -25,8 +23,28 @@ body {
     width: 50px;
 }
 
-@media screen and (max-width: 640px) {
-    
+@media screen and (max-width: 560px) {
+    h2 {
+        font-size: 2.2em;
+    }
+}
+
+@media only screen and (min-width: 561px) and (max-width:1023px){
+    h2 {
+        font-size: 2.5em;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1199px) {
+h2 {
+    font-size: 3.5em;
+}
+}
+
+@media screen and (min-width: 1200px) {
+    h2 {
+        font-size: 4.3em;
+    }
 }
 
 h2 {
@@ -35,7 +53,6 @@ h2 {
     /* font-family: "Quattrocento", serif; */
     font-weight: 700;
     font-style: italic;
-    font-size: 4em;
     line-height: 1em;
 }
 
@@ -74,16 +91,6 @@ button {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-}
-
-.paw-illustration-1dir {
-    transform: rotate(70deg);
-    width: 40px;
-}
-
-.paw-illustration-2dir {
-    transform: rotate(110deg);
-    width: 40px;
 }
 
 .how-container p{

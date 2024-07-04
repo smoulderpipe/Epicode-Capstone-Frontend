@@ -11,3 +11,40 @@
     box-shadow: 0px 0px 20px 10px rgba(255,255,255,0.9);
     border-radius: 20px;
 }
+
+@media only screen and (max-width: 560px) {
+    #beast-img {
+        max-height: 400px;
+    }
+
+    .custom-sm-width {
+        width: 70%;
+    }
+    .paw-illustration-1dir {
+        transform: rotate(140deg);
+        width: 40px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .paw-illustration-2dir {
+        transform: rotate(200deg);
+        width: 40px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+@media only screen and (min-width: 561px) {
+    .paw-illustration-1dir {
+        transform: rotate(70deg);
+        width: 40px;
+    }
+    
+    .paw-illustration-2dir {
+        transform: rotate(110deg);
+        width: 40px;
+    }
+
+}
+
