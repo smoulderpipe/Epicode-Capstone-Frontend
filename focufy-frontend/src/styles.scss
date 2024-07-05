@@ -1,0 +1,130 @@
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+body {
+    background: linear-gradient(45deg, #a1e6ff, #dedd9e, #b5fffb);
+    animation: gradient 12s ease infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.navbar-brand {
+    width: 50px;
+}
+
+@media screen and (max-width: 560px) {
+    h2 {
+        font-size: 2.2em;
+    }
+}
+
+@media only screen and (min-width: 561px) and (max-width:1023px){
+    h2 {
+        font-size: 2.5em;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1199px) {
+h2 {
+    font-size: 3.5em;
+}
+}
+
+@media screen and (min-width: 1200px) {
+    h2 {
+        font-size: 4.3em;
+    }
+}
+
+h2 {
+    /* font-family: "Rasa", serif; */
+    font-family: "Piazzolla", serif;
+    /* font-family: "Quattrocento", serif; */
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1em;
+}
+
+h3 {
+    font-family: "Piazzolla", serif;
+    /* font-family: "Quattrocento", serif; */
+    font-style: normal;
+    font-weight: 700;
+    font-size:2.5em;
+}
+h4{
+    font-size: 1.5em;
+    font-family: "Piazzolla", serif;
+}
+
+p, li, label {
+    font-family: "Red Hat Text", sans-serif;
+    font-optical-sizing: auto;
+    font-weight:400;
+    font-style: normal;
+}
+
+span {
+    font-family: "Red Hat Text", sans-serif;
+}
+
+button {
+    font-family: "Red Hat Text", sans-serif !important;
+}
+
+.navbar li {
+    font-size: 1.5em;
+}
+
+button {
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.how-container p{
+    line-height: 1.2em;
+
+}
+
+.how-container h3 {
+    font-size: 4em;
+}
+
+footer span {
+    font-size: 0.8em !important;
+}
+
+form label {
+    font-size: 1.2em;
+}
+
+form small {
+    color: #b30000;
+}
+
+.form-control {
+    border-radius: 0px;
+    border-bottom: 1px solid black;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#survey-container{
+    min-height: 90vh;
+}
+
+
+

@@ -1,0 +1,148 @@
+.conceal-radio {
+  float: left;
+  margin: 0 5px 0 0;
+  position: relative;
+  background: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+}
+
+h3 span {
+  font-family: "Piazzolla", serif;
+}
+
+.avatar-card {
+  background: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.7);
+}
+
+.conceal-radio label,
+.conceal-radio input {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.conceal-radio input[type="radio"] {
+  opacity: 0.011;
+  z-index: 100;
+  transition: 0.2s;
+  cursor: pointer;
+  color: black;
+}
+
+.conceal-radio input[type="radio"]:checked+label {
+  background: black !important;
+  color: white !important;
+  border-radius: 20px;
+  transition: 0.2s;
+}
+
+.conceal-radio input[type="radio"]:hover+label {
+  background: rgba(255, 255, 255, 0.4);
+  color: black;
+  border-radius: 20px;
+  transition: 0.2s;
+}
+
+.conceal-radio label {
+  cursor: pointer;
+  z-index: 90;
+  line-height: 1.2em;
+  transition: 0.2s;
+  color: black;
+}
+
+
+
+@media only screen and (min-width:768px) {
+
+  label {
+    font-size: 1em;
+  }
+
+  input[type=text] {
+    width: 50% !important;
+    text-align: center;
+  }
+
+  #answer-list ul {
+    min-width: 600px;
+    width: 600px;
+  }
+
+  h4 {
+    max-width: 600px;
+    font-size: 2em;
+  }
+
+  .conceal-radio {
+    width: 230px;
+    height: 120px;
+  }
+
+  #answer-list li {
+    width: 250px;
+  }
+
+}
+
+@media only screen and (min-width: 561px) and (max-width: 767px) {
+
+  label {
+    font-size: 1em;
+  }
+  
+  input[type=text] {
+    width: 80% !important;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  h4 {
+    font-size: 1.5em !important;
+  }
+
+  .conceal-radio {
+    width: 160px !important;
+    height: 100px !important;
+  }
+
+  #answer-list li {
+    width: 160px !important;
+  }
+
+  input, label {
+    font-size: 0.8em;
+  }
+
+  input[type=text] {
+    width: 80% !important;
+    text-align: center;
+  }
+
+  #answer-list ul {
+    max-width: 350px;
+  }
+
+
+}
+
+h4 {
+  font-size: 2em;
+}
+
+
+.conceal-radio {
+  width: 230px;
+  height: 120px;
+}
+
+#answer-list li {
+  width: 250px;
+}
+

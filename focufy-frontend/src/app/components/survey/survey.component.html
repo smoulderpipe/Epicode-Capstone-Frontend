@@ -1,0 +1,97 @@
+<div class="d-flex justify-content-center main-container">
+
+
+  <div class="container m-md-5 m-3 p-md-5 text-center" id="survey-container">
+
+    <div *ngIf="showAvatar">
+      <p class="mb-0">Your avatar type is:</p>
+
+      <h3 class="mb-4"><span class="text-capitalize">{{ userAvatarTemper.temperType}}</span>&nbsp;
+        <span class="text-capitalize">{{ userAvatarChronotype.chronotypeType}}</span>
+      </h3>
+      <div class="row p-4 d-flex justify-content-center align-items-center avatar-card mb-4">
+        <div class="col-md-5"><img [src]="userAvatarUrl" class="img-fluid" /></div>
+
+        <div class="col-md-7 text-md-start text-center">
+          <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
+          <p>Their energy and ability to concentrate peaks in the <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarChronotypeMaxEnergyType}}</span></p>
+          <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
+          <p>Inner strength: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperStrength}}</span></p>
+          <p>Vulnerability: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperRisk}}</span></p>
+        </div>
+      </div>
+
+      <a routerLink="/study-plan"><button type="button"
+          class="text-uppercase fs-md-5 btn btn-dark rounded-pill px-md-5 px-3 py-3 mt-3 ms-md-2"
+          (click)="createStudyPlanAndAssociateMantras()">Discover your study plan</button></a>
+
+    </div>
+    <div *ngIf="questionsPage && currentQuestion && !showAvatar">
+      <form [formGroup]="getCurrentFormGroup(currentQuestion)" (ngSubmit)="onSubmit()" class="px-md-5">
+        <div class="question-card mt-md-0 mt-4">
+          <div class="question-details fs-5">
+            <div *ngIf="currentQuestion.questionType === 'CHRONOTYPE' || currentQuestion.questionType === 'TEMPER'">
+              <h5 class="text-uppercase">Avatar Assessment</h5>
+            </div>
+            <div
+              *ngIf="currentQuestion.questionType === 'LONG_TERM_GOAL' || currentQuestion.questionType === 'SHORT_TERM_GOAL' || currentQuestion.questionType === 'DAYS'">
+              <h5 class="text-uppercase">Goal Assessment</h5>
+            </div>
+            <div *ngIf="currentQuestion.questionType !== 'SATISFACTION' && currentQuestion.questionType !== 'RESTART'">
+              <div class="d-flex justify-content-center">
+                <h4 class="fw-bold mb-4">{{ currentQuestion.questionText }}</h4>
+              </div>
+
+              <div class="answers-list d-flex justify-content-center" id="answer-list">
+                <ng-container [ngSwitch]="currentQuestion.questionType">
+                  <ul class="list-unstyled row justify-content-center px-md-5" *ngSwitchCase="'CHRONOTYPE'">
+                    <li class="justify-content-center d-flex mb-3 px-md-2 px-1"
+                      *ngFor="let answer of answersMap[currentQuestion.id] || []">
+                      <div class="conceal-radio d-flex justify-content-center">
+                        <input type="radio" [value]="answer.id" [formControlName]="getFormControlName(currentQuestion)"
+                          [attr.name]="'question' + currentQuestion.id">
+                        <label class="d-flex align-items-center justify-content-center p-3 fs-md-5">{{ answer.answerText
+                          }}</label>
+                      </div>
+                    </li>
+                  </ul>
+                  <ul class="list-unstyled row justify-content-center" *ngSwitchCase="'TEMPER'">
+                    <li class="justify-content-center d-flex mb-3"
+                      *ngFor="let answer of answersMap[currentQuestion.id] || []">
+                      <div class="conceal-radio d-flex justify-content-center">
+                        <input class="me-2" type="radio" [value]="answer.id"
+                          [formControlName]="getFormControlName(currentQuestion)"
+                          [attr.name]="'question' + currentQuestion.id">
+                        <label class="d-flex align-items-center justify-content-center p-3 fs-md-5"> {{ answer.answerText
+                          }}</label>
+                      </div>
+                    </li>
+                  </ul>
+                  <input type="text" *ngSwitchCase="'LONG_TERM_GOAL'"
+                    [formControlName]="getFormControlName(currentQuestion)"
+                    [attr.name]="'question' + currentQuestion.id" />
+                  <input type="text" *ngSwitchCase="'SHORT_TERM_GOAL'"
+                    [formControlName]="getFormControlName(currentQuestion)"
+                    [attr.name]="'question' + currentQuestion.id" />
+                  <input type="number" *ngSwitchCase="'DAYS'" [formControlName]="getFormControlName(currentQuestion)"
+                    [attr.name]="'daysQuestion' + currentQuestion.id" />
+                  <input type="number" *ngSwitchCase="'SATISFACTION'"
+                    [formControlName]="getFormControlName(currentQuestion)"
+                    [attr.name]="'satisfactionQuestion' + currentQuestion.id" />
+                </ng-container>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="button-group">
+          <button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 me-2"
+            (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"><i
+              class="bi bi-arrow-left"></i></button>
+          <button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2"
+            (click)="nextQuestion()" [disabled]="!isCurrentAnswerValid()"><i class="bi bi-arrow-right"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,200 @@
+<div class="d-flex justify-content-center">
+  <div class="container-fluid container-lg m-0 m-md-5 p-3 p-lg-5">
+    <div *ngIf="!isLoading">
+      <div *ngIf="studyPlan">
+        <div class="row mb-3">
+          <div class="col order-1 order-md-0 text-center text-md-start">
+            <h2 class="pb-3">Your current<br> study plan</h2>
+            <p class="fs-md-5">
+              Your proximal goal is:
+              <span class="btn btn-light border border-1 border-black rounded-0 text-uppercase fs-md-5">
+                {{ studyPlan.shortTermGoal }}
+              </span>
+            </p>
+          </div>
+          <div class="col-12 col-md text-md-end text-center mb-md-0 mb-5">
+            <p class="fs-3 mb-0">Welcome back, <span class="text-capitalize fw-bold">{{ user?.name }}</span></p>
+            <a class="btn p-0" role="button" routerLink="/profile">
+              <button class="text-uppercase btn btn-dark rounded-pill px-4 px-md-5 py-3 mt-1">
+                check your profile <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </a>
+          </div>
+        </div>
+
+        <div class="accordion" id="studyPlanAccordion">
+          <div *ngFor="let day of studyPlan.days; let i = index" class="accordion-item border-0 mb-4">
+            <h2 class="accordion-header border-0" id="heading-{{ i }}">
+              <button class="accordion-button rounded-0 text-black fs-md-6 align-items-start align-items-md-center"
+                type="button" [class.show]="isToday(day)" [attr.aria-expanded]="isToday(day)" data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#collapse-' + i" [attr.aria-controls]="'collapse-' + i">
+                <b>{{ day.name }}</b> <span class="d-none d-md-block">&nbsp; -&nbsp;</span> <span>{{day.date |
+                  date:'fullDate'}}</span>
+              </button>
+            </h2>
+            <div [id]="'collapse-' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading-' + i"
+              [class.show]="isToday(day)" aria-labelledby="headingOne" data-bs-parent="#studyPlanAccordion">
+              <div class="accordion-body p-4">
+
+                <!-- Study Day -->
+                <div *ngIf="day.type === 'StudyDay'" class="row single-day my-1 pt-3 pb-1">
+                  <div class="my-3 my-lg-0 col-lg col-md-12 col-12 align-content-center px-5">
+                    <h3 class="fw-bold fst-italic text-center">{{ day.name }} - Study</h3>
+                    <p class="mantra-text text-center mt-md-0 mb-md-0 mt-4 mb-5"> &ldquo;{{ day.mantra }}&rdquo; </p>
+                  </div>
+                  <div class="col">
+                    <div *ngIf="day.activitySessions && day.activitySessions.length > 0">
+                      <div *ngFor="let session of day.activitySessions.slice().sort(compareSessions)">
+                        <div [ngClass]="{
+                          'session-study': session.activitySessionType === 'STUDY',
+                          'session-rest': session.activitySessionType === 'REST',
+                          'session-fun': session.activitySessionType === 'FUN'
+                        }" class="activity-session p-3">
+                          <!-- [style.height.px]="session.duration * 30" -->
+                          <p class="my-0 fs-4">{{ session.activitySessionType }}</p>
+                          <div class="row sessiondetails">
+                            <div class="col d-flex flex-row flex-md-row indications">
+                              <span class="me-md-2 me-1 my-0 mb-md-0 d-flex">
+                                <i class="d-flex align-items-center">from
+                                  about</i>
+                                <span class="fs-md-5 ms-1 ms-md-2 bg-light px-1 px-md-2 py-1 fakebtn">{{
+                                  formatStartTime(session.startTime)
+                                  }}</span>
+                              </span>
+                              <span class="my-0 d-flex"><i class="d-flex align-items-center">for about</i>
+                                <span class="fs-md-5 ms-1 ms-md-2 me-1 bg-light px-1 px-md-2 py-1 fakebtn">{{
+                                  session.duration
+                                  }} hours</span></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Checkpoint Day -->
+                <div *ngIf="day.type === 'CheckpointDay'" class="row single-day my-0 pt-md-5 pt-4 pb-5">
+
+                  <div class="col col-lg col-md-12 ps-lg-5 px-md-4">
+                    <h3 class="fw-bold text-center mb-lg-0 mb-4">{{ day.name }} - Checkpoint</h3>
+                    <form [formGroup]="formGroup" (ngSubmit)="submitCheckpointAnswers(day)">
+                      <div class="checkpoint-form-container p-3">
+                        <p *ngFor="let question of day.questions" class="my-4">
+                          <ng-container *ngIf="question.questionType === 'CHECKPOINT'">
+                            <div class="d-block d-md-inline question-text"><span>{{ question.questionText }}</span>
+                            </div>
+                            <div class="conceal-radio d-flex justify-content-center border border-1 border-black mb-2">
+                              <input class="me-2" type="radio" [formControlName]="question.id.toString()"
+                                [value]="false" (change)="onAnswerChange(day, question, false)" />
+                              <label class="d-flex align-items-center justify-content-center p-3"> No</label>
+                            </div>
+                            <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
+                              <input class="me-2" type="radio" [formControlName]="question.id.toString()" [value]="true"
+                                (change)="onAnswerChange(day, question, true)" />
+                              <label class="d-flex align-items-center justify-content-center p-3"> Yes</label>
+                            </div>
+
+                          </ng-container>
+                        </p>
+
+                        <button type="submit" [disabled]="!canSubmitAnswers(day)"
+                          class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">
+                          Submit Answers
+                        </button>
+
+                        <p *ngIf="submissionStatus[day.name] === true" class="mt-3 mb-0 text-success text-center">
+                          Answers
+                          correctly submitted</p>
+
+                        <p *ngIf="submissionStatus[day.name] === false" class="mt-3 mb-0 text-danger text-center">You
+                          already submitted answers for this day</p>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col p-0">
+                    <h3 class="fw-bold text-center mt-3">&nbsp;</h3>
+
+                    <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center">
+                      <ng-container *ngIf="question.questionType === 'RESTART'">
+                        <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block"
+                          id="avatarFit">Your avatar doesn't fit you anymore?</button>
+                      </ng-container>
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Deadline Day -->
+                <div *ngIf="day.type === 'DeadlineDay'" class="row single-day my-0 pt-md-5 pt-4 pb-5">
+
+                  <div class="col col-md-12 col-lg ps-lg-5 px-4">
+                    <h3 class="fw-bold text-center mb-lg-2 mb-4">{{ day.name }} - Deadline</h3>
+                    <form [formGroup]="formGroup" (ngSubmit)="submitDeadlineAnswers(day)">
+
+                      <div class="p-3 deadline-form-container">
+                        <div *ngIf="hasAnswers(day)">
+                          <p *ngFor="let question of day.questions" class="my-4">
+                            <ng-container *ngIf="question.questionType === 'DEADLINE'">
+                              <div class="d-block d-md-inline question-text"><span>{{ question.questionText }}</span>
+                              </div>
+
+                              <div
+                                class="conceal-radio d-flex justify-content-center border border-1 border-black mb-2">
+                                <input class="me-2" type="radio" [formControlName]="question.id.toString()"
+                                  [value]="false" (change)="onAnswerChange(day, question, false)" />
+                                <label class="d-flex align-items-center justify-content-center p-3"> No</label>
+                              </div>
+                              <div class="conceal-radio d-flex justify-content-center border border-1 border-black">
+                                <input class="me-2" type="radio" [formControlName]="question.id.toString()"
+                                  [value]="true" (change)="onAnswerChange(day, question, true)" />
+                                <label class="d-flex align-items-center justify-content-center p-3"> Yes</label>
+                              </div>
+                            </ng-container>
+                          </p>
+
+                          <button type="submit" [disabled]="!canSubmitAnswers(day)"
+                            class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">
+                            Submit Answers
+                          </button>
+
+                          <p *ngIf="submissionStatus[day.name] === true" class="mt-3 mb-0 text-success text-center">
+                            Answers
+                            correctly submitted</p>
+                        </div>
+                        <p *ngIf="submissionStatus[day.name] === false" class="mt-3 mb-0 text-danger text-center">You
+                          already submitted answers for this day</p>
+
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col p-0">
+                    <h3 class="fw-bold text-center mt-3 d-none d-lg-block">&nbsp;</h3>
+
+                    <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center mt-md-0 mt-1">
+                      <ng-container *ngIf="question.questionType === 'RESTART'">
+                        <button (click)="confirmRestart(day, question)"
+                          class="text-uppercase btn rounded-pill d-block mt-4 mt-md-5 m4-lg-0" id="avatarFit">Your
+                          avatar doesn't fit
+                          you anymore?</button>
+                      </ng-container>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="!studyPlan">
+        <p>No study plan found for this user.</p>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading">
+      <p>Loading study plan...</p>
+    </div>
+  </div>
+</div>

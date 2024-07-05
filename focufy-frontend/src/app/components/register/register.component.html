@@ -1,0 +1,59 @@
+<div class="container my-5">
+    <div class="row p-5" id="signupContainer">
+        <div class="col">
+            <h2 class="mb-5">Sign up now</h2>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="w-75">
+                <div class="mb-3">
+                    <label for="inputName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="inputName" formControlName="name">
+                    <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+                        <small *ngIf="registerForm.get('name')?.errors?.['required']">
+                            This field is mandatory
+                        </small>
+                        <small *ngIf="registerForm.get('name')?.errors?.['minlength']">
+                            Name cannot be shorter than 3 characters
+                        </small>
+                        <small *ngIf="registerForm.get('name')?.errors?.['maxlength']">
+                            Name cannot be longer than 20 characters
+                        </small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="inputEmail" formControlName="email">
+                    <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                        E-mail must be valid
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" formControlName="password">
+                    <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                        <small *ngIf="registerForm.get('password')?.errors?.['required']">The field is required</small>
+                        <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Password cannot be shorter
+                            than 8 characters</small>
+                        <small *ngIf="registerForm.get('password')?.errors?.['maxlength']">Password cannot be longer
+                            than 30 characters</small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="inputPasswordConf" class="form-label">Confirm password</label>
+                    <input type="password" class="form-control" id="passwordConf" formControlName="passwordConf">
+                    <div *ngIf="registerForm.get('passwordConf')?.invalid && registerForm.get('passwordConf')?.touched">
+                        <small *ngIf="registerForm.get('passwordConf')?.errors?.['required']">The field is
+                            required</small>
+                        <small
+                            *ngIf="registerForm.get('passwordConf')?.hasError('passwordMatch') && registerForm.get('passwordConf')?.touched">
+                            The passwords don't match
+                        </small>
+                    </div>
+                </div>
+
+                <button type="submit" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3"
+                    [disabled]="registerForm.invalid">REGISTER</button>
+            </form>
+        </div>
+    </div>
+
+</div>
