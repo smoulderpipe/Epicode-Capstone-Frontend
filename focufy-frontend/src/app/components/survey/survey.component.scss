@@ -13,7 +13,8 @@ h3 span {
 
 .avatar-card {
   background: rgba(255, 255, 255, 0.4) !important;
-  box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
 }
 
 .conceal-radio label,
@@ -58,7 +59,7 @@ h3 span {
 
 
 
-@media only screen and (min-width:768px) {
+@media only screen and (min-width:769px) {
 
   label {
     font-size: 1em;
@@ -88,9 +89,13 @@ h3 span {
     width: 250px;
   }
 
+  button {
+    font-size: 1.2em;
+  }
+
 }
 
-@media only screen and (min-width: 561px) and (max-width: 767px) {
+@media only screen and (min-width: 561px) and (max-width: 768px) {
 
   label {
     font-size: 1em;

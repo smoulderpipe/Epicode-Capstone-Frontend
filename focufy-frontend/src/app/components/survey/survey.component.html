@@ -12,7 +12,7 @@
       <div class="row p-4 d-flex justify-content-center align-items-center avatar-card mb-4">
         <div class="col-md-5"><img [src]="userAvatarUrl" class="img-fluid" /></div>
 
-        <div class="col-md-7 text-md-start text-center">
+        <div class="col-md-7 px-md-5 text-md-start text-center">
           <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
           <p>Their energy and ability to concentrate peaks in the <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarChronotypeMaxEnergyType}}</span></p>
           <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
@@ -22,7 +22,7 @@
       </div>
 
       <a routerLink="/study-plan"><button type="button"
-          class="text-uppercase fs-md-5 btn btn-dark rounded-pill px-md-5 px-3 py-3 mt-3 ms-md-2"
+          class="bg-black main-btn text-uppercase fs-md-5 btn btn-dark rounded-pill px-md-5 px-3 py-3 mt-3 ms-md-2 fs-"
           (click)="createStudyPlanAndAssociateMantras()">Discover your study plan</button></a>
 
     </div>
@@ -85,10 +85,10 @@
           </div>
         </div>
         <div class="button-group">
-          <button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 me-2"
+          <button type="button" class="text-uppercase fs-5 btn btn-dark bg-black rounded-pill px-5 py-3 mt-3 me-2"
             (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"><i
               class="bi bi-arrow-left"></i></button>
-          <button type="button" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 ms-2"
+          <button type="button" class="text-uppercase fs-5 btn btn-dark bg-black rounded-pill px-5 py-3 mt-3 ms-2"
             (click)="nextQuestion()" [disabled]="!isCurrentAnswerValid()"><i class="bi bi-arrow-right"></i></button>
         </div>
       </form>

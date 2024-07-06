@@ -1,15 +1,12 @@
-#logo {
-    width: 130px !important;
-}
 
 li, a {
     font-size: 1em;
     
 }
 
-.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+/* .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
     text-decoration: underline;
-}
+} */
 
 .navbar-light {
     background: rgba(255,255,255,0) !important;
@@ -19,11 +16,16 @@ li, a {
     color: black;
 }
 
-a:hover {
+/* a:hover {
     text-decoration: underline;
-}
+} */
 
 @media only screen and (max-width: 560px) {
+
+    #logo {
+        width: 110px !important;
+    }
+    
     #navbarNav {
         position: fixed;
         right: 10px;
@@ -58,3 +60,32 @@ a:hover {
         flex-direction: row;
     }
 }
+
+
+@media only screen and (min-width: 561px) {
+
+    #logo {
+        width: 130px !important;
+    }
+
+    .navbar::after{
+        transform: scale(1);
+        background: white;
+        mask: linear-gradient(to top, transparent, black 55%);
+    backdrop-filter: blur(14px);
+    }
+}
+
+.navbar li:hover {
+    filter: brightness(2);
+}
+
+.navbar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: white;
+    mask: linear-gradient(to top, transparent, black 80%);
+backdrop-filter: blur(14px);
+ }

@@ -1,25 +1,64 @@
 .dashed-col {
     border: 2px dashed black;
     box-shadow: 0px 0px 10px 5px rgba(255,255,255,0.9);
+    background: radial-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.5));
+    animation: gradient 6s infinite;
+    background-size: 400% 400%;
   }
+
+
 .how-container h3 {
     line-height: 1em;
 }
 
 #whatsFocufy, .intro-container {
     background: rgba(255,255,255,0.4) !important;
-    box-shadow: 0px 0px 20px 10px rgba(255,255,255,0.9);
+    box-shadow: 0px 0px 10px 5px rgba(255,255,255,0.9);
     border-radius: 20px;
 }
 
-@media only screen and (max-width: 560px) {
+@media only screen and (max-width: 768px){
     #beast-img {
         max-height: 400px;
     }
+   
+}
 
+
+@media only screen and (min-width: 561px) {
+    .paw-illustration-1dir {
+        transform: rotate(70deg);
+        width: 40px;
+    }
+    
+    .paw-illustration-2dir {
+        transform: rotate(110deg);
+        width: 40px;
+    }
+
+}
+
+@media only screen and (min-width:992px){
+    button {
+     font-size: 1.2em;   
+    }
+
+}
+
+.how-container p{
+    line-height: 1.2em;
+
+}
+
+.how-container h3 {
+    font-size: 3em;
+}
+
+@media only screen and (max-width: 991px) {
     .custom-sm-width {
         width: 70%;
     }
+
     .paw-illustration-1dir {
         transform: rotate(140deg);
         width: 40px;
@@ -35,16 +74,6 @@
     }
 }
 
-@media only screen and (min-width: 561px) {
-    .paw-illustration-1dir {
-        transform: rotate(70deg);
-        width: 40px;
-    }
-    
-    .paw-illustration-2dir {
-        transform: rotate(110deg);
-        width: 40px;
-    }
-
+#intro-p{
+    max-width: 380px;
 }
-

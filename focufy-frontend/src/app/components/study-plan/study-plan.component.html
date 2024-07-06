@@ -15,7 +15,7 @@
           <div class="col-12 col-md text-md-end text-center mb-md-0 mb-5">
             <p class="fs-3 mb-0">Welcome back, <span class="text-capitalize fw-bold">{{ user?.name }}</span></p>
             <a class="btn p-0" role="button" routerLink="/profile">
-              <button class="text-uppercase btn btn-dark rounded-pill px-4 px-md-5 py-3 mt-1">
+              <button class="text-uppercase btn btn-dark bg-black rounded-pill px-4 px-md-5 py-3 mt-1 main-btn">
                 check your profile <i class="bi bi-arrow-right ms-2"></i>
               </button>
             </a>
@@ -77,9 +77,9 @@
                 <div *ngIf="day.type === 'CheckpointDay'" class="row single-day my-0 pt-md-5 pt-4 pb-5">
 
                   <div class="col col-lg col-md-12 ps-lg-5 px-md-4">
-                    <h3 class="fw-bold text-center mb-lg-0 mb-4">{{ day.name }} - Checkpoint</h3>
+                    <h3 class="fw-bold text-center mb-lg-2 mb-4">{{ day.name }} - Checkpoint</h3>
                     <form [formGroup]="formGroup" (ngSubmit)="submitCheckpointAnswers(day)">
-                      <div class="checkpoint-form-container p-3">
+                      <div class="checkpoint-form-container px-4 pt-2 pb-4">
                         <p *ngFor="let question of day.questions" class="my-4">
                           <ng-container *ngIf="question.questionType === 'CHECKPOINT'">
                             <div class="d-block d-md-inline question-text"><span>{{ question.questionText }}</span>
@@ -99,7 +99,7 @@
                         </p>
 
                         <button type="submit" [disabled]="!canSubmitAnswers(day)"
-                          class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">
+                          class="text-uppercase btn btn-dark bg-black rounded-pill px-3 py-2 mt-3 w-100 d-block main-btn">
                           Submit Answers
                         </button>
 
@@ -113,7 +113,7 @@
                     </form>
                   </div>
                   <div class="col p-0">
-                    <h3 class="fw-bold text-center mt-3">&nbsp;</h3>
+                    <h3 class="fw-bold text-center mt-3 fake-h3">&nbsp;</h3>
 
                     <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
@@ -131,7 +131,7 @@
                     <h3 class="fw-bold text-center mb-lg-2 mb-4">{{ day.name }} - Deadline</h3>
                     <form [formGroup]="formGroup" (ngSubmit)="submitDeadlineAnswers(day)">
 
-                      <div class="p-3 deadline-form-container">
+                      <div class="deadline-form-container px-4 pt-2 pb-4">
                         <div *ngIf="hasAnswers(day)">
                           <p *ngFor="let question of day.questions" class="my-4">
                             <ng-container *ngIf="question.questionType === 'DEADLINE'">
@@ -153,7 +153,7 @@
                           </p>
 
                           <button type="submit" [disabled]="!canSubmitAnswers(day)"
-                            class="text-uppercase btn btn-dark rounded-pill px-3 py-2 mt-3 w-100 d-block">
+                            class="text-uppercase btn btn-dark bg-black rounded-pill px-3 py-2 mt-3 w-100 d-block main-btn">
                             Submit Answers
                           </button>
 
@@ -168,12 +168,12 @@
                     </form>
                   </div>
                   <div class="col p-0">
-                    <h3 class="fw-bold text-center mt-3 d-none d-lg-block">&nbsp;</h3>
+                    <h3 class="fw-bold text-center mt-3 d-none d-lg-block fake-h3">&nbsp;</h3>
 
                     <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center mt-md-0 mt-1">
                       <ng-container *ngIf="question.questionType === 'RESTART'">
                         <button (click)="confirmRestart(day, question)"
-                          class="text-uppercase btn rounded-pill d-block mt-4 mt-md-5 m4-lg-0" id="avatarFit">Your
+                          class="text-uppercase btn rounded-pill d-block mt-4 mt-lg-4 mt-md-5 m4-lg-0" id="avatarFit">Your
                           avatar doesn't fit
                           you anymore?</button>
                       </ng-container>

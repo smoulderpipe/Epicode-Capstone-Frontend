@@ -1,9 +1,11 @@
-<div class="container my-5">
-    <div class="row p-5" id="signupContainer">
-        <div class="col">
+<div class="d-flex justify-content-center">
+    <div class="d-flex align-items-start p-lg-5 justify-content-center inner-body">
+        <div class="container p-md-5 px-3 py-4 mt-md-5 mt-3 align-content-center justify-content-center"
+            id="signupContainer">
+
             <h2 class="mb-5">Sign up now</h2>
 
-            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="w-75">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                 <div class="mb-3">
                     <label for="inputName" class="form-label">Name</label>
                     <input type="text" class="form-control" id="inputName" formControlName="name">
@@ -30,8 +32,10 @@
                     <label for="inputPassword" class="form-label">Password</label>
                     <input type="password" class="form-control" id="inputPassword" formControlName="password">
                     <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-                        <small *ngIf="registerForm.get('password')?.errors?.['required']">The field is required</small>
-                        <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Password cannot be shorter
+                        <small *ngIf="registerForm.get('password')?.errors?.['required']">The field is
+                            required</small>
+                        <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Password cannot be
+                            shorter
                             than 8 characters</small>
                         <small *ngIf="registerForm.get('password')?.errors?.['maxlength']">Password cannot be longer
                             than 30 characters</small>
@@ -50,10 +54,11 @@
                     </div>
                 </div>
 
-                <button type="submit" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3"
+                <button type="submit" class="text-uppercase fs-5 btn btn-dark bg-black main-btn rounded-pill px-5 py-3 mt-3"
                     [disabled]="registerForm.invalid">REGISTER</button>
             </form>
-        </div>
-    </div>
 
+        </div>
+
+    </div>
 </div>

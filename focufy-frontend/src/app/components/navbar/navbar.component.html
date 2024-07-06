@@ -11,16 +11,16 @@
           <li class="nav-item px-3 py-0 bg-black text-white rounded-pill" *ngIf="(isLoggedIn$ | async)">
             <a class="nav-link text-white p-1" routerLinkActive="active" routerLink="/study-plan">Study Plan</a>
           </li>
-          <li class="nav-item ms-2 px-3 py-0 bg-black rounded-pill" *ngIf="(isLoggedIn$ | async)">
+          <li class="nav-item ms-2 px-3 py-0 bg-black rounded-pill nav-btn" *ngIf="(isLoggedIn$ | async)">
             <a class="nav-link text-white p-1" routerLinkActive="active" routerLink="/profile">Profile</a>
           </li>
-          <li class="nav-item ms-2 px-3 py-0 bg-black text-white rounded-pill" *ngIf="!(isLoggedIn$ | async)">
+          <li class="nav-item ms-2 px-3 py-0 bg-black text-white rounded-pill nav-btn" *ngIf="!(isLoggedIn$ | async)">
             <a class="nav-link text-white p-1" routerLinkActive="active" routerLink="/login">Login</a>
           </li>
-          <li class="nav-item ms-2 px-3 py-0 bg-black text-white rounded-pill" *ngIf="!(isLoggedIn$ | async)">
+          <li class="nav-item ms-2 px-3 py-0 bg-black text-white rounded-pill nav-btn" *ngIf="!(isLoggedIn$ | async)">
             <a class="nav-link text-white p-1" routerLinkActive="active" routerLink="/register">Register</a>
           </li>
-          <li class="nav-item ms-2 px-3 py-0 bg-black text-white rounded-pill" *ngIf="(isLoggedIn$ | async)">
+          <li class="nav-item ms-2 px-3 py-0 bg-black text-white rounded-pill nav-btn" *ngIf="(isLoggedIn$ | async)">
             <a class="nav-link text-white p-1" routerLinkActive="active" (click)="logout()" style="cursor: pointer;">Logout</a>
           </li>
           

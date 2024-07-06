@@ -7,3 +7,20 @@
 input {
     border: 1px solid black;
 }
+
+.inner-body {
+    min-height: 90vh;
+    align-content: center;
+}
+
+@media only screen and (min-width: 768px) {
+    h2 {
+        min-width: 600px;
+    }
+}
+@media only screen and (max-width: 767px) {
+    h2 {
+        min-width: 300px;
+    }
+}
+

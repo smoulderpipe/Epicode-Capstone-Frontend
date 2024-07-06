@@ -1,25 +1,30 @@
-<div class="inner-body mx-3">
-  <div class="container mt-md-5 p-5" id="login-container">
-    <h2 class="mb-5">Login to your account</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="mb-3">
-        <label for="inputEmail" class="form-label">Email</label>
-        <input type="email" class="form-control" id="inputEmail" formControlName="email">
-        <small *ngIf="loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched">
-          Enter the email you registered with.
-        </small>
-      </div>
-      <div class="mb-3">
-        <label for="inputPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="inputPassword" formControlName="password">
-        <small *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched">
-          Enter the password.
-        </small>
-      </div>
+<div class="d-flex justify-content-center">
+  <div class="d-flex align-items-start p-lg-5 justify-content-center inner-body">
+    <div class="container p-md-5 px-3 py-4 mt-md-5 mt-3 align-content-center justify-content-center"
+      id="login-container">
 
-      <button type="submit" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3"
-        [disabled]="loginForm.invalid">Sign in</button>
-    </form>
+      <h2 class="mb-5">Login to your account</h2>
 
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="inputEmail" class="form-label">Email</label>
+          <input type="email" class="form-control" id="inputEmail" formControlName="email">
+          <small *ngIf="loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched">
+            Enter the email you registered with.
+          </small>
+        </div>
+        <div class="mb-3">
+          <label for="inputPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="inputPassword" formControlName="password">
+          <small *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched">
+            Enter the password.
+          </small>
+        </div>
+
+        <button type="submit" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 bg-dark main-btn"
+          [disabled]="loginForm.invalid">Sign in</button>
+      </form>
+
+    </div>
   </div>
 </div>
