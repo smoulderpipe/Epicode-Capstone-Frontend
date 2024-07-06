@@ -82,7 +82,8 @@ li, a {
 
 .navbar::after {
     content: "";
-    position: absolute;
+    position: fixed;
+    height: 100px;
     inset: 0;
     z-index: -1;
     background: white;
