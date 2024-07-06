@@ -69,7 +69,7 @@ li, a {
     }
 
     .navbar::after{
-        transform: scale(1);
+        transform: scale(2);
         background: white;
         mask: linear-gradient(to top, transparent, black 55%);
     backdrop-filter: blur(14px);
