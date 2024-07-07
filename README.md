@@ -7,14 +7,36 @@ Per la parte di backend di cui l'app necessita per funzionare, fare riferimento 
 ## 📚 Che cosa è Focufy?
 
 Focufy è un&#39;app motivazionale per studenti, pensata per aiutarli a conoscere meglio se stessi e a pianificare routine di studio in linea con i propri bisogni.
+
+![Screenshot_24](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/44c3075b-e4ab-4305-a820-fc59628783c9)
+
+
 ## ✨ Funzionalità Principali
 
 - **Registrazione, login e logout**: gli utenti devono registrarsi per utilizzare l’app.
+  
+  ![Screenshot_23](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/e72218c0-dc32-49cf-a4cd-5e1911566b2a)
 - **Questionario abitudini, personalità e obiettivi**: i nuovi utenti compilano un questionario, per permettere all’app di assegnare loro un avatar e obiettivi specifici.
+  
+  ![Screenshot_18](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/599895da-12a0-4052-9ab1-3edc9e42597a)
+  ![Screenshot_29](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/2d311348-99c9-4f61-9b13-d278f3914513)
+
 - **Creazione e gestione di piani di studio**: l’app genera un calendario personalizzato, basato sugli obiettivi del singolo utente e sull’avatar che gli è stato assegnato.
 - **Sessioni**: ogni giorno di attività contiene sessioni di studio, riposo e divertimento per una routine bilanciata, e un mantra specifico per tenere alta la motivazione.
+
+  ![Screenshot_16](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/7348e3a8-9446-4ef5-9a7d-e51ec5f5aef2)
 - **Monitoraggio dei progressi**: gli utenti possono autovalutarsi periodicamente, monitorare i propri progressi e ottenere informazioni utili per bilanciare al meglio le energie.
+
+  ![Screenshot_25](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/ca93d510-9339-4b61-95fc-6b30e7715ec0)
+
+
+  ![Screenshot_28](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/7660e361-be69-46cd-97c4-8fd053b00cf1)
+
 - **Restart**: se un utente cambia abitudini o non si sente più in linea con il proprio piano di studi, può cancellare i propri dati e ripetere l’esperienza a partire dal primo questionario.
+
+
+
+
 
 ## 🛠️ Tecnologie Utilizzate
 
