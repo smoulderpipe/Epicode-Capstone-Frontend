@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user';
@@ -33,21 +33,29 @@ export class AuthService {
             if (payload) {
               this.loggedUserId = payload.sub;
               localStorage.setItem('userId', this.loggedUserId!.toString());
-              console.log('ID utente salvato:', this.loggedUserId);
+              console.log('User ID saved:', this.loggedUserId);
             }
 
             return token;
           } catch (error) {
-            console.error('Errore durante la decodifica del token:', error);
-            throw new Error('Errore durante il login');
+            console.error('Error during decoding of token:', error);
+            throw new Error('Error during login');
           }
         } else {
-          throw new Error('Token non valido ricevuto dal server');
+          throw new Error('Invalid token received from server.');
         }
       }),
-      catchError(error => {
-        console.error('Errore durante il login:', error);
-        return throwError('Errore durante il login');
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Error during login';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.status === 404) {
+          errorMessage = 'User not found. Please check your email.';
+        } else if (error.status === 401 || error.status === 400) {
+          errorMessage = 'An error occurred during authentication process, check your credentials and try again.';
+        }
+        console.error('Error during login:', errorMessage);
+        return throwError(errorMessage);
       })
     );
   }
@@ -59,10 +67,10 @@ export class AuthService {
         localStorage.removeItem('userId');
         this.tokenSubject.next(null);
         this.loggedUserId = null;
-        console.log('Logout effettuato');
+        console.log('Logout successful');
       }),
       catchError(error => {
-        console.error('Errore durante il logout:', error);
+        console.error('Error during logout:', error);
         return throwError(error);
       })
     );
@@ -99,8 +107,8 @@ export class AuthService {
   
     return this.http.get<User>(url, { headers }).pipe(
       catchError(error => {
-        console.error('Errore nel recupero dei dettagli dell\'utente:', error);
-        return throwError('Errore nel recupero dei dettagli dell\'utente');
+        console.error('Error while loading user details:', error);
+        return throwError('Error while loading user details');
       })
     );
   }

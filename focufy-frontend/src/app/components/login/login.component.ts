@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,19 +10,19 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit{
-   loginForm!: FormGroup;
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private studyPlanService: StudyPlanService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required])
+      password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)])
     });
   }
 
@@ -31,13 +32,14 @@ export class LoginComponent implements OnInit{
         email: this.loginForm.value.email,
         password: this.loginForm.value.password
       };
-
+  
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
-          console.log('Login effettuato con successo:', token);
-
+          console.log('Login successful:', token);
+          alert('Welcome back!');
+  
           const userId = this.authService.getUserId();
-
+  
           if (userId) {
             this.studyPlanService.getStudyPlan(userId).subscribe({
               next: (studyPlan) => {
@@ -48,21 +50,23 @@ export class LoginComponent implements OnInit{
                 }
               },
               error: (error) => {
-                console.error('Errore durante il controllo del piano di studio:', error);
+                console.error('Error while checking study plan:', error);
                 this.router.navigate(['/survey']);
               }
             });
           } else {
             console.error('User ID not found');
-            this.router.navigate(['/survey']);
+            alert('User ID not found.');
           }
         },
-        error: (error) => {
-          console.log("Errore durante il login:", error);
+        error: (error: string) => {
+          console.error('Login Error:', error)
+          alert(error);
         }
       });
     } else {
-      console.log("Form non valido!");
+      console.log("Invalid form");
+      alert('Invalid form');
     }
   }
 }
