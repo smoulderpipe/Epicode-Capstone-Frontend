@@ -73,8 +73,12 @@
                   <input type="text" *ngSwitchCase="'SHORT_TERM_GOAL'"
                     [formControlName]="getFormControlName(currentQuestion)"
                     [attr.name]="'question' + currentQuestion.id" />
-                  <input type="number" *ngSwitchCase="'DAYS'" [formControlName]="getFormControlName(currentQuestion)"
-                    [attr.name]="'daysQuestion' + currentQuestion.id" />
+                    <div *ngSwitchCase="'DAYS'">
+                      <p class="text-uppercase fs-6">Insert a number between 1 and 365.</p>
+                      <input type="number" [formControlName]="getFormControlName(currentQuestion)"
+                      [attr.name]="'daysQuestion' + currentQuestion.id" />
+                    </div>
+                  
                   <input type="number" *ngSwitchCase="'SATISFACTION'"
                     [formControlName]="getFormControlName(currentQuestion)"
                     [attr.name]="'satisfactionQuestion' + currentQuestion.id" />
