@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
 import { passwordMatchValidator } from 'src/app/validators/validators';
 
 @Component({
@@ -11,10 +13,11 @@ import { passwordMatchValidator } from 'src/app/validators/validators';
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
+  errorMessage: string | null = null;
 
   private baseUrl = 'http://localhost:8080/auth/register';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -35,40 +38,29 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.registerForm && this.registerForm.valid) {
+    if (this.registerForm.valid) {
       const user: User = {
         name: this.registerForm.value.name,
         email: this.registerForm.value.email,
         password: this.registerForm.value.password
       };
-  
-      this.http.post(this.baseUrl, user)
-        .subscribe(
-          response => {
-            console.log('User successfully created:', response);
-            alert('Thank you for your registration!');
-            window.location.href = "/login";
-          },
-          error => {
-            if (error.status === 400) {
-              const errorMessage = error.error;
-              const regex = /Email.*is already in use\./i;
-              if (regex.test(errorMessage)) {
-                alert('This e-mail is already in use. Try with a different e-mail address.');
-              } else {
-                console.error('Error while creating user:', error);
-                alert('An error occurred, try again later');
-              }
-            } else {
-              console.error('Error while creating user:', error);
-              alert('An error occurred, try again later');
-            }
+
+      this.authService.register(user).subscribe(
+        () => {
+          alert('Thank you for your registration!');
+          this.router.navigateByUrl('/login');
+        },
+        error => {
+          if (error.status === 400 && error.error.message === `Email ${user.email} is already in use.`) {
+            this.errorMessage = error;
+          } else {
+            console.error('Error while creating user:', error);
+            this.errorMessage = error;
           }
-        );
+        }
+      );
     } else {
       console.error('The form is not valid!');
     }
   }
-
-
 }
