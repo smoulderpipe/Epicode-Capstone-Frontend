@@ -17,6 +17,21 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  register(user: User) {
+    return this.http.post(`${this.baseUrl}/auth/register`, user).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Error during registration';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.status === 400) {
+          errorMessage = 'Invalid registration data. Please check your input.';
+        }
+        console.error('Error during registration:', errorMessage);
+        return throwError(errorMessage);
+      })
+    );
+  }
+
   login(email: string, password: string): Observable<string> {
     const loginData = { email, password };
 
