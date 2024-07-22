@@ -50,10 +50,12 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
           this.isDataLoaded = true;
           this.initializeForm();
           this.loadSavedAnswers();
+          this.studyPlanService.updateStudyPlanStatus(true);
         },
         (error) => {
           console.error('Error fetching study plan:', error);
           this.isLoading = false;
+          this.studyPlanService.updateStudyPlanStatus(false);
         }
       );
     } else {
@@ -61,6 +63,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.isLoading = false;
     }
   }
+
 
   loadSavedAnswers() {
     const storedAnswers = localStorage.getItem('checkpointAnswers');

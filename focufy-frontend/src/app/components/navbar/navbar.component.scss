@@ -1,31 +1,23 @@
-
-li, a {
+li,
+a {
     font-size: 1em;
-    
+
 }
 
-/* .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
-    text-decoration: underline;
-} */
-
 .navbar-light {
-    background: rgba(255,255,255,0) !important;
+    background: rgba(255, 255, 255, 0) !important;
 }
 
 .nav-link {
     color: black;
 }
 
-/* a:hover {
-    text-decoration: underline;
-} */
-
 @media only screen and (max-width: 560px) {
 
     #logo {
         width: 110px !important;
     }
-    
+
     #navbarNav {
         position: fixed;
         right: 10px;
@@ -37,7 +29,8 @@ li, a {
         margin-bottom: 6px;
     }
 
-    .navbar .navbar-toggler, .navbar-toggler:focus {
+    .navbar .navbar-toggler,
+    .navbar-toggler:focus {
         border: 0px;
         box-shadow: none;
         padding: 1px;
@@ -56,6 +49,7 @@ li, a {
     .navbar-toggler {
         display: none;
     }
+
     ul {
         flex-direction: row;
     }
@@ -68,11 +62,11 @@ li, a {
         width: 130px !important;
     }
 
-    .navbar::after{
+    .navbar::after {
         transform: scale(2);
         background: white;
         mask: linear-gradient(to top, transparent, black 55%);
-    backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
     }
 }
 
@@ -88,5 +82,5 @@ li, a {
     z-index: -1;
     background: white;
     mask: linear-gradient(to top, transparent, black 80%);
-backdrop-filter: blur(14px);
- }
+    backdrop-filter: blur(14px);
+}
