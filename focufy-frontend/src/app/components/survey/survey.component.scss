@@ -57,7 +57,9 @@ h3 span {
   color: black;
 }
 
-
+input[type=number]{
+  text-align: center;
+}
 
 @media only screen and (min-width:769px) {
 
@@ -66,7 +68,7 @@ h3 span {
   }
 
   input[type=text] {
-    width: 50% !important;
+    width: 100% !important;
     text-align: center;
   }
 
