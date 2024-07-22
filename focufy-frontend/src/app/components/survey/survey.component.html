@@ -67,21 +67,25 @@
                       </div>
                     </li>
                   </ul>
-                  <input type="text" *ngSwitchCase="'LONG_TERM_GOAL'"
+                  <div *ngSwitchCase="'LONG_TERM_GOAL'">
+                    <p class="text-uppercase fs-6">Insert a sentence between 3 and 30 characters</p>
+                    <input type="text"
                     [formControlName]="getFormControlName(currentQuestion)"
                     [attr.name]="'question' + currentQuestion.id" />
-                  <input type="text" *ngSwitchCase="'SHORT_TERM_GOAL'"
+                  </div>
+                  <div *ngSwitchCase="'SHORT_TERM_GOAL'">
+                    <p class="text-uppercase fs-6">Insert a sentence between 3 and 30 characters</p>
+                    <input type="text"
                     [formControlName]="getFormControlName(currentQuestion)"
                     [attr.name]="'question' + currentQuestion.id" />
+                  </div>
+                  
                     <div *ngSwitchCase="'DAYS'">
                       <p class="text-uppercase fs-6">Insert a number between 1 and 365.</p>
                       <input type="number" [formControlName]="getFormControlName(currentQuestion)"
                       [attr.name]="'daysQuestion' + currentQuestion.id" />
                     </div>
                   
-                  <input type="number" *ngSwitchCase="'SATISFACTION'"
-                    [formControlName]="getFormControlName(currentQuestion)"
-                    [attr.name]="'satisfactionQuestion' + currentQuestion.id" />
                 </ng-container>
               </div>
 

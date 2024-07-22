@@ -421,7 +421,7 @@ export class SurveyComponent implements OnInit {
         return control.value !== null && control.value !== '';
       case 'LONG_TERM_GOAL':
       case 'SHORT_TERM_GOAL':
-        return control.value !== null && control.value.trim() !== '';
+        return control.value !== null && control.value.trim() !== '' && control.value.length >= 3 && control.value.length <=30;
       case 'DAYS':
         return control.value !== null && control.value >= 1 && control.value <= 365;
       case 'SATISFACTION':
