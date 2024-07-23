@@ -17,8 +17,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  register(user: User) {
-    return this.http.post(`${this.baseUrl}/auth/register`, user).pipe(
+  register(user: User): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/register`, user, { observe: 'response' }).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Error during registration';
         if (error.error && error.error.message) {
@@ -34,15 +34,15 @@ export class AuthService {
 
   login(email: string, password: string): Observable<string> {
     const loginData = { email, password };
-
+  
     return this.http.post<any>(`${this.baseUrl}/auth/login`, loginData, { responseType: 'text' as 'json' }).pipe(
       map(response => {
         const token = response;
-
+  
         if (token) {
           localStorage.setItem('access_token', token);
           this.tokenSubject.next(token);
-
+  
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             if (payload) {
@@ -50,7 +50,7 @@ export class AuthService {
               localStorage.setItem('userId', this.loggedUserId!.toString());
               console.log('User ID saved:', this.loggedUserId);
             }
-
+  
             return token;
           } catch (error) {
             console.error('Error during decoding of token:', error);
@@ -61,16 +61,24 @@ export class AuthService {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = 'Error during login';
-        if (error.error && error.error.message) {
+        console.error('Error details:', error); 
+  
+        let errorMessage = 'An unknown error occurred'; 
+  
+        if (error.error && typeof error.error === 'object' && 'message' in error.error) {
           errorMessage = error.error.message;
-        } else if (error.status === 404) {
-          errorMessage = 'User not found. Please check your email.';
-        } else if (error.status === 401 || error.status === 400) {
-          errorMessage = 'An error occurred during authentication process, check your credentials and try again.';
+        } else if (typeof error.error === 'string') {
+         
+          try {
+            const parsedError = JSON.parse(error.error);
+            errorMessage = parsedError.message || 'An unknown error occurred.';
+          } catch {
+            errorMessage = error.error;
+          }
         }
-        console.error('Error during login:', errorMessage);
-        return throwError(errorMessage);
+  
+        console.error('Parsed error message:', errorMessage);
+        return throwError(() => new Error(errorMessage));
       })
     );
   }

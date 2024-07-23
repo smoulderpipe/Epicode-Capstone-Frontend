@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
             alert('User ID not found.');
           }
         },
-        error: (error: string) => {
+        error: (error) => {
           console.error('Login Error:', error)
           alert(error);
         }
