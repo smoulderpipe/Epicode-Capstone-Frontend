@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user';
@@ -134,5 +134,23 @@ export class AuthService {
         return throwError('Error while loading user details');
       })
     );
+  }
+
+  confirmRegistration(token: string): Observable<string> {
+    const params = new HttpParams().set('token', token);
+    return this.http.get(`${this.baseUrl}/auth/confirm`, { params, responseType: 'text' })
+      .pipe(
+        map(response => {
+          if (response === 'Registration confirmed successfully.') {
+            return response;
+          } else {
+            throw new Error('Unexpected response.');
+          }
+        }),
+        catchError(error => {
+          console.error('Error during confirmation:', error);
+          return throwError('An error occurred during confirmation.');
+        })
+      );
   }
 } 

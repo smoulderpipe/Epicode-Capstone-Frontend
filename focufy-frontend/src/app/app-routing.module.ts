@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'study-plan', 
     loadChildren: () => import('src/app/modules/study-plan-routing.module').then(m => m.StudyPlanRoutingModule),
     resolve: { studyPlan: StudyPlanResolver }},
-  { path: 'profile', loadChildren: () => import('src/app/modules/profile-routing.module').then(m => m.ProfileRoutingModule)}
+  { path: 'profile', loadChildren: () => import('src/app/modules/profile-routing.module').then(m => m.ProfileRoutingModule)},
+  { path: 'confirm-registration', loadChildren: () => import('src/app/modules/confirm-registration-routing.module').then(m => m.ConfirmRegistrationRoutingModule)}
 ];
 
 @NgModule({
