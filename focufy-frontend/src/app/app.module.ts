@@ -8,13 +8,15 @@ import { AppRoutingRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './components/footer/footer.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ConfirmRegistrationComponent } from './components/confirm-registration/confirm-registration.component';
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomeComponent,
     FooterComponent,
-    ProfileComponent
+    ProfileComponent,
+    ConfirmRegistrationComponent
   ],
   imports: [
     BrowserModule,

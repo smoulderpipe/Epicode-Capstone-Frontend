@@ -13,7 +13,7 @@ Focufy è un&#39;app motivazionale per studenti, pensata per aiutarli a conoscer
 
 ## ✨ Funzionalità Principali
 
-- **Registrazione, login e logout**: gli utenti devono registrarsi per utilizzare l’app.
+- **Registrazione, conferma, login e logout**: gli utenti devono registrarsi tramite email per utilizzare l’app.
   
   ![Screenshot_23](https://github.com/smoulderpipe/Epicode-Capstone-Frontend/assets/48594331/e72218c0-dc32-49cf-a4cd-5e1911566b2a)
 - **Questionario abitudini, personalità e obiettivi**: i nuovi utenti compilano un questionario, per permettere all’app di assegnare loro un avatar e obiettivi specifici.
@@ -82,7 +82,7 @@ L'app sarà disponibile all'indirizzo http://localhost:4200.
 - **src/app/validators**: Contiene un validatore custom per confrontare la password con la conferma della password, in fase di registrazione utente.
 - **src/app/services**: Contiene i servizi per la comunicazione con il backend.
 - **src/assets**: Contiene risorse statiche di tipo immagine.
-- **src/environments**: Contiene i file di configurazione per diversi ambienti (sviluppo, produzione).
+- **src/environments**: Contiene i file di configurazione per l’ambiente di sviluppo.
 
 ## 🌐 Servizi principali
 
@@ -95,5 +95,6 @@ L'app sarà disponibile all'indirizzo http://localhost:4200.
 ## 🏠 Componenti principali
 - **HOME** - Visualizza una landing page che spiega brevemente cos’è l’app e invita l’utente a registrarsi.
 - **SURVEY** - Gestisce la visualizzazione e guida la compilazione del questionario su abitudini, personalità e obiettivi dell’utente, gli mostra l’avatar che gli è stato assegnato in base alle risposte date e invia al backend la richiesta di generazione del piano di studi.
+- **REGISTRATION / CONFIRM / LOGIN** - Gestiscono il processo di registrazione, conferma tramite link ricevuto per e-mail e login.
 - **STUDY PLAN** - Si occupa della visualizzazione e della gestione del piano di studio dell’utente, incluse le attività, la compilazione dei questionari autovalutativi e la sincronizzazione con il calendario reale.
 - **PROFILE** - Gestisce la visualizzazione dettagliata dell’avatar assegnato all’utente e calcola statistiche frutto delle autovalutazioni espresse nel piano di studi.

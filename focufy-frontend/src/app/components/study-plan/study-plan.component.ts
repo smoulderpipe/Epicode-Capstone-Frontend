@@ -163,23 +163,17 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       console.error('User ID not found');
       return;
     }
+
+    const restartAnswer = {
+      questionId: question.id,
+      answerText: 'Restart',
+      personalAnswerType: 'RESTART',
+      userId: userId
+    };
   
-    const answers: any[] = [];
+    const answers = [restartAnswer];
   
-    if (day.questions) {
-      day.questions.forEach(question => {
-        const restartAnswer = {
-          questionId: question.id,
-          answerText: 'Restart',
-          personalAnswerType: 'RESTART',
-          userId: userId
-        };
-        answers.push(restartAnswer);
-      });
-    } else {
-      console.error('No questions found for the day');
-      return;
-    }
+    console.log('Answers to be sent:', answers);
   
     this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
@@ -188,7 +182,6 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       },
       (error) => {
         console.error('Error submitting restart answers', error);
-        this.router.navigate(['/survey']);
       }
     );
   }

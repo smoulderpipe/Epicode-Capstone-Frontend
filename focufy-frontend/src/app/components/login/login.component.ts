@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
-          console.log('Login successful:', token);
+          console.log('Login successful.');
           alert('Welcome back!');
   
           const userId = this.authService.getUserId();
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
             alert('User ID not found.');
           }
         },
-        error: (error: string) => {
+        error: (error) => {
           console.error('Login Error:', error)
           alert(error);
         }
