@@ -48,7 +48,6 @@ export class AuthService {
             if (payload) {
               this.loggedUserId = payload.sub;
               localStorage.setItem('userId', this.loggedUserId!.toString());
-              console.log('User ID saved:', this.loggedUserId);
             }
   
             return token;

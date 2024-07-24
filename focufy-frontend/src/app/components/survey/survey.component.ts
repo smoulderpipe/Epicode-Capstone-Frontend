@@ -271,7 +271,6 @@ export class SurveyComponent implements OnInit {
     let hasErrors = false;
     let errorMessage = '';
 
-    // Utilizza forkJoin per gestire le richieste asincrone delle risposte condivise
     forkJoin(sharedAnswersObservables).subscribe(
       (responses: Answer[][]) => {
         responses.forEach((answers, index) => {
@@ -286,7 +285,6 @@ export class SurveyComponent implements OnInit {
           }
         });
 
-        // Dopo aver completato le richieste delle risposte condivise, gestisci il salvataggio
         if (sharedAnswers.length > 0) {
           this.answerService.assignSharedAnswersToUser(sharedAnswers)
             .pipe(

@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-navbar',
@@ -51,11 +50,11 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        console.log('Logout successful');
+        alert('Logout successful');
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        console.log('Error while logging out', error);
+        alert('Error while logging out');
       }
     });
   }
