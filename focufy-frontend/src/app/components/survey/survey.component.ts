@@ -146,6 +146,7 @@ export class SurveyComponent implements OnInit {
     }
 
     if (currentQuestion.questionType === 'DAYS') {
+      console.log('Submitting answers because current question type is DAYS');
       this.submitAnswers();
     } else if (this.currentQuestionIndex < this.questionsPage.content.length - 1) {
       this.currentQuestionIndex++;
@@ -192,9 +193,12 @@ export class SurveyComponent implements OnInit {
         break;
 
       case 'DAYS':
-      case 'SATISFACTION':
-        this.selectedAnswers[questionId] = +answerValue;
-        break;
+        if (answerValue !== null && answerValue !== '' && !isNaN(answerValue)) {
+          this.selectedAnswers[questionId] = +answerValue;
+      } else {
+          console.warn(`Invalid answer for DAYS question: ${answerValue}`);
+      }
+      break;
 
       default:
         console.warn(`Unhandled question type: ${currentQuestion.questionType}`);
@@ -230,7 +234,6 @@ export class SurveyComponent implements OnInit {
             break;
 
           case 'DAYS':
-          case 'SATISFACTION':
             personalAnswers.push({
               questionId: +questionId,
               answerText: answer,
@@ -372,7 +375,6 @@ export class SurveyComponent implements OnInit {
       case 'LONG_TERM_GOAL':
       case 'SHORT_TERM_GOAL':
       case 'DAYS':
-      case 'SATISFACTION':
       case 'RESTART':
         return this.personalGoalsForm;
       default:
@@ -423,8 +425,8 @@ export class SurveyComponent implements OnInit {
       case 'SHORT_TERM_GOAL':
         return control.value !== null && control.value.trim() !== '' && control.value.length >= 3 && control.value.length <=30;
       case 'DAYS':
-        return control.value !== null && control.value >= 1 && control.value <= 365;
-      case 'SATISFACTION':
+        const value = control.value;
+            return value !== null && !isNaN(value) && value >= 1 && value <= 365;
       case 'RESTART':
         return control.value !== null;
       default:
