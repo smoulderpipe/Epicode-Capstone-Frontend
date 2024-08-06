@@ -1,0 +1,8 @@
+[build]
+  command = "ng build --prod"
+  publish = "focufy-frontend/dist/focufy-frontend"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
