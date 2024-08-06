@@ -1,6 +1,6 @@
 [build]
   command = "ng build"
-  publish = "focufy-frontend/dist/focufy-frontend"
+  publish = "dist/focufy-frontend"
 
 [[redirects]]
   from = "/*"
