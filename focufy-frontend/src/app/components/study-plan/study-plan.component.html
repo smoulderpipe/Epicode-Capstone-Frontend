@@ -74,7 +74,7 @@
               <!-- Checkpoint Day -->
               <div *ngIf="day.type === 'CheckpointDay'" class="row single-day my-0 pt-md-5 pt-4 pb-5">
 
-                <div class="col col-lg col-md-12 ps-lg-5 px-md-4">
+                <div class="col col-lg col-md-12 ps-lg-5 px-md-4 position-relative">
                   <div>
                   <h3 class="fw-bold text-center mb-lg-2 mb-4">{{ day.name }} - Checkpoint</h3>
                   <form [formGroup]="formGroup" (ngSubmit)="submitCheckpointAnswers(day)">
@@ -110,8 +110,8 @@
                         already submitted answers for this day</p>
                     </div>
                   </form>
-                  <!-- *ngIf="isLoadingCDAnswers" -->
-                <div  class="small-loader-container d-flex justify-content-center align-items-center">
+                
+                <div *ngIf="isLoadingCDAnswers" class="small-loader-container d-flex justify-content-center align-items-center">
 
                   <div class="mini-container">
                     <p class="text-center h3 fst-italic text-white mb-3">hang on...</p>
