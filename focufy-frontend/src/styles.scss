@@ -192,5 +192,9 @@ form small {
     width: 92%;
     position: absolute;
     top: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 1);
+}
+
+.small-loader-container .loader {
+    height: 1em;
 }
