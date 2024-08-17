@@ -44,7 +44,7 @@
 
               <div class="answers-list d-flex justify-content-center" id="answer-list">
                 <ng-container [ngSwitch]="currentQuestion.questionType">
-                  <ul class="list-unstyled row justify-content-center px-md-5" *ngSwitchCase="'CHRONOTYPE'">
+                  <ul class="list-unstyled row justify-content-md-center justify-content-around px-md-5" *ngSwitchCase="'CHRONOTYPE'">
                     <li class="justify-content-center d-flex mb-3 px-md-2 px-1"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
                       <div class="conceal-radio d-flex justify-content-center">
@@ -55,7 +55,7 @@
                       </div>
                     </li>
                   </ul>
-                  <ul class="list-unstyled row justify-content-center" *ngSwitchCase="'TEMPER'">
+                  <ul class="list-unstyled row justify-content-md-center justify-content-around" *ngSwitchCase="'TEMPER'">
                     <li class="justify-content-center d-flex mb-3"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
                       <div class="conceal-radio d-flex justify-content-center">
