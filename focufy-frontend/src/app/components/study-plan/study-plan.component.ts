@@ -259,6 +259,9 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 }
 
   submitDeadlineAnswers(day: Day) {
+
+    this.isLoadingCDAnswers = true;
+
     console.log('Submitting deadline answers for day:', day);
     const userId = this.authService.getUserId();
     if (!userId) {
@@ -302,12 +305,14 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.answerService.saveDeadlineAnswers(day.id, answers).subscribe(
       (response) => {
         console.log('Deadline answers submitted successfully', response);
+        this.isLoadingCDAnswers = false;
         this.submissionStatus[day.name] = true;
         localStorage.removeItem('deadlineAnswers');
         this.answers = {};
       },
       (error) => {
         console.error('Error submitting deadline answers', error);
+        this.isLoadingCDAnswers = false;
         this.submissionStatus[day.name] = false;
       }
     );
