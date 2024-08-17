@@ -181,10 +181,12 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
         console.log('Restart answers submitted successfully', response);
+        alert('Your avatar and study plan data were correctly erased. Get ready to restart the experience by answering the test.');
         this.router.navigate(['/survey']);
       },
       (error) => {
         console.error('Error submitting restart answers', error);
+        alert('There was a problem erasing your avatar and study plan data, try again later.');
       }
     );
   }

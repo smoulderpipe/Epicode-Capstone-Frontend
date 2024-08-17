@@ -20,6 +20,10 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class SurveyComponent implements OnInit {
 
+  isLoadingForm: boolean = false;
+  isLoadingAvatar: boolean = false;
+  isLoadingStudyPlan: boolean = false;
+
   chronotypeForm!: FormGroup;
   temperForm!: FormGroup;
   personalGoalsForm!: FormGroup;
@@ -66,6 +70,7 @@ export class SurveyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isLoadingForm = true;
     this.getQuestions();
     this.chronotypeForm = this.fb.group({});
     this.temperForm = this.fb.group({});
@@ -85,6 +90,8 @@ export class SurveyComponent implements OnInit {
       },
       (error) => {
         console.log('Error loading questions:', error);
+        alert('Error loading form');
+        this.isLoadingForm = false;
       }
     );
   }
@@ -123,9 +130,12 @@ export class SurveyComponent implements OnInit {
       (answers) => {
         this.answersMap[questionId] = answers;
         console.log(`Answers for question ${questionId} loaded:`, answers);
+        this.isLoadingForm = false;
       },
       (error) => {
         console.log(`Error loading answers for question ${questionId}:`, error);
+        alert(`Error loading answers for question ${questionId}:`);
+        this.isLoadingForm = false;
       }
     );
   }
@@ -146,6 +156,7 @@ export class SurveyComponent implements OnInit {
     }
 
     if (currentQuestion.questionType === 'DAYS') {
+      this.isLoadingAvatar = true;
       console.log('Submitting answers because current question type is DAYS');
       this.submitAnswers();
     } else if (this.currentQuestionIndex < this.questionsPage.content.length - 1) {
@@ -404,6 +415,7 @@ export class SurveyComponent implements OnInit {
           this.userAvatarTemperStrength = avatar.temper.strengthType;
           this.userAvatarTemperRisk = avatar.temper.riskType;
           this.showAvatar = true;
+          this.isLoadingAvatar = false;
         }
       });
   }
@@ -433,6 +445,7 @@ export class SurveyComponent implements OnInit {
   }
 
   createStudyPlanAndAssociateMantras(): void {
+    this.isLoadingStudyPlan = true;
     const userId = this.authService.getUserId();
     if (userId !== null) {
       const shortTermGoalQuestion = this.questionsPage.content.find(question => question.questionType === 'SHORT_TERM_GOAL');
@@ -464,10 +477,12 @@ export class SurveyComponent implements OnInit {
           ).subscribe((mantrasResponse) => {
             console.log('Mantras added to study plan:', mantrasResponse);
             this.router.navigate(['/study-plan']);
+            this.isLoadingStudyPlan = false;
           });
         });
       } else {
         console.error('Unable to fetch shortTermGoal or numberOfDays from user responses.');
+        this.isLoadingStudyPlan = false;
       }
     } else {
       console.error('UserId is null. Unable to create study plan or add mantras.');
