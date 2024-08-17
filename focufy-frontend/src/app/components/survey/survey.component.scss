@@ -40,6 +40,7 @@ h3 span {
   color: white !important;
   border-radius: 20px;
   transition: 0.2s;
+  height: auto;
 }
 
 .conceal-radio label {
@@ -110,6 +111,7 @@ input[type=number]{
 }
 
 @media only screen and (max-width: 560px) {
+
   h4 {
     font-size: 1.5em !important;
   }
