@@ -227,8 +227,10 @@ export class ProfileComponent implements OnInit {
   confirmRestart() {
     const confirmation = confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
     if (confirmation) {
-      this.onRestartAnswer();
-    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.onRestartAnswer();
+      });
     }
   }
 
