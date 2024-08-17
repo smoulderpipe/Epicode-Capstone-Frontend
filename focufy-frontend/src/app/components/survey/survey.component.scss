@@ -136,6 +136,11 @@ input[type=number]{
     font-size: 0.8em;
   }
 
+  input[type=radio] {
+    width: 160px !important;
+    height: 100px !important;
+  }
+
   input[type=text] {
     width: 80% !important;
     text-align: center;
