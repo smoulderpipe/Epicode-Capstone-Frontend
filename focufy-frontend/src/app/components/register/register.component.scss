@@ -1,57 +1,60 @@
 #signupContainer {
-    background: rgba(255,255,255,0.4);
-    box-shadow: 0px 0px 10px 5px rgba(255,255,255,0.9);
-    border-radius: 20px;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
 }
 
 input {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 
 .inner-body {
-    min-height: 90vh;
-    align-content: center;
+  min-height: 90vh;
+  align-content: center;
 }
 
 @media only screen and (min-width: 768px) {
-    h2 {
-        min-width: 600px;
-    }
+  h2 {
+    min-width: 600px;
+  }
 }
+
 @media only screen and (max-width: 767px) {
-    h2 {
-        min-width: 300px;
-    }
+  h2 {
+    min-width: 300px;
+  }
 }
 
+/* HTML: <div class="loader"></div> */
 .loader {
-    width: 40px;
-    height: 26px;
-    --c:no-repeat linear-gradient(#000 0 0);
-    background:
-      var(--c) 0    100%,
-      var(--c) 50%  100%,
-      var(--c) 100% 100%;
-    background-size:8px calc(100% - 4px);
-    position: relative;
-  }
-  .loader:before {
-    content: "";
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #000;
-    left: 0;
-    top: 0;
-    animation: 
-      l3-1 1.5s  linear infinite alternate,
-      l3-2 0.75s cubic-bezier(0,200,.8,200) infinite;
-  }
-  @keyframes l3-1 {
-    100% {left:calc(100% - 8px)}
-  }
-  @keyframes l3-2 {
-    100% {top:-0.1px}
-  }
+  height: 2.3em;
+  aspect-ratio: 5;
+  --_g:no-repeat radial-gradient(farthest-side,#ffffff 94%,#ffffff00);
+  background: var(--_g),var(--_g),var(--_g),var(--_g);
+  background-size: 20% 100%;
+  animation:
+    l40-1 .75s infinite alternate,
+    l40-2 1.5s infinite alternate;
+ 
+}
+@keyframes l40-1 {
+  0%,
+  10% {background-position: 0 0,0 0,0 0,0 0}
+  33% {background-position: 0 0,calc(100%/3) 0,calc(100%/3) 0,calc(100%/3) 0}
+  66% {background-position: 0 0,calc(100%/3) 0,calc(2*100%/3) 0,calc(2*100%/3) 0}
+  90%,
+  100% {background-position: 0 0,calc(100%/3) 0,calc(2*100%/3) 0,100% 0}
+}
+@keyframes l40-2 {
+  0%,49.99% {transform: scale( 1)}
+  50%,100%  {transform: scale(-1)}
+}
 
+.loader-container {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+}
