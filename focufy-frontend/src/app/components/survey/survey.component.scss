@@ -136,7 +136,7 @@ input[type=number]{
     font-size: 0.8em;
   }
 
-  input[type=radio] {
+  input[type=radio], .conceal-radio label {
     width: 160px !important;
     height: 100px !important;
   }
