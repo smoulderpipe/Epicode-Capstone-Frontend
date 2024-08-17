@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit {
   isStudyEnough: boolean | null = null;
   isFunEnough: boolean | null = null;
   isRestEnough: boolean | null = null;
+  isLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -53,6 +54,7 @@ export class ProfileComponent implements OnInit {
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (studyPlan) => {
           this.studyPlan = studyPlan;
+          this.isLoading = false;
         },
         (error) => {
           console.error('Error fetching study plan:', error);

@@ -186,3 +186,11 @@ form small {
     background: rgba(0, 0, 0, 0.6);
     z-index: 10000;
 }
+
+.small-loader-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    top: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
