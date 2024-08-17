@@ -1,5 +1,5 @@
 .conceal-radio {
-  float: left;
+  //float: left;
   margin: 0 5px 0 0;
   position: relative;
   background: rgba(255, 255, 255, 0.1) !important;
@@ -17,10 +17,16 @@ h3 span {
   border-radius: 20px;
 }
 
+.conceal-radio input {
+  position: absolute;
+  width: 100%;
+}
+.conceal-radio label {
+  position: relative;
+}
 .conceal-radio label,
 .conceal-radio input {
   display: block;
-  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -114,7 +120,7 @@ input[type=number]{
 
   .conceal-radio label,
 .conceal-radio input {
-  display: block;
+  position: relative;
 }
 
   h4 {
