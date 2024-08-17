@@ -98,8 +98,19 @@
                       </p>
 
                       <button type="submit" [disabled]="!canSubmitAnswers(day)"
-                        class="text-uppercase btn btn-dark bg-black rounded-pill px-3 py-2 mt-3 w-100 d-block main-btn">
+                        class="text-uppercase btn btn-dark bg-black rounded-pill px-3 py-2 mt-3 w-100 d-block main-btn position-relative">
+                        <span>
+              
                         Submit Answers
+                        <span *ngIf="isLoadingCDAnswers" class="small-loader-container d-flex justify-content-center align-items-center">
+
+                          <span class="mini-container">
+                            <span class="loader">
+                            </span>
+                        
+                          </span>
+                        </span>
+                        </span>
                       </button>
 
                       <p *ngIf="submissionStatus[day.name] === true" class="mt-3 mb-0 text-success text-center">
@@ -111,15 +122,7 @@
                     </div>
                   </form>
                 
-                <div *ngIf="isLoadingCDAnswers" class="small-loader-container d-flex justify-content-center align-items-center">
-
-                  <div class="mini-container">
-                    <p class="text-center h3 fst-italic text-white mb-3">hang on...</p>
-                    <div class="loader">
-                    </div>
                 
-                  </div>
-                </div>
               </div>
                 </div>
                 
