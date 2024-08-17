@@ -7,15 +7,17 @@ body {
 }
 
 @keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .navbar-brand {
@@ -28,16 +30,16 @@ body {
     }
 }
 
-@media only screen and (min-width: 561px) and (max-width:991px){
+@media only screen and (min-width: 561px) and (max-width:991px) {
     h2 {
         font-size: 2.1em;
     }
 }
 
 @media screen and (min-width: 992px) and (max-width: 1199px) {
-h2 {
-    font-size: 3.2em;
-}
+    h2 {
+        font-size: 3.2em;
+    }
 }
 
 @media screen and (min-width: 1200px) {
@@ -63,17 +65,20 @@ h3 {
     font-family: "Piazzolla", serif;
     font-style: normal;
     font-weight: 700;
-    font-size:2.5em;
+    font-size: 2.5em;
 }
-h4{
+
+h4 {
     font-size: 1.5em;
     font-family: "Piazzolla", serif;
 }
 
-p, li, label {
+p,
+li,
+label {
     font-family: "Red Hat Text", sans-serif;
     font-optical-sizing: auto;
-    font-weight:400;
+    font-weight: 400;
     font-style: normal;
 }
 
@@ -115,7 +120,7 @@ form small {
     border-right: 0px;
 }
 
-#survey-container{
+#survey-container {
     min-height: 90vh;
 }
 
@@ -123,4 +128,61 @@ form small {
     background: white !important;
     color: black !important;
     transition: 0.2s;
-  }
+}
+
+//https://css-loaders.com/dots/
+
+.loader {
+    height: 2.3em;
+    aspect-ratio: 5;
+    --_g: no-repeat radial-gradient(farthest-side, #ffffff 94%, #ffffff00);
+    background: var(--_g), var(--_g), var(--_g), var(--_g);
+    background-size: 20% 100%;
+    animation:
+        l40-1 .75s infinite alternate,
+        l40-2 1.5s infinite alternate;
+
+}
+
+@keyframes l40-1 {
+
+    0%,
+    10% {
+        background-position: 0 0, 0 0, 0 0, 0 0
+    }
+
+    33% {
+        background-position: 0 0, calc(100%/3) 0, calc(100%/3) 0, calc(100%/3) 0
+    }
+
+    66% {
+        background-position: 0 0, calc(100%/3) 0, calc(2*100%/3) 0, calc(2*100%/3) 0
+    }
+
+    90%,
+    100% {
+        background-position: 0 0, calc(100%/3) 0, calc(2*100%/3) 0, 100% 0
+    }
+}
+
+@keyframes l40-2 {
+
+    0%,
+    49.99% {
+        transform: scale(1)
+    }
+
+    50%,
+    100% {
+        transform: scale(-1)
+    }
+}
+
+.loader-container {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+}

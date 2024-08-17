@@ -12,6 +12,7 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  isLoading: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -32,10 +33,12 @@ export class LoginComponent implements OnInit {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password
       };
+
+      this.isLoading = true;
   
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
-          console.log('Login successful.');
+          this.isLoading = false;
           alert('Welcome back!');
   
           const userId = this.authService.getUserId();
@@ -60,6 +63,7 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error) => {
+          this.isLoading = false;
           console.error('Login Error:', error)
           alert(error);
         }
