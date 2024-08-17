@@ -47,13 +47,16 @@ export class LoginComponent implements OnInit {
               next: (studyPlan) => {
                 if (studyPlan) {
                   this.router.navigate(['/study-plan']);
+                  this.isLoading = false;
                 } else {
                   this.router.navigate(['/survey']);
+                  this.isLoading = false;
                 }
               },
               error: (error) => {
                 console.error('Error while checking study plan:', error);
                 this.router.navigate(['/survey']);
+                this.isLoading = false;
               }
             });
           } else {
@@ -64,7 +67,7 @@ export class LoginComponent implements OnInit {
         error: (error) => {
           console.error('Login Error:', error)
           alert(error);
-        }
+          this.isLoading = false;        }
       });
     } else {
       console.log("Invalid form");
