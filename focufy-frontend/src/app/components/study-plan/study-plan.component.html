@@ -97,13 +97,13 @@
                         </ng-container>
                       </p>
 
-                      <button type="submit" [disabled]="!canSubmitAnswers(day)"
+                      <button type="submit" [disabled]="!canSubmitAnswers(day) || isLoadingCDAnswers"
                         class="text-uppercase btn btn-dark bg-black rounded-pill px-3 py-2 mt-3 w-100 d-block main-btn position-relative">
                         <span>
               
                         Submit Answers
                         <!--*ngIf="isLoadingCDAnswers"-->
-                        <span class="small-loader-container d-flex justify-content-center align-items-center">
+                        <span class="rounded-pill small-loader-container d-flex justify-content-center align-items-center">
 
                           <span class="mini-container">
                             <span class="loader d-block">
