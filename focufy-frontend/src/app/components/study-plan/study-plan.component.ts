@@ -154,8 +154,9 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     const confirmation = confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
     if (confirmation) {
       this.isLoadingComponent = true;
-      this.onRestartAnswer(day, question);
-    } else {
+      setTimeout(() => {
+        this.onRestartAnswer(day, question);
+      }, 0);
     }
   }
 
