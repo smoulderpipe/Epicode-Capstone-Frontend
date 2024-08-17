@@ -102,11 +102,11 @@
                         <span>
               
                         Submit Answers
-                        <!--*ngIf="isLoadingCDAnswers"-->
-                        <span class="small-loader-container d-flex justify-content-center align-items-center">
+                       
+                        <span *ngIf="isLoadingCDAnswers" class="small-loader-container d-flex justify-content-center align-items-center">
 
                           <span class="mini-container">
-                            <span class="loader">
+                            <span class="loader d-block">
                             </span>
                         
                           </span>
