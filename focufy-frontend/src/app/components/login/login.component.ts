@@ -46,17 +46,20 @@ export class LoginComponent implements OnInit {
             this.studyPlanService.getStudyPlan(userId).subscribe({
               next: (studyPlan) => {
                 if (studyPlan) {
-                  this.router.navigate(['/study-plan']);
-                  this.isLoading = false;
+                  this.router.navigate(['/study-plan']).then(() => {
+                    this.isLoading = false;
+                  });
                 } else {
-                  this.router.navigate(['/survey']);
-                  this.isLoading = false;
+                  this.router.navigate(['/survey']).then(() => {
+                    this.isLoading = false;
+                  });
                 }
               },
               error: (error) => {
                 console.error('Error while checking study plan:', error);
-                this.router.navigate(['/survey']);
-                this.isLoading = false;
+                this.router.navigate(['/survey']).then(() => {
+                  this.isLoading = false;
+                });
               }
             });
           } else {
