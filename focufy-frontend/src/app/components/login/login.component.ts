@@ -38,7 +38,6 @@ export class LoginComponent implements OnInit {
   
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
-          this.isLoading = false;
           alert('Welcome back!');
   
           const userId = this.authService.getUserId();
@@ -63,7 +62,6 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.isLoading = false;
           console.error('Login Error:', error)
           alert(error);
         }
