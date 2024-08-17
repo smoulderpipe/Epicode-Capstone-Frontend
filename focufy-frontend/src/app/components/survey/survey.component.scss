@@ -28,10 +28,10 @@ h3 span {
 }
 
 .conceal-radio input[type="radio"] {
-  opacity: 0.011;
+  opacity: 0;
   z-index: 100;
   transition: 0.2s;
-  cursor: pointer;
+  //cursor: pointer;
   color: black;
 }
 
@@ -42,15 +42,8 @@ h3 span {
   transition: 0.2s;
 }
 
-.conceal-radio input[type="radio"]:hover+label {
-  background: rgba(255, 255, 255, 0.4);
-  color: black;
-  border-radius: 20px;
-  transition: 0.2s;
-}
-
 .conceal-radio label {
-  cursor: pointer;
+  //cursor: pointer;
   z-index: 90;
   line-height: 1.2em;
   transition: 0.2s;
@@ -62,6 +55,13 @@ input[type=number]{
 }
 
 @media only screen and (min-width:769px) {
+
+  .conceal-radio input[type="radio"]:hover+label {
+    background: rgba(255, 255, 255, 0.4);
+    color: black;
+    border-radius: 20px;
+    transition: 0.2s;
+  }
 
   label {
     font-size: 1em;
