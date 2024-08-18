@@ -77,7 +77,8 @@ export class LoginComponent implements OnInit {
 
           // alert(error);
           this.modalTitle = "Oops!";
-          console.log(error.status);
+          console.log('Error status: ' + error.status);
+          console.log('Error object: ' + error);
           if (error.status === 404) {
             this.modalDescription = "We couldn't find an account with that email. Want to try again?";
           } else {
