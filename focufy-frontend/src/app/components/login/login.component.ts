@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private studyPlanService: StudyPlanService
+    private studyPlanService: StudyPlanService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -73,13 +74,15 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           console.error('Login Error:', error)
-          
+
           // alert(error);
-          this.modalTitle = "Oops!"
-          if(error.status == 404) {
+          this.modalTitle = "Oops!";
+          if (error.status == 404) {
             this.modalDescription = "We couldn't find an account with that email. Want to try again?";
-            console.log(this.modalDescription);
+          } else {
+            this.modalDescription = "An unexpected error occurred. Please try again later.";
           }
+          this.cdr.detectChanges();
           this.openModal();
           this.isLoading = false;
         }
