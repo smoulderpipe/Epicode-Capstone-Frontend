@@ -38,6 +38,11 @@ input {
     backdrop-filter: blur(7px);
   }
 
+  .modal button {
+    width: 30%;
+    align-self: center;
+  }
+
   .modal-header {
     border: 0px;
   }
