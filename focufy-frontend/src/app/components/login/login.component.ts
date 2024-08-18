@@ -73,6 +73,7 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           console.error('Login Error:', error)
+          this.openModal();
           // alert(error);
           this.modalTitle = "Oops!"
           this.modalDescription = error;
