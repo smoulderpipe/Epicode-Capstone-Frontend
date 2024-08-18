@@ -13,6 +13,7 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading: boolean = false;
+  isModalOpen: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -77,6 +78,15 @@ export class LoginComponent implements OnInit {
       alert('Invalid form');
     }
   }
+
+  openModal(): void {
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+  }
+
 }
 
 
