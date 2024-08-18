@@ -36,6 +36,7 @@ input {
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
     backdrop-filter: blur(7px);
+    border: 0px;
   }
   
   .modal-content {
@@ -47,7 +48,8 @@ input {
   }
 
 .modal.show {
-    display: block;
+    display: flex;
+    align-items: center;
   }
   
   .close {
@@ -55,6 +57,9 @@ input {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    position: absolute;
+    top: 7px;
+    left: 7px;
   }
   
   .close:hover,
