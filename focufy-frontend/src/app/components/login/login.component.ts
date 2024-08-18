@@ -14,8 +14,8 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading: boolean = false;
   isModalOpen: boolean = false;
-  modalTitle!: string;
-  modalDescription!: string;
+  modalTitle: string = '';
+  modalDescription: string = '';
 
   constructor(
     private authService: AuthService,
