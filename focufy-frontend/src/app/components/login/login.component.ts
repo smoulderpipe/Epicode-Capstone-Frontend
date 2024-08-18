@@ -14,6 +14,8 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading: boolean = false;
   isModalOpen: boolean = false;
+  modalTitle!: string;
+  modalDescription!: string;
 
   constructor(
     private authService: AuthService,
@@ -36,12 +38,12 @@ export class LoginComponent implements OnInit {
       };
 
       this.isLoading = true;
-  
+
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
-  
+
           const userId = this.authService.getUserId();
-  
+
           if (userId) {
             this.studyPlanService.getStudyPlan(userId).subscribe({
               next: (studyPlan) => {
@@ -64,13 +66,18 @@ export class LoginComponent implements OnInit {
             });
           } else {
             console.error('User ID not found');
+            this.modalTitle = "Oops!"
+            this.modalDescription = "We couldn't find an account with that email. Want to try again?"
             this.openModal();
           }
         },
         error: (error) => {
           console.error('Login Error:', error)
-          alert(error);
-          this.isLoading = false;        }
+          // alert(error);
+          this.modalTitle = "Oops!"
+          this.modalDescription = error;
+          this.isLoading = false;
+        }
       });
     } else {
       console.log("Invalid form");

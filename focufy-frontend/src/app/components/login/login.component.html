@@ -6,11 +6,11 @@
   <!-- Modal content -->
   <div class="modal-content">
     <div class="modal-header d-flex justify-content-between">
-      <h3 class="text-center">Oops! </h3>
+      <h3 class="text-center">{{ modalTitle }} </h3>
       <span class="close" (click)="closeModal()">&times;</span>
     </div>
     
-    <p>We couldn't find an account with that email. Want to try again?</p>
+    <p>{{ modalDescription}}</p>
     <button type="button" class="btn rounded-pill" (click)="closeModal()">OK</button>
   </div>
 </div>
