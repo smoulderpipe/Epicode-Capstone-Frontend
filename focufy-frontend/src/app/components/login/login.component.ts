@@ -72,22 +72,37 @@ export class LoginComponent implements OnInit {
             this.openModal();
           }
         },
-        error: (error) => {
-          console.error('Login Error:', error)
-
-          // alert(error);
-          this.modalTitle = "Oops!";
-          console.log('Error status: ' + error.status);
-          console.log('Error object: ' + error);
-          if (error.status === 404) {
-            this.modalDescription = "We couldn't find an account with that email. Want to try again?";
+        error: (error: any) => {
+          let parsedError;
+          if (typeof error.error === 'string') {
+              try {
+                  parsedError = JSON.parse(error.error);
+              } catch (e) {
+                  console.error('Failed to parse error string:', e);
+                  parsedError = { message: 'An unexpected error occurred' };
+              }
           } else {
-            this.modalDescription = "An unexpected error occurred. Please try again later.";
+              parsedError = error.error;
           }
+      
+          console.log('Parsed Error Object:', parsedError);
+
+          console.error('Full Error Object:', error);
+    console.error('Error Status:', error.status);
+    console.error('Error Message:', error.message);
+    console.error('Error Response:', error.error);
+      
+          this.modalTitle = "Oops!";
+          if (error.status === 404) {
+              this.modalDescription = parsedError.message || "We couldn't find an account with that email. Want to try again?";
+          } else {
+              this.modalDescription = parsedError.message || "An unexpected error occurred. Please try again later.";
+          }
+      
           this.cdr.detectChanges();
           this.openModal();
           this.isLoading = false;
-        }
+      }
       });
     } else {
       console.log("Invalid form");
