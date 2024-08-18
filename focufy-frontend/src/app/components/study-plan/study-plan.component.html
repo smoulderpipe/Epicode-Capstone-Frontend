@@ -134,7 +134,7 @@
                   <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center">
                     <ng-container *ngIf="question.questionType === 'RESTART'">
                       <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block"
-                        id="avatarFit">Your avatar doesn't fit you anymore?</button>
+                        id="avatarFit">Doesn't your avatar fit you anymore?</button>
                     </ng-container>
                   </p>
                 </div>
@@ -201,9 +201,7 @@
                   <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center mt-md-0 mt-1">
                     <ng-container *ngIf="question.questionType === 'RESTART'">
                       <button (click)="confirmRestart(day, question)"
-                        class="text-uppercase btn rounded-pill d-block mt-4 mt-lg-4 mt-md-5 m4-lg-0" id="avatarFit">Your
-                        avatar doesn't fit
-                        you anymore?</button>
+                        class="text-uppercase btn rounded-pill d-block mt-4 mt-lg-4 mt-md-5 m4-lg-0" id="avatarFit">Doesn't your avatar fit you anymore?</button>
                     </ng-container>
                   </p>
                 </div>
