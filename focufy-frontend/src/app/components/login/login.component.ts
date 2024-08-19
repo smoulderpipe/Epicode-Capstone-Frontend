@@ -79,13 +79,12 @@ export class LoginComponent implements OnInit {
           console.error('Error Message: ', error.message);
           console.error('Error Response: ', error.error);
 
-          const parsedError = error.error;
       
           this.modalTitle = "Oops!";
           if (error.errorStatus === 'NOT_FOUND') {
-              this.modalDescription = parsedError.message || "We couldn't find an account with that email. Want to try again?";
+              this.modalDescription = error.message || "We couldn't find an account with that email. Want to try again?";
           } else {
-              this.modalDescription = parsedError.message || "An unexpected error occurred. Please try again later.";
+              this.modalDescription = error.message || "An unexpected error occurred. Please try again later.";
           }
       
           this.cdr.detectChanges();
