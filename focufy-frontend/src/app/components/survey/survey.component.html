@@ -13,7 +13,7 @@
         <div class="col-md-5"><img [src]="userAvatarUrl" class="img-fluid" /></div>
 
         <div class="col-md-7 px-md-5 text-md-start text-center">
-          <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
+          <p>{{ userAvatarChronotype.chronotypeType}} chronotypes {{ userAvatarChronotypeDescription}}</p>
           <p>Their energy and ability to concentrate peaks in the <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarChronotypeMaxEnergyType}}</span></p>
           <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
           <p>Inner strength: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperStrength}}</span></p>
@@ -44,7 +44,7 @@
 
               <div class="answers-list d-flex justify-content-center" id="answer-list">
                 <ng-container [ngSwitch]="currentQuestion.questionType">
-                  <ul class="list-unstyled row justify-content-center px-md-5" *ngSwitchCase="'CHRONOTYPE'">
+                  <ul class="list-unstyled row justify-content-md-center justify-content-around px-md-5" *ngSwitchCase="'CHRONOTYPE'">
                     <li class="justify-content-center d-flex mb-3 px-md-2 px-1"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
                       <div class="conceal-radio d-flex justify-content-center">
@@ -55,7 +55,7 @@
                       </div>
                     </li>
                   </ul>
-                  <ul class="list-unstyled row justify-content-center" *ngSwitchCase="'TEMPER'">
+                  <ul class="list-unstyled row justify-content-md-center justify-content-around" *ngSwitchCase="'TEMPER'">
                     <li class="justify-content-center d-flex mb-3"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
                       <div class="conceal-radio d-flex justify-content-center">
@@ -101,5 +101,14 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
+<div *ngIf="isLoadingForm || isLoadingAvatar || isLoadingStudyPlan" class="loader-container d-flex justify-content-center align-items-center">
+
+  <div class="mini-container">
+    <p class="text-center h3 fst-italic text-white mb-3">hang on...</p>
+    <div class="loader">
+    </div>
+
   </div>
 </div>

@@ -1,5 +1,5 @@
 .conceal-radio {
-  float: left;
+  //float: left;
   margin: 0 5px 0 0;
   position: relative;
   background: rgba(255, 255, 255, 0.1) !important;
@@ -17,10 +17,17 @@ h3 span {
   border-radius: 20px;
 }
 
+.conceal-radio input {
+  position: absolute;
+  width: 100%;
+}
+.conceal-radio label {
+  position: relative;
+  width: 100%;
+}
 .conceal-radio label,
 .conceal-radio input {
   display: block;
-  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -28,10 +35,10 @@ h3 span {
 }
 
 .conceal-radio input[type="radio"] {
-  opacity: 0.011;
+  opacity: 0;
   z-index: 100;
   transition: 0.2s;
-  cursor: pointer;
+  //cursor: pointer;
   color: black;
 }
 
@@ -40,17 +47,11 @@ h3 span {
   color: white !important;
   border-radius: 20px;
   transition: 0.2s;
-}
-
-.conceal-radio input[type="radio"]:hover+label {
-  background: rgba(255, 255, 255, 0.4);
-  color: black;
-  border-radius: 20px;
-  transition: 0.2s;
+  height: auto;
 }
 
 .conceal-radio label {
-  cursor: pointer;
+  //cursor: pointer;
   z-index: 90;
   line-height: 1.2em;
   transition: 0.2s;
@@ -62,6 +63,13 @@ input[type=number]{
 }
 
 @media only screen and (min-width:769px) {
+
+  .conceal-radio input[type="radio"]:hover+label {
+    background: rgba(255, 255, 255, 0.4);
+    color: black;
+    border-radius: 20px;
+    transition: 0.2s;
+  }
 
   label {
     font-size: 1em;
@@ -110,21 +118,28 @@ input[type=number]{
 }
 
 @media only screen and (max-width: 560px) {
+
+
   h4 {
     font-size: 1.5em !important;
   }
 
   .conceal-radio {
-    width: 160px !important;
+    width: 140px !important;
     height: 100px !important;
   }
 
   #answer-list li {
-    width: 160px !important;
+    width: 140px !important;
   }
 
   input, label {
     font-size: 0.8em;
+  }
+
+  input[type=radio], .conceal-radio label {
+    width: 140px !important;
+    height: 100px !important;
   }
 
   input[type=text] {

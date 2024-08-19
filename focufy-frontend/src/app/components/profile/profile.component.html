@@ -31,8 +31,7 @@
                                     <p class="mb-md-0">Risk <span class="btn-light border border-1 border-black px-2 bg-white">{{
                                             avatar.temper.riskType }}</span></p>
                                 </div>
-                                <div class="d-flex justify-content-between mt-3 align-items-center flex-md-row flex-column"><i>Your avatar
-                                        doesn't fit you anymore?</i>
+                                <div class="d-flex justify-content-between mt-3 align-items-center flex-md-row flex-column"><i>Doesn't your avatar fit you anymore?</i>
                                     <button (click)="confirmRestart()"
                                         class="text-uppercase btn btn-dark rounded-pill d-block px-3 mt-2 mt-md-0"
                                         id="avatarFit">Restart your journey</button>
@@ -102,3 +101,13 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="isLoading" class="loader-container d-flex justify-content-center align-items-center">
+
+    <div class="mini-container">
+        <p class="text-center h3 fst-italic text-white mb-3">hang on...</p>
+        <div class="loader">
+        </div>
+  
+    </div>
+  </div>

@@ -32,10 +32,10 @@ export class AuthService {
     );
   }
 
-  login(email: string, password: string): Observable<string> {
+  login(email: string, password: string): Observable<string | { message: string, status: string } > {
     const loginData = { email, password };
   
-    return this.http.post<any>(`${this.baseUrl}/auth/login`, loginData, { responseType: 'text' as 'json' }).pipe(
+    return this.http.post<any>(`${this.baseUrl}/auth/login`, loginData, { responseType: 'json' }).pipe(
       map(response => {
         const token = response;
   
@@ -63,21 +63,19 @@ export class AuthService {
         console.error('Error details:', error); 
   
         let errorMessage = 'An unknown error occurred'; 
-  
-        if (error.error && typeof error.error === 'object' && 'message' in error.error) {
-          errorMessage = error.error.message;
-        } else if (typeof error.error === 'string') {
-         
-          try {
-            const parsedError = JSON.parse(error.error);
-            errorMessage = parsedError.message || 'An unknown error occurred.';
-          } catch {
-            errorMessage = error.error;
-          }
+        let errorStatus = '';
+
+        if(error && typeof error === 'object') {
+          errorMessage = error.error.message || errorMessage;
+          errorStatus = error.error.errorStatus || 'UNKNOWN_ERROR';
         }
   
-        console.error('Parsed error message:', errorMessage);
-        return throwError(() => new Error(errorMessage));
+        console.error('Error message:', errorMessage);
+        console.error('Error status: ', errorStatus);
+        return throwError(() => ({
+          message: errorMessage,
+          status: errorStatus
+        }));
       })
     );
   }

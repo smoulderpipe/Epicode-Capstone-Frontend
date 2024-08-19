@@ -136,6 +136,25 @@ h3 {
   border: 2px dashed black;
 }
 
+/*@media only screen and (max-width: 560px) {
+
+  .conceal-radio {
+    width: 140px !important;
+    height: 100px !important;
+  }
+
+  #answer-list li {
+    width: 140px !important;
+  }
+
+  input[type=radio], .conceal-radio label {
+    width: 140px !important;
+    height: 100px !important;
+  }
+
+
+}*/
+
 @media only screen and (max-width: 560px) {
 
 
@@ -162,6 +181,11 @@ h3 {
     top: -45px;
     width: 50px;
     height: 40px;
+  }
+
+  input[type=radio], .conceal-radio label {
+    width: 50px !important;
+    height: 40px !important;
   }
 
   .mantra-text {

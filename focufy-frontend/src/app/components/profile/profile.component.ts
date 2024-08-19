@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit {
   isStudyEnough: boolean | null = null;
   isFunEnough: boolean | null = null;
   isRestEnough: boolean | null = null;
+  isLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -53,6 +54,7 @@ export class ProfileComponent implements OnInit {
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (studyPlan) => {
           this.studyPlan = studyPlan;
+          this.isLoading = false;
         },
         (error) => {
           console.error('Error fetching study plan:', error);
@@ -225,8 +227,10 @@ export class ProfileComponent implements OnInit {
   confirmRestart() {
     const confirmation = confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
     if (confirmation) {
-      this.onRestartAnswer();
-    } else {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.onRestartAnswer();
+      });
     }
   }
 

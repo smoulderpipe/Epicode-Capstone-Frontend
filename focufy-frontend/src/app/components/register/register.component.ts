@@ -14,6 +14,7 @@ import { passwordMatchValidator } from 'src/app/validators/validators';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errorMessage: string | null = null;
+  isLoading: boolean = false;
 
   private baseUrl = 'http://localhost:8080/auth/register';
 
@@ -38,6 +39,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
+
     if (this.registerForm.valid) {
       const user: User = {
         name: this.registerForm.value.name,
@@ -45,13 +47,17 @@ export class RegisterComponent implements OnInit {
         password: this.registerForm.value.password
       };
 
+      this.isLoading = true;
+
       this.authService.register(user).subscribe(
         (response: any) => {
+          this.isLoading = false;
           const successMessage = response.body.message;
           alert(successMessage);
           this.router.navigateByUrl('/login');
         },
         error => {
+          this.isLoading = false;
           if (error.status === 400 && error.error.message === `Email ${user.email} is already in use.`) {
             this.errorMessage = error;
           } else {

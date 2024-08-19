@@ -16,7 +16,8 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
   studyPlan!: StudyPlan;
   today: string = new Date().toISOString().split('T')[0];
-  isLoading: boolean = true;
+  isLoadingComponent: boolean = true;
+  isLoadingCDAnswers: boolean = false;
   isDataLoaded: boolean = false;
   answers: { [key: number]: boolean } = {};
   user: { name: string } | null = null;
@@ -46,7 +47,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (data) => {
           this.studyPlan = data;
-          this.isLoading = false;
+          this.isLoadingComponent = false;
           this.isDataLoaded = true;
           this.initializeForm();
           this.loadSavedAnswers();
@@ -54,13 +55,13 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
         },
         (error) => {
           console.error('Error fetching study plan:', error);
-          this.isLoading = false;
+          this.isLoadingComponent = false;
           this.studyPlanService.updateStudyPlanStatus(false);
         }
       );
     } else {
       console.error('User ID not found');
-      this.isLoading = false;
+      this.isLoadingComponent = false;
     }
   }
 
@@ -152,8 +153,10 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   confirmRestart(day: any, question: any) {
     const confirmation = confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
     if (confirmation) {
-      this.onRestartAnswer(day, question);
-    } else {
+      this.isLoadingComponent = true;
+      setTimeout(() => {
+        this.onRestartAnswer(day, question);
+      }, 0);
     }
   }
 
@@ -178,10 +181,12 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
         console.log('Restart answers submitted successfully', response);
+        alert('Your avatar and study plan data were correctly erased. Get ready to restart the experience by answering the test.');
         this.router.navigate(['/survey']);
       },
       (error) => {
         console.error('Error submitting restart answers', error);
+        alert('There was a problem erasing your avatar and study plan data, try again later.');
       }
     );
   }
@@ -198,6 +203,9 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
 
   submitCheckpointAnswers(day: Day) {
+
+  this.isLoadingCDAnswers = true;
+
   console.log('Submitting checkpoint answers for day:', day);
   const userId = this.authService.getUserId();
   if (!userId) {
@@ -241,18 +249,23 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   this.answerService.saveCheckpointAnswers(day.id, answers).subscribe(
     (response) => {
       console.log('Checkpoint answers submitted successfully', response);
+      this.isLoadingCDAnswers = false;
       this.submissionStatus[day.name] = true;
       localStorage.removeItem('checkpointAnswers');
       this.answers = {};
     },
     (error) => {
       console.error('Error submitting checkpoint answers', error);
+      this.isLoadingCDAnswers = false;
       this.submissionStatus[day.name] = false;
     }
   );
 }
 
   submitDeadlineAnswers(day: Day) {
+
+    this.isLoadingCDAnswers = true;
+
     console.log('Submitting deadline answers for day:', day);
     const userId = this.authService.getUserId();
     if (!userId) {
@@ -296,12 +309,14 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.answerService.saveDeadlineAnswers(day.id, answers).subscribe(
       (response) => {
         console.log('Deadline answers submitted successfully', response);
+        this.isLoadingCDAnswers = false;
         this.submissionStatus[day.name] = true;
         localStorage.removeItem('deadlineAnswers');
         this.answers = {};
       },
       (error) => {
         console.error('Error submitting deadline answers', error);
+        this.isLoadingCDAnswers = false;
         this.submissionStatus[day.name] = false;
       }
     );
