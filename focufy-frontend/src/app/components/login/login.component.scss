@@ -39,8 +39,8 @@ input {
   }
 
   .modal button {
-    width: 30%;
-    align-self: right;
+    width: 50%;
+    align-self: end;
   }
 
   .modal-header {
@@ -56,17 +56,14 @@ input {
     box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
   }
 
-  .modal p {
-    max-width: 320px;
-  }
-
 .modal.show {
     display: flex;
     align-items: center;
   }
 
-  .modal-img-col {
-    max-width: 175px;
+  .modal-info-col {
+    min-width: 320px;
+    justify-content: center;
   }
   
   .close {
