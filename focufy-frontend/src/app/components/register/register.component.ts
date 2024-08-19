@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -15,10 +15,13 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errorMessage: string | null = null;
   isLoading: boolean = false;
+  isModalOpen: boolean = false;
+  modalTitle: string = '';
+  modalDescription: string = '';
 
   private baseUrl = 'http://localhost:8080/auth/register';
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -52,9 +55,11 @@ export class RegisterComponent implements OnInit {
       this.authService.register(user).subscribe(
         (response: any) => {
           this.isLoading = false;
-          const successMessage = response.body.message;
-          alert(successMessage);
-          this.router.navigateByUrl('/login');
+          this.modalDescription = "Good news! Check your email to confirm your registration.";
+          this.modalTitle = 'Almost there...';
+          this.openModal().then(() => {
+            this.router.navigateByUrl('/login');
+          });
         },
         error => {
           this.isLoading = false;
@@ -64,10 +69,27 @@ export class RegisterComponent implements OnInit {
             console.error('Error while creating user:', error);
             this.errorMessage = error;
           }
+          this.openModal();
         }
       );
     } else {
       console.error('The form is not valid!');
     }
+  }
+
+  openModal(): Promise<void> {
+    this.isModalOpen = true;
+    return new Promise<void>(resolve => {
+      const closeModal = () => {
+        this.isModalOpen = false;
+        this.cdr.detectChanges();
+        resolve();
+      };
+      this.closeModal = closeModal;
+    });
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
   }
 }
