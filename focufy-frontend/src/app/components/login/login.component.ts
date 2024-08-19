@@ -70,27 +70,16 @@ export class LoginComponent implements OnInit {
             this.modalTitle = "Oops!";
             this.modalDescription = "We couldn't find an account with that email. Want to try again?";
             this.openModal();
+            this.isLoading = false;
           }
         },
         error: (error: any) => {
-          let parsedError;
-          if (typeof error.error === 'string') {
-              try {
-                  parsedError = JSON.parse(error.error);
-              } catch (e) {
-                  console.error('Failed to parse error string:', e);
-                  parsedError = { message: 'An unexpected error occurred' };
-              }
-          } else {
-              parsedError = error.error;
-          }
-      
-          console.log('Parsed Error Object:', parsedError);
-
           console.error('Full Error Object:', error);
-    console.error('Error Status:', error.status);
-    console.error('Error Message:', error.message);
-    console.error('Error Response:', error.error);
+          console.error('Error status: ', error.status);
+          console.error('Error Message: ', error.message);
+          console.error('Error Response: ', error.error);
+
+          const parsedError = error.error;
       
           this.modalTitle = "Oops!";
           if (error.status === 404) {
