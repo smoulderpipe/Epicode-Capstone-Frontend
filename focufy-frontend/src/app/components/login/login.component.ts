@@ -75,6 +75,8 @@ export class LoginComponent implements OnInit {
           this.modalTitle = "Oops!";
           if (error.status === 'NOT_FOUND') {
             this.modalDescription = "We couldn't find an account with that email... Want to try again?";
+          } else if (error.status === 'UNAUTHORIZED'){
+            this.modalDescription = 'You password is incorrect, check your credentials and try again.';
           } else {
             this.modalDescription = "An unexpected error occurred. Please try again later.";
           }
