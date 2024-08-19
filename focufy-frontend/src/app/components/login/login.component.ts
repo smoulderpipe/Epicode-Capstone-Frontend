@@ -50,13 +50,12 @@ export class LoginComponent implements OnInit {
               next: (studyPlan) => {
                 if (studyPlan) {
                   this.router.navigate(['/study-plan']).then(() => {
-                    this.isLoading = false;
                   });
                 } else {
                   this.router.navigate(['/survey']).then(() => {
-                    this.isLoading = false;
                   });
                 }
+                this.isLoading = false;
               },
               error: (error) => {
                 console.error('Error while checking study plan:', error);
@@ -74,20 +73,18 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          console.error('Error message by login component:', error.message);
-        console.error('Error status by login component:', error.status);
-      
+
           this.modalTitle = "Oops!";
           if (error.status === 'NOT_FOUND') {
-              this.modalDescription = "We couldn't find an account with that email. Want to try again?";
+            this.modalDescription = "We couldn't find an account with that email. Want to try again?";
           } else {
-              this.modalDescription = "An unexpected error occurred. Please try again later.";
+            this.modalDescription = "An unexpected error occurred. Please try again later.";
           }
-      
+
           this.cdr.detectChanges();
           this.openModal();
           this.isLoading = false;
-      }
+        }
       });
     } else {
       console.log("Invalid form");
