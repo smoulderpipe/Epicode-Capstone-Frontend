@@ -32,7 +32,7 @@ export class AuthService {
     );
   }
 
-  login(email: string, password: string): Observable<string> {
+  login(email: string, password: string): Observable<string | { message: string, status: string } > {
     const loginData = { email, password };
   
     return this.http.post<any>(`${this.baseUrl}/auth/login`, loginData, { responseType: 'json' }).pipe(
@@ -67,12 +67,15 @@ export class AuthService {
 
         if(error && typeof error === 'object') {
           errorMessage = error.error.message || errorMessage;
-          errorStatus = error.error.errorStatus || errorStatus;
+          errorStatus = error.error.errorStatus || 'UNKNOWN_ERROR';
         }
   
         console.error('Error message:', errorMessage);
         console.error('Error status: ', errorStatus);
-        return throwError(() => new Error(errorMessage));
+        return throwError(() => ({
+          message: errorMessage,
+          status: errorStatus
+        }));
       })
     );
   }
