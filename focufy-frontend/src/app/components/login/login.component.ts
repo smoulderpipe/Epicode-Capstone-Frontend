@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
 
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
-
           const userId = this.authService.getUserId();
 
           if (userId) {
@@ -73,7 +72,6 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error: any) => {
-
           this.modalTitle = "Oops!";
           if (error.status === 'NOT_FOUND') {
             this.modalDescription = "We couldn't find an account with that email... Want to try again?";

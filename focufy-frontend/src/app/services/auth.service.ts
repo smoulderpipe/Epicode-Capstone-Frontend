@@ -15,7 +15,7 @@ export class AuthService {
   token$ = this.tokenSubject.asObservable();
   private loggedUserId: number | null = this.getStoredUserId();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   register(user: User): Observable<any> {
     return this.http.post(`${this.baseUrl}/auth/register`, user, { observe: 'response' }).pipe(
@@ -32,24 +32,24 @@ export class AuthService {
     );
   }
 
-  login(email: string, password: string): Observable<string | { message: string, status: string } > {
+  login(email: string, password: string): Observable<string> {
     const loginData = { email, password };
-  
-    return this.http.post<any>(`${this.baseUrl}/auth/login`, loginData, { responseType: 'json' }).pipe(
+
+    return this.http.post<string>(`${this.baseUrl}/auth/login`, loginData, { responseType: 'text' as 'json' }).pipe(
       map(response => {
         const token = response;
-  
+
         if (token) {
           localStorage.setItem('access_token', token);
           this.tokenSubject.next(token);
-  
+
           try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             if (payload) {
               this.loggedUserId = payload.sub;
               localStorage.setItem('userId', this.loggedUserId!.toString());
             }
-  
+
             return token;
           } catch (error) {
             console.error('Error during decoding of token:', error);
@@ -60,18 +60,28 @@ export class AuthService {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Error details:', error); 
-  
-        let errorMessage = 'An unknown error occurred'; 
+        console.error('Error details:', error);
+
+        let errorMessage = 'An unknown error occurred';
         let errorStatus = '';
 
-        if(error && typeof error === 'object') {
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = error.error.message;
+        } else if (typeof error.error === 'string') {
+          try {
+            const errorResponse = JSON.parse(error.error);
+            errorMessage = errorResponse.message || errorMessage;
+            errorStatus = errorResponse.errorStatus || 'UNKNOWN_ERROR';
+          } catch {
+            errorMessage = error.error;
+          }
+        } else if (error.error && typeof error.error === 'object') {
           errorMessage = error.error.message || errorMessage;
           errorStatus = error.error.errorStatus || 'UNKNOWN_ERROR';
         }
-  
+
         console.error('Error message:', errorMessage);
-        console.error('Error status: ', errorStatus);
+        console.error('Error status:', errorStatus);
         return throwError(() => ({
           message: errorMessage,
           status: errorStatus
@@ -116,15 +126,15 @@ export class AuthService {
   getUserDetails(userId: number): Observable<User> {
     const url = `${this.baseUrl}/api/users/${userId}`;
     const token = this.getToken();
-  
+
     if (!token) {
       throw new Error('Token not available');
     }
-  
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-  
+
     return this.http.get<User>(url, { headers }).pipe(
       catchError(error => {
         console.error('Error while loading user details:', error);
