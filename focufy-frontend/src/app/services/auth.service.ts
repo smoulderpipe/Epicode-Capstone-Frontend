@@ -65,12 +65,13 @@ export class AuthService {
         let errorMessage = 'An unknown error occurred'; 
         let errorStatus = '';
 
-        if(error.error && typeof error.error === 'object') {
+        if(error && typeof error === 'object') {
           errorMessage = error.error.message || errorMessage;
-          errorStatus = error.error.status || errorStatus;
+          errorStatus = error.error.errorStatus || errorStatus;
         }
   
-        console.error('Parsed error message:', errorMessage);
+        console.error('Error message:', errorMessage);
+        console.error('Error status: ', errorStatus);
         return throwError(() => new Error(errorMessage));
       })
     );
