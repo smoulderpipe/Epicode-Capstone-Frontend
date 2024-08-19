@@ -7,14 +7,14 @@
   <div class="modal-content">
     <div class="row pe-4">
       <div class="col p-0"><img src="../../../assets/img/confused-bull.png" class="img-fluid"/></div>
-      <div class="col modal-info-col p-0 d-flex flex-column align-content-end justify-content-between">
-        <div>
+      <div class="col modal-info-col p-0 d-flex flex-column align-content-end">
+        
         <div class="modal-header py-0 px-0">
           <h3>{{ modalTitle }} </h3>
           <span class="close" (click)="closeModal()">&times;</span>
         </div>
         <p class="fs-6">{{modalDescription}}</p>
-        </div>
+        
         <button type="button" class="btn btn-dark rounded-pill" (click)="closeModal()">OK</button>
       </div>
     </div>
