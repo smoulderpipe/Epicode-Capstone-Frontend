@@ -5,11 +5,15 @@
 <div id="myModal" class="modal" [ngClass]="{'show': isModalOpen}">
   <!-- Modal content -->
   <div class="modal-content">
-    <img src="../../../assets/img/confused-bull.png"/>
-    <div class="modal-header d-flex justify-content-center pb-0">
-      <h3 class="text-center">{{ modalTitle }} </h3>
-      <span class="close" (click)="closeModal()">&times;</span>
+    <div class="row">
+      <div class="col-4"><img src="../../../assets/img/confused-bull.png"/></div>
+      <div class="col"><div class="modal-header d-flex justify-content-center pb-0">
+        <h3 class="text-center">{{ modalTitle }} </h3>
+        <span class="close" (click)="closeModal()">&times;</span>
+      </div></div>
     </div>
+    
+    
     
     <p class="text-center" [innerHTML]="modalDescription"></p>
     <button type="button" class="btn btn-dark rounded-pill" (click)="closeModal()">OK</button>
