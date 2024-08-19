@@ -74,10 +74,10 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          console.error('Full Error Object:', error.error);
-          console.error('Error status: ', error.error.errorStatus);
-          console.error('Error Message: ', error.error.message);
-          console.error('Error Response: ', error.error);
+          console.error('Full Error Object:', error);
+          console.error('Error status: ', error.errorStatus);
+          console.error('Error Message: ', error.message);
+          console.error('Error Response: ', error);
 
       
           this.modalTitle = "Oops!";
