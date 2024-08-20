@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SurveyComponent } from '../components/survey/survey.component';
 import { StudyPlanComponent } from '../components/study-plan/study-plan.component';
 import { RouterModule } from '@angular/router';
+import { ModalComponent } from '../components/modal/modal.component';
+import { ModalService } from '../services/modal.service';
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, RouterModule
@@ -14,13 +16,19 @@ import { RouterModule } from '@angular/router';
     LoginComponent,
     RegisterComponent,
     SurveyComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ModalComponent
   ],
   exports: [
     LoginComponent,
     RegisterComponent,
     SurveyComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ModalComponent
+  ],
+  providers: [
+    ModalService
   ]
+  
 })
 export class SharedModule { }

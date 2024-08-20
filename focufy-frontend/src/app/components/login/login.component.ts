@@ -1,8 +1,8 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
 
 @Component({
@@ -16,12 +16,13 @@ export class LoginComponent implements OnInit {
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
+  modalImage: string = '';
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private studyPlanService: StudyPlanService,
-    private cdr: ChangeDetectorRef
+    private modalService: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -73,6 +74,7 @@ export class LoginComponent implements OnInit {
         },
         error: (error: any) => {
           this.modalTitle = "Oops!";
+          this.modalImage = "../../../assets/img/confused-bull.png";
           if (error.status === 'NOT_FOUND') {
             this.modalDescription = "We couldn't find an account with that email... Want to try again?";
           } else if (error.status === 'UNAUTHORIZED'){
@@ -81,7 +83,6 @@ export class LoginComponent implements OnInit {
             this.modalDescription = "An unexpected error occurred. Please try again later.";
           }
 
-          this.cdr.detectChanges();
           this.openModal();
           this.isLoading = false;
         }
@@ -92,12 +93,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  openModal(): void {
-    this.isModalOpen = true;
+  openModal() {
+    this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
   }
 
-  closeModal(): void {
-    this.isModalOpen = false;
+  closeModal() {
+    this.modalService.closeModal();
   }
 
 }

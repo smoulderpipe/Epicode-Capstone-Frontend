@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { passwordMatchValidator } from 'src/app/validators/validators';
 
 @Component({
@@ -18,10 +19,11 @@ export class RegisterComponent implements OnInit {
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
+  modalImage: string = '';
 
   private baseUrl = 'http://localhost:8080/auth/register';
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) {
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef, private modalService: ModalService) {
   }
 
   ngOnInit(): void {
@@ -57,6 +59,7 @@ export class RegisterComponent implements OnInit {
           this.isLoading = false;
           this.modalDescription = "Good news! Check your email to confirm your registration.";
           this.modalTitle = 'Almost there...';
+          this.modalImage = '../../../assets/img/mail-confirmation-image.png';
           this.openModal().then(() => {
             this.router.navigateByUrl('/login');
           });
@@ -78,18 +81,17 @@ export class RegisterComponent implements OnInit {
   }
 
   openModal(): Promise<void> {
-    this.isModalOpen = true;
-    return new Promise<void>(resolve => {
-      const closeModal = () => {
-        this.isModalOpen = false;
-        this.cdr.detectChanges();
-        resolve();
-      };
-      this.closeModal = closeModal;
+    return new Promise<void>((resolve) => {
+      this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+      this.modalService.modalClosed$.subscribe(closed => {
+        if (closed) {
+          resolve(); // Risolvi la promessa solo quando la modale viene chiusa
+        }
+      });
     });
   }
 
-  closeModal(): void {
-    this.isModalOpen = false;
+  closeModal() {
+    this.modalService.closeModal();
   }
 }

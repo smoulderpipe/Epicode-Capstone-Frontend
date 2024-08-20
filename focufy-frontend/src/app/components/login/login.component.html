@@ -1,23 +1,9 @@
-<!-- The Modal -->
-<div id="myModal" class="modal" [ngClass]="{'show': isModalOpen}">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div class="row pe-md-4 px-md-0 px-4">
-      <div class="col-12 col-md d-flex align-content-center justify-content-md-start justify-content-center p-0"><img src="../../../assets/img/confused-bull.png" class="img-fluid"/></div>
-      <div class="col modal-info-col p-0 d-flex flex-column align-content-end">
-        
-        <div class="modal-header py-0 px-0 d-flex justify-content-center">
-          <h3 class="text-center">{{ modalTitle }} </h3>
-          <span class="close" (click)="closeModal()">&times;</span>
-        </div>
-        <p class="text-center">{{modalDescription}}</p>
-        
-        <button type="button" class="btn rounded-pill align-self-center w-50" (click)="closeModal()">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+<app-modal
+  [modalTitle]="modalTitle"
+  [modalDescription]="modalDescription"
+  [modalImage]="modalImage"
+  (close)="closeModal()">
+</app-modal>
 <div class="d-flex justify-content-center">
   <div class="d-flex align-items-start p-lg-5 justify-content-center inner-body">
     <div class="container p-md-5 px-3 py-4 mt-md-5 mt-3 align-content-center justify-content-center"
