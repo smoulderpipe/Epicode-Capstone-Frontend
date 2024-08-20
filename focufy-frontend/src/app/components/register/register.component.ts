@@ -85,7 +85,7 @@ export class RegisterComponent implements OnInit {
       this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
       this.modalService.modalClosed$.subscribe(closed => {
         if (closed) {
-          resolve(); // Risolvi la promessa solo quando la modale viene chiusa
+          resolve();
         }
       });
     });
