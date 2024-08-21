@@ -239,22 +239,16 @@ export class ProfileComponent implements OnInit {
     const confirmation = "";
     this.modalTitle = "What if...";
     this.modalDescription = "Personalities change, tests don’t always get it right, and sometimes your avatar just doesn’t feel like ‘you.’ Ready to try something different?";
-    this.modalImage = "";
+    this.modalImage = "../../../assets/img/onRestartImage.png";
     this.hasYesButton = true;
     this.hasNoButton = true;
     this.openModal();
-    //confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
-    //if (confirmation) {
-      // this.isLoading = true;
-      // setTimeout(() => {
-      //   this.onRestartAnswer();
-      // });
-    //}
   }
 
   areYouSure() {
     this.modalTitle = "Are you 100% sure?";
-    this.modalDescription = "By clicking YES, you will PERMANENTLY DELETE your study plan, avatar, and goals, and you'll be redirected to the quiz page to start a new adventure."
+    this.modalDescription = "By clicking 'GO AHEAD', you will PERMANENTLY DELETE your study plan, avatar, and goals, and you'll be redirected to the quiz page to start a new adventure."
+    this.modalImage = "../../../assets/img/warning.png";
     this.hasYesButton = false;
     this.hasNoButton = false;
     this.hasHellNoButton = true;
@@ -291,6 +285,7 @@ export class ProfileComponent implements OnInit {
             
             this.modalTitle = "All set!";
             this.modalDescription = "Your avatar and study plan data were correctly erased! Get ready to restart the experience by answering the test.";
+            this.modalImage = "../../../assets/img/thumbs-up-image.png";
             this.hasOkButton = true;
             
             this.openModal().then(() => {

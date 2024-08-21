@@ -22,3 +22,15 @@
     font-family: "Piazzolla", serif;
     
   }
+
+
+  @media screen and (min-width: 992px) and (max-width: 1199px) {
+    .profile-card p, .stats-card p {
+      font-size: 1.1em;
+    }
+
+    .profile-card span, .stats-card span {
+      font-size: 1em;
+    }
+  }
+

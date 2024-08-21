@@ -26,7 +26,7 @@
 
                     <div class="profile-card">
                         <div class="row p-3 p-md-5 mx-md-3 justify-content-center">
-                            <div class="col-lg-4 col-md-6 col-12 align-content-center">
+                            <div class="col-xl-4 col-lg-5 col-md-6 col-12 align-content-center">
                                 <div class="pe-4"><img [src]="avatar.image" alt="Avatar Image"
                                         class="text-info img-fluid" /></div>
                             </div>
@@ -37,17 +37,17 @@
                                     avatar.temper.description }}</p>
                                 <div class="d-md-flex justify-content-between pb-3">
                                     <p class="mb-md-0 mb-2">Peak energy <span
-                                            class="btn-light border border-1 border-black px-2 bg-white">{{
+                                            class="btn-light border border-1 border-black px-2 bg-white d-block">{{
                                             avatar.chronotype.maxEnergyType }}</span></p>
                                     <p class="mb-md-0 mb-2">Strength <span
-                                            class="btn-light border border-1 border-black px-2 bg-white">{{
+                                            class="btn-light border border-1 border-black px-2 bg-white d-block">{{
                                             avatar.temper.strengthType }}</span></p>
-                                    <p class="mb-md-0">Risk <span class="btn-light border border-1 border-black px-2 bg-white">{{
+                                    <p class="mb-md-0">Risk <span class="btn-light border border-1 border-black px-2 bg-white d-block">{{
                                             avatar.temper.riskType }}</span></p>
                                 </div>
                                 <div class="d-flex justify-content-between mt-3 align-items-center flex-md-row flex-column"><i>Doesn't your avatar fit you anymore?</i>
                                     <button (click)="confirmRestart()"
-                                        class="text-uppercase btn btn-dark rounded-pill d-block px-3 mt-2 mt-md-0"
+                                        class="text-uppercase btn btn-dark bg-black main-btn rounded-pill d-block px-3 mt-2 mt-md-0"
                                         id="avatarFit">Restart your journey</button>
                                 </div>
                             </div>
