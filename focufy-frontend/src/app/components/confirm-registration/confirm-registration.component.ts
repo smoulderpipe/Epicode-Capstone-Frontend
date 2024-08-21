@@ -34,19 +34,30 @@ export class ConfirmRegistrationComponent implements OnInit {
             this.isLoading = false;
             this.modalTitle = "Welcome aboard!";
             this.modalDescription = "Log in and see what awaits you...";
+            this.modalImage = "../../../assets/img/thumbs-up-image.png";
             this.openModal().then(() => {
               this.router.navigateByUrl('/login');
             });
           },
           error: (error) => {
             this.isLoading = false;
-            alert('There was an error confirming your registration. Please try again later.');
+            this.modalTitle = "Oops!";
+            this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
+            this.modalImage = "../../../assets/img/confused-bull.png";
+            this.openModal().then(() => {
+              this.router.navigateByUrl('/');
+            });
             console.error('Error during registration confirmation', error);
           }
         });
       } else {
-        alert('Invalid confirmation token.');
-        this.router.navigate(['/login']);
+        this.modalTitle = "Oops!";
+        this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
+        this.modalImage = "../../../assets/img/confused-bull.png";
+        this.openModal().then(() => {
+          this.router.navigateByUrl('/');
+        });
+        console.error('Invalid confirmation token.');
       }
     });
   }
