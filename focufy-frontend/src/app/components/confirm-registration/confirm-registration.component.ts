@@ -15,6 +15,7 @@ export class ConfirmRegistrationComponent implements OnInit {
   modalTitle: string = '';
   modalDescription: string = '';
   modalImage: string = '';
+  hasOkButton: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,6 +36,7 @@ export class ConfirmRegistrationComponent implements OnInit {
             this.modalTitle = "Welcome aboard!";
             this.modalDescription = "Log in and see what awaits you...";
             this.modalImage = "../../../assets/img/thumbs-up-image.png";
+            this.hasOkButton = true;
             this.openModal().then(() => {
               this.router.navigateByUrl('/login');
             });
@@ -44,6 +46,7 @@ export class ConfirmRegistrationComponent implements OnInit {
             this.modalTitle = "Oops!";
             this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
             this.modalImage = "../../../assets/img/confused-bull.png";
+            this.hasOkButton = true;
             this.openModal().then(() => {
               this.router.navigateByUrl('/');
             });
@@ -54,6 +57,7 @@ export class ConfirmRegistrationComponent implements OnInit {
         this.modalTitle = "Oops!";
         this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
         this.modalImage = "../../../assets/img/confused-bull.png";
+        this.hasOkButton = true;
         this.openModal().then(() => {
           this.router.navigateByUrl('/');
         });

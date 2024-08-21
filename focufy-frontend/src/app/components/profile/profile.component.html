@@ -1,3 +1,17 @@
+<app-modal
+  [modalTitle]="modalTitle"
+  [modalDescription]="modalDescription"
+  [modalImage]="modalImage"
+  [hasOkButton]="hasOkButton"
+  [hasYesButton]="hasYesButton"
+  [hasNoButton]="hasNoButton"
+  [hasHellNoButton]="hasHellNoButton"
+  [hasGoAheadButton]="hasGoAheadButton"
+  [onOkOrNoClick]="closeModal.bind(this)"
+  [onYesClick]="areYouSure.bind(this)"
+  [onGoAheadClick]="onRestartAnswer.bind(this)">
+</app-modal>
+
 <div class="d-flex justify-content-center">
     <div class="container m-lg-5 p-5">
         <div *ngIf="user && avatar">

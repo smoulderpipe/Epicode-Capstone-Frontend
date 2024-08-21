@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   modalTitle: string = '';
   modalDescription: string = '';
   modalImage: string = '';
+  hasOkButton: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -67,7 +68,9 @@ export class LoginComponent implements OnInit {
           } else {
             console.error('User ID not found');
             this.modalTitle = "Oops!";
+            this.modalImage = "../../../assets/img/confused-bull.png";
             this.modalDescription = "We couldn't find an account with that email. Want to try again?";
+            this.hasOkButton = true;
             this.openModal();
             this.isLoading = false;
           }
@@ -75,6 +78,7 @@ export class LoginComponent implements OnInit {
         error: (error: any) => {
           this.modalTitle = "Oops!";
           this.modalImage = "../../../assets/img/confused-bull.png";
+          this.hasOkButton = true;
           if (error.status === 'NOT_FOUND') {
             this.modalDescription = "We couldn't find an account with that email... Want to try again?";
           } else if (error.status === 'UNAUTHORIZED'){

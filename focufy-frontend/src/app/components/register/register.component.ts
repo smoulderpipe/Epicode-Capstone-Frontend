@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
   modalTitle: string = '';
   modalDescription: string = '';
   modalImage: string = '';
+  hasOkButton: boolean = false;
 
   private baseUrl = 'http://localhost:8080/auth/register';
 
@@ -60,6 +61,7 @@ export class RegisterComponent implements OnInit {
           this.modalDescription = "Good news! Check your email to confirm your registration.";
           this.modalTitle = 'Almost there...';
           this.modalImage = '../../../assets/img/mail-confirmation-image.png';
+          this.hasOkButton = true;
           this.openModal().then(() => {
             this.router.navigateByUrl('/login');
           });

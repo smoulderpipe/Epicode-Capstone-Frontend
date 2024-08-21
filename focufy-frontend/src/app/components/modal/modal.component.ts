@@ -11,6 +11,15 @@ export class ModalComponent implements OnInit {
   @Input() modalTitle: string = '';
   @Input() modalDescription: string = '';
   @Input() modalImage: string = '';
+  @Input() hasOkButton: boolean = false;
+  @Input() hasYesButton: boolean = false;
+  @Input() hasNoButton: boolean = false;
+  @Input() hasHellNoButton: boolean = false;
+  @Input() hasGoAheadButton: boolean = false;
+  
+  @Input() onOkOrNoClick: () => void = () => {};
+  @Input() onYesClick: () => void = () => {};
+  @Input() onGoAheadClick: () => void = () => {};
 
   constructor(private modalService: ModalService) {}
 
@@ -26,4 +35,6 @@ export class ModalComponent implements OnInit {
   closeModal() {
     this.modalService.closeModal();
   }
+
+
 }
