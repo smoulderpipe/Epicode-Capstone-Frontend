@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit {
   isStudyEnough: boolean | null = null;
   isFunEnough: boolean | null = null;
   isRestEnough: boolean | null = null;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
 
   modalTitle: string = '';
   modalDescription: string = '';
@@ -42,6 +42,7 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isLoading = true;
     const userId = this.authService.getUserId();
     if (userId) {
       this.userService.getUserAvatar(userId).subscribe(
@@ -65,7 +66,6 @@ export class ProfileComponent implements OnInit {
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (studyPlan) => {
           this.studyPlan = studyPlan;
-          this.isLoading = false;
         },
         (error) => {
           console.error('Error fetching study plan:', error);
@@ -77,6 +77,7 @@ export class ProfileComponent implements OnInit {
       this.getFunAnswers(userId);
       this.getRestAnswers(userId);
       this.getSleepingAnswers(userId);
+      this.isLoading = false;
     }
   }
 
@@ -315,20 +316,36 @@ export class ProfileComponent implements OnInit {
 
   openModal(): Promise<void> {
     return new Promise<void>((resolve) => {
-      this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
-      this.modalService.modalClosed$.subscribe(closed => {
-        if (closed) {
-          resolve();
-        }
-      });
+      const img = new Image();
+      img.src = this.modalImage;
+
+      img.onload = () => {
+        this.isLoading = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
+      img.onerror = () => {
+        console.error("Error loading image.");
+        this.isLoading = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
     });
   }
 
   closeModal() {
-    this.hasGoAheadButton = false;
-    this.hasHellNoButton = false;
-    this.hasYesButton = false;
-    this.hasNoButton = false;
     this.modalService.closeModal();
   }
 }

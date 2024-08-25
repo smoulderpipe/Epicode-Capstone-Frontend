@@ -17,7 +17,7 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
   studyPlan!: StudyPlan;
   today: string = new Date().toISOString().split('T')[0];
-  isLoadingComponent: boolean = true;
+  isLoadingComponent: boolean = false;
   isLoadingCDAnswers: boolean = false;
   isDataLoaded: boolean = false;
   answers: { [key: number]: boolean } = {};
@@ -44,6 +44,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   ) { }
 
   ngOnInit(): void {
+    this.isLoadingComponent = true;
     const userId = this.authService.getUserId();
     if (userId !== null) {
       this.authService.getUserDetails(userId).subscribe(
@@ -162,7 +163,6 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   confirmRestart() {
-    const confirmation = "";
     this.modalTitle = "What if...";
     this.modalDescription = "Personalities change, tests don’t always get it right, and sometimes your avatar just doesn’t feel like ‘you.’ Ready to try something different?";
     this.modalImage = "../../../assets/img/onRestartImage.png";
@@ -193,34 +193,34 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       console.error('User ID not found');
       return;
     }
-  
+
     const answers = [{
       questionId: 24,
       answerText: "yes",
       personalAnswerType: "RESTART",
       userId: userId
     }];
-  
+
     this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
         console.log('Restart answers submitted successfully', response);
-        
+
         this.authService.getUserDetails(userId).subscribe(
           (userDetails) => {
             this.user = userDetails;
-            
+
             this.modalTitle = "All set!";
             this.modalDescription = "Your avatar and study plan data were correctly erased! Get ready to restart the experience by answering the test.";
             this.modalImage = "../../../assets/img/thumbs-up-image.png";
             this.hasOkButton = true;
-            
+
             this.openModal().then(() => {
               this.isLoadingComponent = false;
               this.modalService.modalClosed$.subscribe(() => {
                 this.router.navigateByUrl('/survey');
               });
             });
-            
+
           },
           (error) => {
             console.error('Error fetching user details after restart', error);
@@ -238,22 +238,39 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   openModal(): Promise<void> {
+    this.isLoadingComponent = true;
     return new Promise<void>((resolve) => {
-      this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
-      this.modalService.modalClosed$.subscribe(closed => {
-        if (closed) {
-          resolve();
-        }
-      });
+      const img = new Image();
+      img.src = this.modalImage;
+
+      img.onload = () => {
+        this.isLoadingComponent = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
+      img.onerror = () => {
+        console.error("Error loading image.");
+        this.isLoadingComponent = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
     });
   }
 
   closeModal() {
     this.modalService.closeModal();
-    this.hasGoAheadButton = false;
-    this.hasHellNoButton = false;
-    this.hasYesButton = false;
-    this.hasNoButton = false;
   }
 
   canSubmitAnswers(day: Day): boolean {
@@ -269,84 +286,24 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   submitCheckpointAnswers(day: Day) {
 
-  this.isLoadingCDAnswers = true;
-
-  console.log('Submitting checkpoint answers for day:', day);
-  const userId = this.authService.getUserId();
-  if (!userId) {
-    console.error('User ID not found');
-    return;
-  }
-
-  if (!day.questions) return;
-
-  const checkpointQuestions = day.questions.filter(question =>
-    question.questionType === 'CHECKPOINT'
-  );
-
-  const answers: CheckpointAnswer[] = checkpointQuestions.map((question, index) => {
-    let cdAnswerType: CDAnswerType;
-
-    switch (index % 3) {
-      case 0:
-        cdAnswerType = CDAnswerType.STUDY;
-        break;
-      case 1:
-        cdAnswerType = CDAnswerType.FUN;
-        break;
-      case 2:
-        cdAnswerType = CDAnswerType.REST;
-        break;
-      default:
-        cdAnswerType = CDAnswerType.STUDY;
-        break;
-    }
-
-    return {
-      questionId: question.id,
-      answerText: (this.formGroup.get(question.id.toString())?.value as boolean).toString(),
-      checkpointDayId: day.id,
-      userId: userId,
-      answerType: cdAnswerType
-    };
-  });
-
-  this.answerService.saveCheckpointAnswers(day.id, answers).subscribe(
-    (response) => {
-      console.log('Checkpoint answers submitted successfully', response);
-      this.isLoadingCDAnswers = false;
-      this.submissionStatus[day.name] = true;
-      localStorage.removeItem('checkpointAnswers');
-      this.answers = {};
-    },
-    (error) => {
-      console.error('Error submitting checkpoint answers', error);
-      this.isLoadingCDAnswers = false;
-      this.submissionStatus[day.name] = false;
-    }
-  );
-}
-
-  submitDeadlineAnswers(day: Day) {
-
     this.isLoadingCDAnswers = true;
 
-    console.log('Submitting deadline answers for day:', day);
+    console.log('Submitting checkpoint answers for day:', day);
     const userId = this.authService.getUserId();
     if (!userId) {
       console.error('User ID not found');
       return;
     }
-  
+
     if (!day.questions) return;
-  
-    const deadlineQuestions = day.questions.filter(question =>
-      question.questionType === 'DEADLINE'
+
+    const checkpointQuestions = day.questions.filter(question =>
+      question.questionType === 'CHECKPOINT'
     );
-  
-    const answers: DeadlineAnswer[] = deadlineQuestions.map((question, index) => {
+
+    const answers: CheckpointAnswer[] = checkpointQuestions.map((question, index) => {
       let cdAnswerType: CDAnswerType;
-  
+
       switch (index % 3) {
         case 0:
           cdAnswerType = CDAnswerType.STUDY;
@@ -361,7 +318,67 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
           cdAnswerType = CDAnswerType.STUDY;
           break;
       }
-  
+
+      return {
+        questionId: question.id,
+        answerText: (this.formGroup.get(question.id.toString())?.value as boolean).toString(),
+        checkpointDayId: day.id,
+        userId: userId,
+        answerType: cdAnswerType
+      };
+    });
+
+    this.answerService.saveCheckpointAnswers(day.id, answers).subscribe(
+      (response) => {
+        console.log('Checkpoint answers submitted successfully', response);
+        this.isLoadingCDAnswers = false;
+        this.submissionStatus[day.name] = true;
+        localStorage.removeItem('checkpointAnswers');
+        this.answers = {};
+      },
+      (error) => {
+        console.error('Error submitting checkpoint answers', error);
+        this.isLoadingCDAnswers = false;
+        this.submissionStatus[day.name] = false;
+      }
+    );
+  }
+
+  submitDeadlineAnswers(day: Day) {
+
+    this.isLoadingCDAnswers = true;
+
+    console.log('Submitting deadline answers for day:', day);
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      console.error('User ID not found');
+      return;
+    }
+
+    if (!day.questions) return;
+
+    const deadlineQuestions = day.questions.filter(question =>
+      question.questionType === 'DEADLINE'
+    );
+
+    const answers: DeadlineAnswer[] = deadlineQuestions.map((question, index) => {
+      let cdAnswerType: CDAnswerType;
+
+      switch (index % 3) {
+        case 0:
+          cdAnswerType = CDAnswerType.STUDY;
+          break;
+        case 1:
+          cdAnswerType = CDAnswerType.FUN;
+          break;
+        case 2:
+          cdAnswerType = CDAnswerType.REST;
+          break;
+        default:
+          cdAnswerType = CDAnswerType.STUDY;
+          break;
+      }
+
       return {
         questionId: question.id,
         answerText: (this.formGroup.get(question.id.toString())?.value as boolean).toString(),
@@ -370,7 +387,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
         answerType: cdAnswerType
       };
     });
-  
+
     this.answerService.saveDeadlineAnswers(day.id, answers).subscribe(
       (response) => {
         console.log('Deadline answers submitted successfully', response);
@@ -391,7 +408,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     if (!day || !day.questions) {
       return false;
     }
-    
+
     return day.questions.some(question => {
       return true;
     });

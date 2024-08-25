@@ -28,6 +28,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoadingComponent = true;
     this.registerForm = new FormGroup({
       name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
       email: new FormControl(null, [Validators.required, Validators.email]),
@@ -38,6 +39,8 @@ export class RegisterComponent implements OnInit {
         passwordMatchValidator('password')
       ])
     });
+
+    this.isLoadingComponent = false;
 
     this.registerForm.get('password')?.valueChanges.subscribe(passwordValue => {
       this.registerForm.get('passwordConf')?.updateValueAndValidity();

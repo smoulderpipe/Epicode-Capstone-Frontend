@@ -415,9 +415,9 @@ export class SurveyComponent implements OnInit {
           this.userAvatarTemperStrength = avatar.temper.strengthType;
           this.userAvatarTemperRisk = avatar.temper.riskType;
           this.showAvatar = true;
-          this.isLoadingAvatar = false;
         }
       });
+      this.isLoadingAvatar = false;
   }
 
   isCurrentAnswerValid(): boolean {

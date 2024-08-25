@@ -69,12 +69,32 @@ export class ConfirmRegistrationComponent implements OnInit {
 
   openModal(): Promise<void> {
     return new Promise<void>((resolve) => {
-      this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
-      this.modalService.modalClosed$.subscribe(closed => {
-        if (closed) {
-          resolve();
-        }
-      });
+      const img = new Image();
+      img.src = this.modalImage;
+
+      img.onload = () => {
+        this.isLoading = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
+      img.onerror = () => {
+        console.error("Error loading image.");
+        this.isLoading = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
     });
   }
 

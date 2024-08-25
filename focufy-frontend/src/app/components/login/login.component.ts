@@ -12,7 +12,7 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  isLoading: boolean = false;
+  isLoadingComponent: boolean = false;
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
         password: this.loginForm.value.password
       };
 
-      this.isLoading = true;
+      this.isLoadingComponent = true;
 
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
@@ -56,12 +56,12 @@ export class LoginComponent implements OnInit {
                   this.router.navigate(['/survey']).then(() => {
                   });
                 }
-                this.isLoading = false;
+                
               },
               error: (error) => {
                 console.error('Error while checking study plan:', error);
                 this.router.navigate(['/survey']).then(() => {
-                  this.isLoading = false;
+                  
                 });
               }
             });
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
             this.modalDescription = "We couldn't find an account with that email. Want to try again?";
             this.hasOkButton = true;
             this.openModal();
-            this.isLoading = false;
+            
           }
         },
         error: (error: any) => {
@@ -83,12 +83,14 @@ export class LoginComponent implements OnInit {
             this.modalDescription = "We couldn't find an account with that email... Want to try again?";
           } else if (error.status === 'UNAUTHORIZED'){
             this.modalDescription = 'You password is incorrect, check your credentials and try again.';
+          } else if (error.status === 'FORBIDDEN') {
+            this.modalDescription = "Did you forget to click the link we sent you via email? We really need that click to get you in, don't miss out!"
           } else {
             this.modalDescription = "An unexpected error occurred. Please try again later.";
           }
 
           this.openModal();
-          this.isLoading = false;
+          
         }
       });
     } else {
@@ -97,8 +99,35 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  openModal() {
-    this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+  openModal(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const img = new Image();
+      img.src = this.modalImage;
+
+      img.onload = () => {
+        this.isLoadingComponent = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
+      img.onerror = () => {
+        console.error("Error loading image.");
+        this.isLoadingComponent = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
+    });
   }
 
   closeModal() {
