@@ -15,7 +15,7 @@ import { passwordMatchValidator } from 'src/app/validators/validators';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errorMessage: string | null = null;
-  isLoading: boolean = false;
+  isLoadingComponent: boolean = false;
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
@@ -53,11 +53,11 @@ export class RegisterComponent implements OnInit {
         password: this.registerForm.value.password
       };
 
-      this.isLoading = true;
+      this.isLoadingComponent = true;
+      console.log("isLoadingComponent=true");
 
       this.authService.register(user).subscribe(
         (response: any) => {
-          this.isLoading = false;
           this.modalDescription = "Good news! Check your email to confirm your registration.";
           this.modalTitle = 'Almost there...';
           this.modalImage = '../../../assets/img/mail-confirmation-image.png';
@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
           });
         },
         error => {
-          this.isLoading = false;
+          this.isLoadingComponent = true;
           if (error.status === 400 && error.error.message === `Email ${user.email} is already in use.`) {
             this.errorMessage = error;
           } else {
@@ -84,12 +84,32 @@ export class RegisterComponent implements OnInit {
 
   openModal(): Promise<void> {
     return new Promise<void>((resolve) => {
-      this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
-      this.modalService.modalClosed$.subscribe(closed => {
-        if (closed) {
-          resolve();
-        }
-      });
+      const img = new Image();
+      img.src = this.modalImage;
+
+      img.onload = () => {
+        this.isLoadingComponent = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
+      img.onerror = () => {
+        console.error("Error loading image.");
+        this.isLoadingComponent = false;
+        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+        const subscription = this.modalService.modalClosed$.subscribe(closed => {
+          if (closed) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        })
+      };
+
     });
   }
 

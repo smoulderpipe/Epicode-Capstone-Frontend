@@ -15,16 +15,16 @@
                 <div class="d-flex justify-content-center">
 
                     <button *ngIf="hasOkButton" type="button" class="btn rounded-pill align-self-center w-25"
-                    (click)="onOkOrNoClick()">OK</button>
+                    (click)="closeModal()">OK</button>
                     <button *ngIf="hasYesButton" type="button"
                         class="btn rounded-pill align-self-center w-25 m-2" (click)="onYesClick()">YES</button>
                     <button *ngIf="hasNoButton" type="button"
-                        class="btn rounded-pill align-self-center w-25 m-2" (click)="onOkOrNoClick()">NO</button>
+                        class="btn rounded-pill align-self-center w-25 m-2" (click)="closeModal()">NO</button>
 
                     <button *ngIf="hasGoAheadButton" type="button"
                         class="btn rounded-pill align-self-center w-50 m-2" (click)="onGoAheadClick()">GO AHEAD</button>
                     <button *ngIf="hasHellNoButton" type="button"
-                        class="btn rounded-pill align-self-center w-50 m-2" (click)="onOkOrNoClick()">HELL NO!</button>
+                        class="btn rounded-pill align-self-center w-50 m-2" (click)="closeModal()">HELL NO!</button>
 
                 </div>
             </div>

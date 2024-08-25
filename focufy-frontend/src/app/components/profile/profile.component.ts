@@ -240,6 +240,8 @@ export class ProfileComponent implements OnInit {
     this.modalTitle = "What if...";
     this.modalDescription = "Personalities change, tests don’t always get it right, and sometimes your avatar just doesn’t feel like ‘you.’ Ready to try something different?";
     this.modalImage = "../../../assets/img/onRestartImage.png";
+    this.hasHellNoButton = false;
+    this.hasGoAheadButton = false;
     this.hasYesButton = true;
     this.hasNoButton = true;
     this.openModal();
@@ -323,10 +325,10 @@ export class ProfileComponent implements OnInit {
   }
 
   closeModal() {
-    this.modalService.closeModal();
     this.hasGoAheadButton = false;
     this.hasHellNoButton = false;
     this.hasYesButton = false;
     this.hasNoButton = false;
+    this.modalService.closeModal();
   }
 }

@@ -79,7 +79,7 @@
   }
   
   .close {
-    color: #aaa;
+    color: #636363;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -101,4 +101,12 @@
 
   #myModal {
     z-index: 100000000;
+  }
+
+  .modal-loader {
+    display: none;
+  }
+
+  .loadingImage {
+    display: flex;
   }

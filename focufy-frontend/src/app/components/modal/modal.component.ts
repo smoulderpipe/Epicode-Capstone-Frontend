@@ -17,7 +17,6 @@ export class ModalComponent implements OnInit {
   @Input() hasHellNoButton: boolean = false;
   @Input() hasGoAheadButton: boolean = false;
   
-  @Input() onOkOrNoClick: () => void = () => {};
   @Input() onYesClick: () => void = () => {};
   @Input() onGoAheadClick: () => void = () => {};
 

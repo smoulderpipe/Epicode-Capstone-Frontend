@@ -32,7 +32,7 @@ export class ConfirmRegistrationComponent implements OnInit {
         this.isLoading = true;
         this.authService.confirmRegistration(token).subscribe({
           next: (response: string) => {
-            this.isLoading = false;
+            this.isLoading = true;
             this.modalTitle = "Welcome aboard!";
             this.modalDescription = "Log in and see what awaits you...";
             this.modalImage = "../../../assets/img/thumbs-up-image.png";
@@ -42,7 +42,7 @@ export class ConfirmRegistrationComponent implements OnInit {
             });
           },
           error: (error) => {
-            this.isLoading = false;
+            this.isLoading = true;
             this.modalTitle = "Oops!";
             this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
             this.modalImage = "../../../assets/img/confused-bull.png";
@@ -54,6 +54,7 @@ export class ConfirmRegistrationComponent implements OnInit {
           }
         });
       } else {
+        this.isLoading = true;
         this.modalTitle = "Oops!";
         this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
         this.modalImage = "../../../assets/img/confused-bull.png";
