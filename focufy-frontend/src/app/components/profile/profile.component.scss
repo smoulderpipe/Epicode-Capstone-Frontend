@@ -34,3 +34,22 @@
     }
   }
 
+h4 {
+ //font-family: "Red Hat Text", sans-serif;
+  //text-transform: uppercase;
+  font-size: 2em;
+  font-weight: 700;
+  font-style: italic;
+}
+.security-btn {
+  background: transparent;
+  border: 2px dashed black;
+  padding: 5px 15px 5px 15px !important;
+  color: black;
+  transition: 0.2s;
+}
+
+.security-btn:hover {
+  background: white;
+  transition: 0.2s;
+}

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user';
 import { environment } from 'src/environments/environment';
+import { UpdateUserCredentials } from '../models/updateUserCredentials';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +35,7 @@ export class AuthService {
 
   requestNewPassword(email: string): Observable<string> {
     const requestNewPasswordData = { email };
-  
+
     return this.http.post<any>(`${this.baseUrl}/auth/forgot-password`, requestNewPasswordData, { observe: 'response', responseType: 'text' as 'json' }).pipe(
       map(response => {
         if (response.status === 200) {
@@ -45,8 +46,8 @@ export class AuthService {
       }),
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Error while requesting new password';
-  
-        
+
+
         if (error.status === 404) {
           errorMessage = "User not found";
         } else if (error.status === 500) {
@@ -56,12 +57,28 @@ export class AuthService {
         } else if (error.error && typeof error.error === 'string') {
           errorMessage = error.error;
         }
-  
+
         console.error('Error while requesting new password:', errorMessage);
         return throwError(() => new Error(errorMessage));
       })
     );
   }
+
+  changeCredentials(userId: number, updateDTO: UpdateUserCredentials): Observable<any> {
+    const url = `${this.baseUrl}/api/users/${userId}`;
+    const token = this.getToken();
+    if (!token) {
+      throw new Error('Token not available');
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put(url, updateDTO, { headers: headers });
+  }
+
 
   login(email: string, password: string): Observable<string> {
     const loginData = { email, password };

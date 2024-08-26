@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { ModalService } from '../services/modal.service';
 import { ModalModule } from './modal.module';
 import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
+import { ChangeCredentialsComponent } from '../components/change-credentials/change-credentials.component';
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, RouterModule, ModalModule
@@ -18,14 +19,16 @@ import { ForgotPasswordComponent } from '../components/forgot-password/forgot-pa
     RegisterComponent,
     SurveyComponent,
     StudyPlanComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ChangeCredentialsComponent
   ],
   exports: [
     LoginComponent,
     RegisterComponent,
     SurveyComponent,
     StudyPlanComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ChangeCredentialsComponent
   ],
   providers: [
     ModalService

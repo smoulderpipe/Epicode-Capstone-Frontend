@@ -237,7 +237,7 @@ export class ProfileComponent implements OnInit {
   }
 
   confirmRestart() {
-    const confirmation = "";
+    this.isLoading = true;
     this.modalTitle = "What if...";
     this.modalDescription = "Personalities change, tests don’t always get it right, and sometimes your avatar just doesn’t feel like ‘you.’ Ready to try something different?";
     this.modalImage = "../../../assets/img/onRestartImage.png";
