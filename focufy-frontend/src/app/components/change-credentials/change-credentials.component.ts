@@ -115,7 +115,7 @@ export class ChangeCredentialsComponent implements OnInit {
         this.hasOkButton = true;
         this.modalImage = "../../../assets/img/thumbs-up-image.png";
         this.openModal();
-        this.isLoadingComponent = false;
+        
       }, error => {
         console.error("Error updating password", error);
         this.isModalOpen = true;
@@ -124,7 +124,7 @@ export class ChangeCredentialsComponent implements OnInit {
         this.modalImage = "../../../assets/img/confused-bull.png";
         this.hasOkButton = true;
         this.openModal();
-        this.isLoadingComponent = false;
+        
       })
     }
   }
