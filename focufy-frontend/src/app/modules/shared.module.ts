@@ -8,6 +8,7 @@ import { StudyPlanComponent } from '../components/study-plan/study-plan.componen
 import { RouterModule } from '@angular/router';
 import { ModalService } from '../services/modal.service';
 import { ModalModule } from './modal.module';
+import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
 @NgModule({
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, RouterModule, ModalModule
@@ -16,13 +17,15 @@ import { ModalModule } from './modal.module';
     LoginComponent,
     RegisterComponent,
     SurveyComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ForgotPasswordComponent
   ],
   exports: [
     LoginComponent,
     RegisterComponent,
     SurveyComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ForgotPasswordComponent
   ],
   providers: [
     ModalService

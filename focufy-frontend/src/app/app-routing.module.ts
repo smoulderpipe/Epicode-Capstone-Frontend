@@ -11,7 +11,8 @@ const routes: Routes = [
     loadChildren: () => import('src/app/modules/study-plan-routing.module').then(m => m.StudyPlanRoutingModule),
     resolve: { studyPlan: StudyPlanResolver }},
   { path: 'profile', loadChildren: () => import('src/app/modules/profile-routing.module').then(m => m.ProfileRoutingModule)},
-  { path: 'confirm-registration', loadChildren: () => import('src/app/modules/confirm-registration-routing.module').then(m => m.ConfirmRegistrationRoutingModule)}
+  { path: 'confirm-registration', loadChildren: () => import('src/app/modules/confirm-registration-routing.module').then(m => m.ConfirmRegistrationRoutingModule)},
+  { path: 'forgot-password', loadChildren: () => import('src/app/modules/forgot-password-routing.module').then(m => m.ForgotPasswordRoutingModule)}
 ];
 
 @NgModule({

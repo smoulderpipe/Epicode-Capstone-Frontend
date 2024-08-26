@@ -99,6 +99,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  onForgotPassword(){
+    this.isLoadingComponent = true;
+    this.router.navigate(['/forgot-password']);
+  }
+
   openModal(): Promise<void> {
     return new Promise<void>((resolve) => {
       const img = new Image();

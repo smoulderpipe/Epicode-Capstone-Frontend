@@ -32,6 +32,37 @@ export class AuthService {
     );
   }
 
+  requestNewPassword(email: string): Observable<string> {
+    const requestNewPasswordData = { email };
+  
+    return this.http.post<any>(`${this.baseUrl}/auth/forgot-password`, requestNewPasswordData, { observe: 'response', responseType: 'text' as 'json' }).pipe(
+      map(response => {
+        if (response.status === 200) {
+          return response.body as string;
+        } else {
+          throw new Error('Unexpected response status');
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Error while requesting new password';
+  
+        
+        if (error.status === 404) {
+          errorMessage = "User not found";
+        } else if (error.status === 500) {
+          errorMessage = "An unexpected error occurred. Please try again later."
+        } else if (error.error instanceof ErrorEvent) {
+          errorMessage = error.error.message;
+        } else if (error.error && typeof error.error === 'string') {
+          errorMessage = error.error;
+        }
+  
+        console.error('Error while requesting new password:', errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
   login(email: string, password: string): Observable<string> {
     const loginData = { email, password };
 
