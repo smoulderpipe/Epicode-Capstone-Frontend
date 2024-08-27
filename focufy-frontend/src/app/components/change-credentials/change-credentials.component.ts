@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UpdateUserCredentials } from 'src/app/models/updateUserCredentials';
@@ -12,7 +12,7 @@ import { passwordMatchValidator } from 'src/app/validators/validators';
   templateUrl: './change-credentials.component.html',
   styleUrls: ['./change-credentials.component.scss']
 })
-export class ChangeCredentialsComponent implements OnInit, AfterViewInit {
+export class ChangeCredentialsComponent implements OnInit, AfterViewInit{
   userId!: number;
   errorMessage: string | null = null;
   updatePasswordForm!: FormGroup;
@@ -28,7 +28,8 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -46,16 +47,17 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit {
       name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)])
     });
 
-    this.loadData().then(() => {
-      requestAnimationFrame(() => {
-        window.scrollTo(0, 0);
-      });
-    });
+    // this.loadData().then(() => {
+    //   window.scrollTo(0, 0);
+    // });
+
+    this.loadData();
 
   }
 
   ngAfterViewInit(): void {
-    window.scrollTo(0, 0);
+    this.cdr.detectChanges();
+    window.scrollTo(0,0);
   }
 
   private async loadData(): Promise<void> {
