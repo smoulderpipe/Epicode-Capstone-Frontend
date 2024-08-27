@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UpdateUserCredentials } from 'src/app/models/updateUserCredentials';
@@ -12,7 +12,7 @@ import { passwordMatchValidator } from 'src/app/validators/validators';
   templateUrl: './change-credentials.component.html',
   styleUrls: ['./change-credentials.component.scss']
 })
-export class ChangeCredentialsComponent implements OnInit {
+export class ChangeCredentialsComponent implements OnInit, AfterViewInit {
   userId!: number;
   errorMessage: string | null = null;
   updatePasswordForm!: FormGroup;
@@ -46,12 +46,12 @@ export class ChangeCredentialsComponent implements OnInit {
       name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)])
     });
 
-    this.loadData().then(() => {
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 0);
-    });
+    this.loadData();
 
+  }
+
+  ngAfterViewInit(): void {
+    window.scrollTo(0, 0);
   }
 
   private async loadData(): Promise<void> {
