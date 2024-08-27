@@ -206,10 +206,10 @@ export class SurveyComponent implements OnInit {
       case 'DAYS':
         if (answerValue !== null && answerValue !== '' && !isNaN(answerValue)) {
           this.selectedAnswers[questionId] = +answerValue;
-      } else {
+        } else {
           console.warn(`Invalid answer for DAYS question: ${answerValue}`);
-      }
-      break;
+        }
+        break;
 
       default:
         console.warn(`Unhandled question type: ${currentQuestion.questionType}`);
@@ -414,10 +414,30 @@ export class SurveyComponent implements OnInit {
           this.userAvatarChronotypeMaxEnergyType = avatar.chronotype.maxEnergyType;
           this.userAvatarTemperStrength = avatar.temper.strengthType;
           this.userAvatarTemperRisk = avatar.temper.riskType;
-          this.showAvatar = true;
+
+          this.loadImageAndShowAvatar(this.userAvatarUrl);
+        } else {
+          this.isLoadingAvatar = false;
         }
+
+
       });
+    this.isLoadingAvatar = false;
+  }
+
+  private loadImageAndShowAvatar(imageUrl: string): void {
+    const img = new Image();
+    img.src = imageUrl;
+
+    img.onload = () => {
+      this.showAvatar = true;
       this.isLoadingAvatar = false;
+    };
+
+    img.onerror = (error) => {
+      console.error('Error loading avatar image:', error);
+      this.isLoadingAvatar = false;
+    };
   }
 
   isCurrentAnswerValid(): boolean {
@@ -433,10 +453,10 @@ export class SurveyComponent implements OnInit {
         return control.value !== null && control.value !== '';
       case 'LONG_TERM_GOAL':
       case 'SHORT_TERM_GOAL':
-        return control.value !== null && control.value.trim() !== '' && control.value.length >= 3 && control.value.length <=30;
+        return control.value !== null && control.value.trim() !== '' && control.value.length >= 3 && control.value.length <= 30;
       case 'DAYS':
         const value = control.value;
-            return value !== null && !isNaN(value) && value >= 1 && value <= 365;
+        return value !== null && !isNaN(value) && value >= 1 && value <= 365;
       case 'RESTART':
         return control.value !== null;
       default:
