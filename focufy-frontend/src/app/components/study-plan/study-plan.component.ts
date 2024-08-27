@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CDAnswerType, CheckpointAnswer, DeadlineAnswer } from 'src/app/models/answer';
@@ -6,6 +6,7 @@ import { Question } from 'src/app/models/question';
 import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
 import { AnswerService } from 'src/app/services/answer.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { FooterService } from 'src/app/services/footer.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
 
@@ -14,7 +15,7 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
   templateUrl: './study-plan.component.html',
   styleUrls: ['./study-plan.component.scss']
 })
-export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   studyPlan!: StudyPlan;
   today: string = new Date().toISOString().split('T')[0];
   isLoadingComponent: boolean = false;
@@ -40,11 +41,13 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     private authService: AuthService,
     private answerService: AnswerService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private footerService: FooterService
   ) { }
 
   ngOnInit(): void {
     this.isLoadingComponent = true;
+    this.footerService.setFooterClass('footer-flex-start');
     const userId = this.authService.getUserId();
     if (userId !== null) {
       this.authService.getUserDetails(userId).subscribe(
@@ -412,6 +415,14 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     return day.questions.some(question => {
       return true;
     });
+  }
+
+  backToTop(){
+    window.scrollTo(0, 0);
+  }
+
+  ngOnDestroy(): void {
+    this.footerService.setFooterClass('footer-default');
   }
 
 }

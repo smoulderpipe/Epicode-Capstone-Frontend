@@ -136,26 +136,45 @@ h3 {
 .deadline-form-container {
   border: 2px dashed black;
 }
-
-/*@media only screen and (max-width: 560px) {
-
-  .conceal-radio {
-    width: 140px !important;
-    height: 100px !important;
+#back-to-top  {
+  z-index: 1000000;
+}
+@media only screen and (max-width: 767px) {
+  #back-to-top span {
+    display: none;
   }
 
-  #answer-list li {
-    width: 140px !important;
+  #back-to-top {
+    right: 15px;
+    bottom: 12px;
   }
 
-  input[type=radio], .conceal-radio label {
-    width: 140px !important;
-    height: 100px !important;
+  #back-to-top i {
+    font-size: 30px;
   }
+  
+}
 
-
-}*/
-
+@media only screen and (min-width: 768px) {
+  #back-to-top span {
+    display: inline;
+  }
+  #back-to-top {
+    right: 15px;
+    bottom: 3px;
+  }
+  #back-to-top i {
+    margin-bottom: 10px;
+    font-size: 30px;
+  }
+  #back-to-top span {
+    font-size: 16px !important;
+    font-style: normal;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: -4px;
+  }
+}
 @media only screen and (max-width: 560px) {
 
 
@@ -231,8 +250,6 @@ h3 {
 
 
 }
-
-
 
 label {
   font-size: 1em;

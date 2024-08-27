@@ -1,13 +1,6 @@
-<app-modal
-  [modalTitle]="modalTitle"
-  [modalDescription]="modalDescription"
-  [modalImage]="modalImage"
-  [hasOkButton]="hasOkButton"
-  [hasYesButton]="hasYesButton"
-  [hasNoButton]="hasNoButton"
-  [hasHellNoButton]="hasHellNoButton"
-  [hasGoAheadButton]="hasGoAheadButton"
-  [onYesClick]="areYouSure.bind(this)"
+<app-modal [modalTitle]="modalTitle" [modalDescription]="modalDescription" [modalImage]="modalImage"
+  [hasOkButton]="hasOkButton" [hasYesButton]="hasYesButton" [hasNoButton]="hasNoButton"
+  [hasHellNoButton]="hasHellNoButton" [hasGoAheadButton]="hasGoAheadButton" [onYesClick]="areYouSure.bind(this)"
   [onGoAheadClick]="onRestartAnswer.bind(this)">
 </app-modal>
 
@@ -215,7 +208,8 @@
                   <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center mt-md-0 mt-1">
                     <ng-container *ngIf="question.questionType === 'RESTART'">
                       <button (click)="confirmRestart()"
-                        class="text-uppercase btn rounded-pill d-block mt-4 mt-lg-4 mt-md-5 m4-lg-0" id="avatarFit">Doesn't your avatar fit you anymore?</button>
+                        class="text-uppercase btn rounded-pill d-block mt-4 mt-lg-4 mt-md-5 m4-lg-0"
+                        id="avatarFit">Doesn't your avatar fit you anymore?</button>
                     </ng-container>
                   </p>
                 </div>
@@ -231,6 +225,13 @@
     <div *ngIf="!studyPlan">
       <p>No study plan found for this user.</p>
     </div>
+
+    <button class="position-fixed bg-transparent border-0 m-0 p-0" id="back-to-top" (click)="backToTop()">
+      <span>TO TOP</span>
+      <i class="d-flex bi bi-arrow-up-circle-fill"></i>
+
+      
+    </button>
 
   </div>
 </div>

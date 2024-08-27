@@ -24,9 +24,19 @@ a {
 
     #navbarNav {
         position: fixed;
-        right: 10px;
-        top: 68px;
+        right: 0px;
+        top: 43px;
+    }
 
+    #navbarNav ul {
+        backdrop-filter: blur(20px);
+        padding-left: 10px;
+        padding-bottom: 5px;
+        border-bottom-left-radius: 20px;
+        border-top-left-radius: 20px;
+        padding-top: 10px;
+        background: rgba(255, 255, 255, 1);
+        padding-right: 10px;
     }
 
     #navbarNav li {
@@ -41,7 +51,11 @@ a {
     }
 
     .navbar-toggler-icon {
-        filter: brightness(0);
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0,0,0, 1)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    }
+
+    .navbar::after {
+        mask: linear-gradient(to top, transparent, black 46%);
     }
 }
 
@@ -69,14 +83,10 @@ a {
     .navbar::after {
         transform: scale(2);
         background: white;
-        mask: linear-gradient(to top, transparent, black 55%);
+        mask: linear-gradient(to top, transparent, black 80%);
         backdrop-filter: blur(14px);
     }
 }
-
-// .navbar li:hover {
-//     filter: brightness(2);
-// }
 
 .navbar::after {
     content: "";
@@ -85,6 +95,5 @@ a {
     inset: 0;
     z-index: -1;
     background: white;
-    mask: linear-gradient(to top, transparent, black 80%);
     backdrop-filter: blur(14px);
 }

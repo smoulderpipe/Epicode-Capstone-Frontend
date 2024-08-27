@@ -198,3 +198,19 @@ form small {
 .small-loader-container .loader {
     height: 1em;
 }
+
+.footer-default footer.d-flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .footer-flex-start footer.d-flex {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .footer-default > app-footer:nth-child(1) {
+    width: 100%;
+  }
+
+  
