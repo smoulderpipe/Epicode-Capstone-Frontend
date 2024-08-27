@@ -6,16 +6,16 @@
     <div *ngIf="showAvatar">
       <p class="mb-0">Your avatar type is:</p>
 
-      <h3 class="mb-4"><span class="text-capitalize">{{ userAvatarTemper.temperType}}</span>&nbsp;
+      <h3 class="mb-4 avatar-titles"><span>{{ userAvatarTemper.temperType}}</span>&nbsp;
         <span class="text-capitalize">{{ userAvatarChronotype.chronotypeType}}</span>
       </h3>
       <div class="row p-4 d-flex justify-content-center align-items-center avatar-card mb-4">
         <div class="col-md-5"><img [src]="userAvatarUrl" class="img-fluid" /></div>
 
         <div class="col-md-7 px-md-5 text-md-start text-center">
-          <p>{{ userAvatarChronotype.chronotypeType}} chronotypes {{ userAvatarChronotypeDescription}}</p>
+          <p><i>{{ userAvatarChronotype.chronotypeType}}</i> chronotypes {{ userAvatarChronotypeDescription}}</p>
           <p>Their energy and ability to concentrate peaks in the <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarChronotypeMaxEnergyType}}</span></p>
-          <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
+          <p>Being <i>{{userAvatarTemper.temperType}}</i>, {{ userAvatarTemperDescription }}</p>
           <p>Inner strength: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperStrength}}</span></p>
           <p>Vulnerability: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperRisk}}</span></p>
         </div>

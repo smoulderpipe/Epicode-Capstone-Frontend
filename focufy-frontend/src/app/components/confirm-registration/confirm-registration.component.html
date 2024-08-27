@@ -1,6 +1,20 @@
+<app-modal
+  [modalTitle]="modalTitle"
+  [modalDescription]="modalDescription"
+  [modalImage]="modalImage"
+  [hasOkButton]="hasOkButton"
+  (close)="closeModal()">
+</app-modal>
+
 <div class="container d-flex align-items-center justify-content-center">
-    <div class="row text-center">
-        <p class="h2"><i class="bi bi-hourglass-split"></i></p>
-        <p class="h2"> Wait until you're redirected <br> to login page...</p>
+</div>
+
+<div *ngIf="isLoading" class="loader-container d-flex justify-content-center align-items-center">
+
+  <div class="mini-container">
+    <p class="text-center h3 fst-italic text-white mb-3">hang on...</p>
+    <div class="loader">
     </div>
+
+  </div>
 </div>

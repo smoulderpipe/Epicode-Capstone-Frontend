@@ -6,21 +6,33 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SurveyComponent } from '../components/survey/survey.component';
 import { StudyPlanComponent } from '../components/study-plan/study-plan.component';
 import { RouterModule } from '@angular/router';
+import { ModalService } from '../services/modal.service';
+import { ModalModule } from './modal.module';
+import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
+import { ChangeCredentialsComponent } from '../components/change-credentials/change-credentials.component';
 @NgModule({
   imports: [
-    CommonModule, ReactiveFormsModule, FormsModule, RouterModule
+    CommonModule, ReactiveFormsModule, FormsModule, RouterModule, ModalModule
   ],
   declarations: [
     LoginComponent,
     RegisterComponent,
     SurveyComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ForgotPasswordComponent,
+    ChangeCredentialsComponent
   ],
   exports: [
     LoginComponent,
     RegisterComponent,
     SurveyComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ForgotPasswordComponent,
+    ChangeCredentialsComponent
+  ],
+  providers: [
+    ModalService
   ]
+  
 })
 export class SharedModule { }

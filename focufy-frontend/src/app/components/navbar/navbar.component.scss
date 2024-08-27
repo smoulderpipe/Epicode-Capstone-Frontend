@@ -12,6 +12,10 @@ a {
     color: black;
 }
 
+.nav-btn {
+    background: black;
+}
+
 @media only screen and (max-width: 560px) {
 
     #logo {
@@ -70,9 +74,9 @@ a {
     }
 }
 
-.navbar li:hover {
-    filter: brightness(2);
-}
+// .navbar li:hover {
+//     filter: brightness(2);
+// }
 
 .navbar::after {
     content: "";

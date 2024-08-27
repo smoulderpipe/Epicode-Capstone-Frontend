@@ -9,7 +9,7 @@
   }
 
   #studyPlanFit:hover {
-    background: white;
+    background: rgba(255,255,255,0.5);
     transition: 0.2s;
   }
 
@@ -22,3 +22,34 @@
     font-family: "Piazzolla", serif;
     
   }
+
+
+  @media screen and (min-width: 992px) and (max-width: 1199px) {
+    .profile-card p, .stats-card p {
+      font-size: 1.1em;
+    }
+
+    .profile-card span, .stats-card span {
+      font-size: 1em;
+    }
+  }
+
+h4 {
+ //font-family: "Red Hat Text", sans-serif;
+  //text-transform: uppercase;
+  font-size: 2em;
+  font-weight: 700;
+  font-style: italic;
+}
+.security-btn {
+  background: transparent;
+  border: 2px dashed black;
+  padding: 5px 15px 5px 15px !important;
+  color: black;
+  transition: 0.2s;
+}
+
+.security-btn:hover {
+  background: rgba(255,255,255,0.5);
+  transition: 0.2s;
+}

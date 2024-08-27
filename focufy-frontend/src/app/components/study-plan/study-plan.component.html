@@ -1,3 +1,17 @@
+<app-modal
+  [modalTitle]="modalTitle"
+  [modalDescription]="modalDescription"
+  [modalImage]="modalImage"
+  [hasOkButton]="hasOkButton"
+  [hasYesButton]="hasYesButton"
+  [hasNoButton]="hasNoButton"
+  [hasHellNoButton]="hasHellNoButton"
+  [hasGoAheadButton]="hasGoAheadButton"
+  [onYesClick]="areYouSure.bind(this)"
+  [onGoAheadClick]="onRestartAnswer.bind(this)">
+</app-modal>
+
+
 <div *ngIf="!isLoadingComponent" class="d-flex justify-content-center">
   <div class="container-fluid container-lg m-0 m-md-5 p-3 p-lg-5">
     <div *ngIf="studyPlan">
@@ -133,7 +147,7 @@
 
                   <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center">
                     <ng-container *ngIf="question.questionType === 'RESTART'">
-                      <button (click)="confirmRestart(day, question)" class="text-uppercase btn rounded-pill d-block"
+                      <button (click)="confirmRestart()" class="text-uppercase btn rounded-pill d-block"
                         id="avatarFit">Doesn't your avatar fit you anymore?</button>
                     </ng-container>
                   </p>
@@ -200,7 +214,7 @@
 
                   <p *ngFor="let question of day.questions" class="mb-0 d-flex justify-content-center mt-md-0 mt-1">
                     <ng-container *ngIf="question.questionType === 'RESTART'">
-                      <button (click)="confirmRestart(day, question)"
+                      <button (click)="confirmRestart()"
                         class="text-uppercase btn rounded-pill d-block mt-4 mt-lg-4 mt-md-5 m4-lg-0" id="avatarFit">Doesn't your avatar fit you anymore?</button>
                     </ng-container>
                   </p>
