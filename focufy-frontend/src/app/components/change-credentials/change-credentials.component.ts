@@ -33,6 +33,7 @@ export class ChangeCredentialsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoadingComponent = true;
+    window.scrollTo(0, 0);
     this.updatePasswordForm = new FormGroup({
       password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
       passwordConf: new FormControl(null, [
