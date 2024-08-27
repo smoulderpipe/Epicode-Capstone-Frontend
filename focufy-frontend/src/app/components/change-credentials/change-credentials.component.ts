@@ -33,7 +33,7 @@ export class ChangeCredentialsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoadingComponent = true;
-    window.scrollTo(0, 0);
+   
     this.updatePasswordForm = new FormGroup({
       password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
       passwordConf: new FormControl(null, [
@@ -46,26 +46,28 @@ export class ChangeCredentialsComponent implements OnInit {
       name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)])
     });
 
+    this.loadData().then(() => {
+      window.scrollTo(0, 0);
+    });
+
+  }
+
+  private async loadData(): Promise<void> {
     const userId = this.authService.getUserId();
     if (userId) {
       this.userId = userId;
-      this.authService.getUserDetails(userId).subscribe(
-        (userDetails) => {
-          this.user = userDetails;
-          this.updateUsernameForm.patchValue({ name: this.user.name });
-          this.isLoadingComponent = false;
-        },
-        (error) => {
-          console.error('Error fetching user details:', error);
-          this.isLoadingComponent = false;
-        }
-      );
+      try {
+        this.user = await this.authService.getUserDetails(userId).toPromise() || null;
+        this.updateUsernameForm.patchValue({ name: this.user?.name || '' });
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      } finally {
+        this.isLoadingComponent = false;
+      }
     } else {
       console.error('User ID not found');
       this.isLoadingComponent = false;
     }
-    
-
   }
 
   onUpdateUsername(userId: number): void {
