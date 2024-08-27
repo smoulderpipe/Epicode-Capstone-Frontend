@@ -47,7 +47,9 @@ export class ChangeCredentialsComponent implements OnInit {
     });
 
     this.loadData().then(() => {
-      window.scrollTo(0, 0);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 0);
     });
 
   }
