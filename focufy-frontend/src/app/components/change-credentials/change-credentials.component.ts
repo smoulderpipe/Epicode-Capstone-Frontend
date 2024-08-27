@@ -12,7 +12,7 @@ import { passwordMatchValidator } from 'src/app/validators/validators';
   templateUrl: './change-credentials.component.html',
   styleUrls: ['./change-credentials.component.scss']
 })
-export class ChangeCredentialsComponent implements OnInit, AfterViewInit{
+export class ChangeCredentialsComponent implements OnInit {
   userId!: number;
   errorMessage: string | null = null;
   updatePasswordForm!: FormGroup;
@@ -34,7 +34,7 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit{
 
   ngOnInit(): void {
     this.isLoadingComponent = true;
-   
+
     this.updatePasswordForm = new FormGroup({
       password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
       passwordConf: new FormControl(null, [
@@ -47,18 +47,13 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit{
       name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)])
     });
 
-    // this.loadData().then(() => {
-    //   window.scrollTo(0, 0);
-    // });
-
-    this.loadData();
+    this.loadData().then(() => {
+      window.scrollTo(0, 0);
+      this.cdr.detectChanges();
+    });
 
   }
 
-  ngAfterViewInit(): void {
-    this.cdr.detectChanges();
-    window.scrollTo(0,0);
-  }
 
   private async loadData(): Promise<void> {
     const userId = this.authService.getUserId();
@@ -85,7 +80,7 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit{
       const updateDTO: UpdateUserCredentials = {
         name: newUsername
       };
-  
+
       this.authService.changeCredentials(userId, updateDTO)
         .subscribe(response => {
           console.log('Username updated', response);
@@ -110,7 +105,7 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit{
   }
 
   onUpdatePassword(userId: number): void {
-    if(this.updateUsernameForm && this.updateUsernameForm.valid) {
+    if (this.updateUsernameForm && this.updateUsernameForm.valid) {
       const newPassword = this.updatePasswordForm.value.password;
       this.isLoadingComponent = true;
       const updateDto: UpdateUserCredentials = {
@@ -118,25 +113,25 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit{
       };
 
       this.authService.changeCredentials(userId, updateDto)
-      .subscribe(response => {
-        console.log('Password updated', response);
-        this.isModalOpen = true;
-        this.modalTitle = "Boom!";
-        this.modalDescription = "Password updated, you're good to go!";
-        this.hasOkButton = true;
-        this.modalImage = "../../../assets/img/thumbs-up-image.png";
-        this.openModal();
-        
-      }, error => {
-        console.error("Error updating password", error);
-        this.isModalOpen = true;
-        this.modalTitle = "Oops!";
-        this.modalDescription = "We ran into an issue updating your password. Maybe try again later?";
-        this.modalImage = "../../../assets/img/confused-bull.png";
-        this.hasOkButton = true;
-        this.openModal();
-        
-      })
+        .subscribe(response => {
+          console.log('Password updated', response);
+          this.isModalOpen = true;
+          this.modalTitle = "Boom!";
+          this.modalDescription = "Password updated, you're good to go!";
+          this.hasOkButton = true;
+          this.modalImage = "../../../assets/img/thumbs-up-image.png";
+          this.openModal();
+
+        }, error => {
+          console.error("Error updating password", error);
+          this.isModalOpen = true;
+          this.modalTitle = "Oops!";
+          this.modalDescription = "We ran into an issue updating your password. Maybe try again later?";
+          this.modalImage = "../../../assets/img/confused-bull.png";
+          this.hasOkButton = true;
+          this.openModal();
+
+        })
     }
   }
 
