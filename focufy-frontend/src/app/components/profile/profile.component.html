@@ -5,7 +5,8 @@
 </app-modal>
 
 <div class="d-flex justify-content-center">
-    <div class="container m-lg-5 p-5">
+    <div class="container px-4 px-md-5 py-5 mx-1 mx-md-5 my-0 my-md-5">
+
         <div *ngIf="user && avatar">
             <div class="row">
                 <div class="col">
@@ -21,11 +22,11 @@
                     </div>
 
 
-                    <div class="profile-card">
+                    <div class="profile-card mt-0 mt-md-3 mt-lg-0">
                         <div class="row p-3 p-md-5 mx-md-3 justify-content-center">
                             <div class="col-xl-4 col-lg-5 col-md-6 col-12 align-content-center">
-                                <div class="pe-4"><img [src]="avatar.image" alt="Avatar Image"
-                                        class="text-info img-fluid" /></div>
+                                <div class="pe-4 d-flex justify-content-center"><img [src]="avatar.image"
+                                        alt="Avatar Image" class="text-info img-fluid" /></div>
                             </div>
                             <div class="col pt-3 align-content-center text-center text-lg-start">
                                 <p>The <i>{{ avatar.chronotype.chronotypeType }}</i> chronotypes {{
@@ -33,15 +34,21 @@
                                 <p>Being <i>{{avatar.temper.temperType}}</i>, {{
                                     avatar.temper.description }}</p>
                                 <div class="d-md-flex justify-content-between pb-3">
-                                    <p class="mb-md-0 mb-2">Peak energy <span
-                                            class="btn-light border border-1 border-black px-2 bg-white d-block">{{
-                                            avatar.chronotype.maxEnergyType }}</span></p>
-                                    <p class="mb-md-0 mb-2">Strength <span
-                                            class="btn-light border border-1 border-black px-2 bg-white d-block">{{
-                                            avatar.temper.strengthType }}</span></p>
-                                    <p class="mb-md-0">Risk <span
-                                            class="btn-light border border-1 border-black px-2 bg-white d-block">{{
-                                            avatar.temper.riskType }}</span></p>
+                                    <div class="mb-md-0 mb-2">
+                                        <p class="mb-0">Peak energy </p><span
+                                            class="btn-light border border-1 border-black px-2 bg-white">{{
+                                            avatar.chronotype.maxEnergyType }}</span>
+                                    </div>
+                                    <div class="mb-md-0 mb-2">
+                                        <p class="mb-0">Strength </p><span
+                                            class="btn-light border border-1 border-black px-2 bg-white">{{
+                                            avatar.temper.strengthType }}</span>
+                                    </div>
+                                    <div class="mb-md-0 mb-2">
+                                        <p class="mb-0">Risk </p><span
+                                            class="btn-light border border-1 border-black px-2 bg-white">{{
+                                            avatar.temper.riskType }}</span>
+                                    </div>
                                 </div>
 
                             </div>
@@ -57,21 +64,21 @@
                     </div>
                     <div class="d-md-flex justify-content-between align-items-center px-0 mt-5 mb-md-0 mb-3">
                         <h2 class="pb-1 mb-0 text-center text-md-start">Your stats:</h2>
-                        <p class="mb-0 fs-4 text-center">how well are you doing?</p>
+                        <p class="mb-0 fs-4 text-center">how's your progress going?</p>
                     </div>
                     <div class="stats-card p-3 mt-2">
                         <div class="row p-3">
 
                             <div class="col-lg col-12 pt-lg-3 text-center text-lg-start">
                                 <div class="pb-3">
-                                    <p class="mb-0 me-3">Current goal</p>
+                                    <p class="mb-0 me-3">Short term goal</p>
                                     <p
-                                        class="text-uppercase btn-light border border-1 border-black px-2 bg-white d-lg-inline">
+                                        class="text-uppercase btn-light border border-1 border-black p-2 bg-white d-lg-inline">
                                         {{
                                         studyPlan?.shortTermGoal }}</p>
                                     <p class="mb-0">Long term goal</p>
                                     <p
-                                        class="text-uppercase btn-light border border-1 border-black px-2 bg-white d-lg-inline">
+                                        class="text-uppercase btn-light border border-1 border-black p-2 bg-white d-lg-inline">
                                         {{
                                         user.longTermGoal }}</p>
 

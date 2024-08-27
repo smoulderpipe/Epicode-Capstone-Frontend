@@ -318,30 +318,27 @@ export class ProfileComponent implements OnInit {
     return new Promise<void>((resolve) => {
       const img = new Image();
       img.src = this.modalImage;
-
+  
       img.onload = () => {
         this.isLoading = false;
-        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
-        const subscription = this.modalService.modalClosed$.subscribe(closed => {
-          if (closed) {
-            subscription.unsubscribe();
-            resolve();
-          }
-        })
+        this.showModalWithImage(resolve);
       };
-
+  
       img.onerror = () => {
         console.error("Error loading image.");
         this.isLoading = false;
-        this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
-        const subscription = this.modalService.modalClosed$.subscribe(closed => {
-          if (closed) {
-            subscription.unsubscribe();
-            resolve();
-          }
-        })
+        this.showModalWithImage(resolve);
       };
-
+    });
+  }
+  
+  private showModalWithImage(resolve: () => void): void {
+    this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+    const subscription = this.modalService.modalClosed$.subscribe(closed => {
+      if (closed) {
+        subscription.unsubscribe();
+        resolve();
+      }
     });
   }
 

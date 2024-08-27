@@ -1,16 +1,16 @@
 <div class="d-flex justify-content-center main-container">
 
 
-  <div class="container m-md-5 m-3 p-md-5 text-center" id="survey-container">
+  <div class="container mx-3 mx-md-5 mt-5 mt-md-5 mb-3 mb-md-5 p-md-5 text-center" id="survey-container">
 
-    <div *ngIf="showAvatar">
+    <div *ngIf="showAvatar" class="mb-5 mb-md-0 pb-5 pb-md-0">
       <p class="mb-0">Your avatar type is:</p>
 
       <h3 class="mb-4 avatar-titles"><span>{{ userAvatarTemper.temperType}}</span>&nbsp;
         <span class="text-capitalize">{{ userAvatarChronotype.chronotypeType}}</span>
       </h3>
       <div class="row p-4 d-flex justify-content-center align-items-center avatar-card mb-4">
-        <div class="col-md-5"><img [src]="userAvatarUrl" class="img-fluid" /></div>
+        <div class="col-md-5 d-flex justify-content-center"><img [src]="userAvatarUrl" class="img-fluid" /></div>
 
         <div class="col-md-7 px-md-5 text-md-start text-center">
           <p><i>{{ userAvatarChronotype.chronotypeType}}</i> chronotypes {{ userAvatarChronotypeDescription}}</p>
@@ -22,7 +22,7 @@
       </div>
 
       <a routerLink="/study-plan"><button type="button"
-          class="bg-black main-btn text-uppercase fs-md-5 btn btn-dark rounded-pill px-md-5 px-3 py-3 mt-3 ms-md-2 fs-"
+          class="bg-black main-btn text-uppercase fs-md-5 btn btn-dark rounded-pill px-md-5 px-4 py-3 mt-3 ms-md-2 fs-"
           (click)="createStudyPlanAndAssociateMantras()">Discover your study plan</button></a>
 
     </div>

@@ -10,13 +10,14 @@
     <div *ngIf="studyPlan">
       <div class="row mb-3">
         <div class="col order-1 order-md-0 text-center text-md-start">
-          <h2 class="pb-3">Your current<br> study plan</h2>
-          <p class="fs-md-5">
-            Your proximal goal is:
-            <span class="btn btn-light border border-1 border-black rounded-0 text-uppercase fs-md-5">
-              {{ studyPlan.shortTermGoal }}
-            </span>
+          <h2 class="pb-md-3 pb-5">Your current<br> study plan</h2>
+          <p class="fs-md-5 d-block d-md-inline mb-1 mb-md-2">
+            Your current goal is:
+            
           </p>
+          <span class="btn btn-light border border-1 border-black rounded-0 text-uppercase fs-md-5 mb-5 mb-md-0">
+            {{ studyPlan.shortTermGoal }}
+          </span>
         </div>
         <div class="col-12 col-md text-md-end text-center mb-md-0 mb-5">
           <p class="fs-3 mb-0">Welcome back, <span class="text-capitalize fw-bold">{{ user?.name }}</span></p>
