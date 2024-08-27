@@ -46,7 +46,11 @@ export class ChangeCredentialsComponent implements OnInit, AfterViewInit {
       name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)])
     });
 
-    this.loadData();
+    this.loadData().then(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+      });
+    });
 
   }
 
