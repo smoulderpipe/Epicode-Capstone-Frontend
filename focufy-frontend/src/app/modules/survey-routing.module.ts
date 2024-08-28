@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from './shared.module';
 import { SurveyComponent } from '../components/survey/survey.component';
+import { AuthGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: SurveyComponent }
+  { path: '', component: SurveyComponent}
 ];
 
 @NgModule({

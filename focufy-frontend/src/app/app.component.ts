@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
 import { FooterService } from './services/footer.service';
 
 @Component({
@@ -11,13 +9,16 @@ import { FooterService } from './services/footer.service';
 export class AppComponent implements OnInit{
   title = 'focufy-frontend';
 
-  footerClass: string = 'footer-default'; // Default class
+  footerClass: string = 'footer-default';
 
   constructor(private footerService: FooterService) { }
 
   ngOnInit(): void {
     this.footerService.footerClass$.subscribe(className => {
-      this.footerClass = className;
+      setTimeout(() => {
+        this.footerClass = className;
+      }, 0);
+      
     });
   }
 }
