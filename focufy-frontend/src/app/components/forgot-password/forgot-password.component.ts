@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
@@ -13,7 +14,6 @@ export class ForgotPasswordComponent implements OnInit {
 
   errorMessage: string | null = null;
   requestNewPasswordForm!: FormGroup;
-  isLoadingComponent: boolean = false;
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
@@ -23,20 +23,22 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
     this.requestNewPasswordForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email])
     });
+    this.loadingService.setLoading(false);
   }
 
   onSubmit() {
     if (this.requestNewPasswordForm && this.requestNewPasswordForm.valid) {
       const email = this.requestNewPasswordForm.value.email;
 
-      this.isLoadingComponent = true;
+      this.loadingService.setLoading(true);
 
       this.authService.requestNewPassword(email).subscribe(
         (response: string) => {
@@ -70,7 +72,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   onForgotPassword(){
-    this.isLoadingComponent = true;
+    this.loadingService.setLoading(true);
     this.router.navigate(['/forgot-password']);
   }
 
@@ -80,7 +82,7 @@ export class ForgotPasswordComponent implements OnInit {
       img.src = this.modalImage;
 
       img.onload = () => {
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {
@@ -92,7 +94,7 @@ export class ForgotPasswordComponent implements OnInit {
 
       img.onerror = () => {
         console.error("Error loading image.");
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
 
@@ -12,7 +13,6 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  isLoadingComponent: boolean = false;
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private studyPlanService: StudyPlanService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
@@ -40,7 +41,7 @@ export class LoginComponent implements OnInit {
         password: this.loginForm.value.password
       };
 
-      this.isLoadingComponent = true;
+      this.loadingService.setLoading(true);
 
       this.authService.login(credentials.email, credentials.password).subscribe({
         next: (token) => {
@@ -100,7 +101,7 @@ export class LoginComponent implements OnInit {
   }
 
   onForgotPassword(){
-    this.isLoadingComponent = true;
+    this.loadingService.setLoading(true);
     this.router.navigate(['/forgot-password']);
   }
 
@@ -110,7 +111,7 @@ export class LoginComponent implements OnInit {
       img.src = this.modalImage;
 
       img.onload = () => {
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {
@@ -122,7 +123,7 @@ export class LoginComponent implements OnInit {
 
       img.onerror = () => {
         console.error("Error loading image.");
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {

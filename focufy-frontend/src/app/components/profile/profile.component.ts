@@ -5,6 +5,7 @@ import { StudyPlan } from 'src/app/models/studyPlan';
 import { User } from 'src/app/models/user';
 import { AnswerService } from 'src/app/services/answer.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
 import { UserService } from 'src/app/services/user.service';
@@ -21,7 +22,6 @@ export class ProfileComponent implements OnInit {
   isStudyEnough: boolean | null = null;
   isFunEnough: boolean | null = null;
   isRestEnough: boolean | null = null;
-  isLoading: boolean = false;
 
   modalTitle: string = '';
   modalDescription: string = '';
@@ -38,11 +38,12 @@ export class ProfileComponent implements OnInit {
     private studyPlanService: StudyPlanService,
     private answerService: AnswerService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
-    this.isLoading = true;
+    this.loadingService.setLoading(true);
     const userId = this.authService.getUserId();
     if (userId) {
       this.userService.getUserAvatar(userId).subscribe(
@@ -77,7 +78,7 @@ export class ProfileComponent implements OnInit {
       this.getFunAnswers(userId);
       this.getRestAnswers(userId);
       this.getSleepingAnswers(userId);
-      this.isLoading = false;
+      this.loadingService.setLoading(false);
     }
   }
 
@@ -237,7 +238,7 @@ export class ProfileComponent implements OnInit {
   }
 
   confirmRestart() {
-    this.isLoading = true;
+    this.loadingService.setLoading(true);
     this.modalTitle = "What if...";
     this.modalDescription = "Personalities change, tests don’t always get it right, and sometimes your avatar just doesn’t feel like ‘you.’ Ready to try something different?";
     this.modalImage = "../../../assets/img/onRestartImage.png";
@@ -260,7 +261,7 @@ export class ProfileComponent implements OnInit {
   }
 
   onRestartAnswer() {
-    this.isLoading = true;
+    this.loadingService.setLoading(true);
     this.hasGoAheadButton = false;
     this.hasHellNoButton = false;
     const userId = this.authService.getUserId();
@@ -296,19 +297,19 @@ export class ProfileComponent implements OnInit {
             });
             
             
-            this.isLoading = false;
+            this.loadingService.setLoading(false);
           },
           (error) => {
             console.error('Error fetching user details after restart', error);
             alert('There was a problem fetching updated user details.');
-            this.isLoading = false;
+            this.loadingService.setLoading(false);
           }
         );
       },
       (error) => {
         console.error('Error submitting restart answers', error);
         alert('There was a problem erasing your avatar and study plan data, try again later.');
-        this.isLoading = false;
+        this.loadingService.setLoading(false);
       }
     );
     
@@ -320,13 +321,13 @@ export class ProfileComponent implements OnInit {
       img.src = this.modalImage;
   
       img.onload = () => {
-        this.isLoading = false;
+        this.loadingService.setLoading(false);
         this.showModalWithImage(resolve);
       };
   
       img.onerror = () => {
         console.error("Error loading image.");
-        this.isLoading = false;
+        this.loadingService.setLoading(false);
         this.showModalWithImage(resolve);
       };
     });

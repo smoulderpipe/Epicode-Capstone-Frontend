@@ -7,6 +7,7 @@ import { ActivitySession, Day, StudyPlan } from 'src/app/models/studyPlan';
 import { AnswerService } from 'src/app/services/answer.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FooterService } from 'src/app/services/footer.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
 
@@ -18,7 +19,6 @@ import { StudyPlanService } from 'src/app/services/study-plan.service';
 export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   studyPlan!: StudyPlan;
   today: string = new Date().toISOString().split('T')[0];
-  isLoadingComponent: boolean = false;
   isLoadingCDAnswers: boolean = false;
   isDataLoaded: boolean = false;
   answers: { [key: number]: boolean } = {};
@@ -42,11 +42,12 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     private answerService: AnswerService,
     private router: Router,
     private modalService: ModalService,
-    private footerService: FooterService
+    private footerService: FooterService,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
-    this.isLoadingComponent = true;
+    this.loadingService.setLoading(true);
     this.footerService.setFooterClass('footer-flex-start');
     const userId = this.authService.getUserId();
     if (userId !== null) {
@@ -62,7 +63,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.studyPlanService.getStudyPlan(userId).subscribe(
         (data) => {
           this.studyPlan = data;
-          this.isLoadingComponent = false;
+          this.loadingService.setLoading(false);
           this.isDataLoaded = true;
           this.initializeForm();
           this.loadSavedAnswers();
@@ -70,13 +71,13 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
         },
         (error) => {
           console.error('Error fetching study plan:', error);
-          this.isLoadingComponent = false;
+          this.loadingService.setLoading(false);
           this.studyPlanService.updateStudyPlanStatus(false);
         }
       );
     } else {
       console.error('User ID not found');
-      this.isLoadingComponent = false;
+      this.loadingService.setLoading(false);
     }
   }
 
@@ -188,7 +189,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   onRestartAnswer() {
-    this.isLoadingComponent = true;
+    this.loadingService.setLoading(true);
     this.hasGoAheadButton = false;
     this.hasHellNoButton = false;
     const userId = this.authService.getUserId();
@@ -218,7 +219,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
             this.hasOkButton = true;
 
             this.openModal().then(() => {
-              this.isLoadingComponent = false;
+              this.loadingService.setLoading(false);
               this.modalService.modalClosed$.subscribe(() => {
                 this.router.navigateByUrl('/survey');
               });
@@ -228,26 +229,26 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
           (error) => {
             console.error('Error fetching user details after restart', error);
             alert('There was a problem fetching updated user details.');
-            this.isLoadingComponent = false;
+            this.loadingService.setLoading(false);
           }
         );
       },
       (error) => {
         console.error('Error submitting restart answers', error);
         alert('There was a problem erasing your avatar and study plan data, try again later.');
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
       }
     );
   }
 
   openModal(): Promise<void> {
-    this.isLoadingComponent = true;
+    this.loadingService.setLoading(true);
     return new Promise<void>((resolve) => {
       const img = new Image();
       img.src = this.modalImage;
 
       img.onload = () => {
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {
@@ -259,7 +260,7 @@ export class StudyPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
       img.onerror = () => {
         console.error("Error loading image.");
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {

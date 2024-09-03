@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UpdateUserCredentials } from 'src/app/models/updateUserCredentials';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { passwordMatchValidator } from 'src/app/validators/validators';
 
@@ -17,7 +18,6 @@ export class ChangeCredentialsComponent implements OnInit {
   errorMessage: string | null = null;
   updatePasswordForm!: FormGroup;
   updateUsernameForm!: FormGroup;
-  isLoadingComponent: boolean = false;
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
@@ -29,11 +29,12 @@ export class ChangeCredentialsComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalService: ModalService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
-    this.isLoadingComponent = true;
+    this.loadingService.setLoading(true);
 
     this.updatePasswordForm = new FormGroup({
       password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(30)]),
@@ -65,18 +66,18 @@ export class ChangeCredentialsComponent implements OnInit {
       } catch (error) {
         console.error('Error fetching user details:', error);
       } finally {
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
       }
     } else {
       console.error('User ID not found');
-      this.isLoadingComponent = false;
+      this.loadingService.setLoading(false);
     }
   }
 
   onUpdateUsername(userId: number): void {
     if (this.updateUsernameForm && this.updateUsernameForm.valid) {
       const newUsername = this.updateUsernameForm.value.name;
-      this.isLoadingComponent = true;
+      this.loadingService.setLoading(true);
       const updateDTO: UpdateUserCredentials = {
         name: newUsername
       };
@@ -90,7 +91,7 @@ export class ChangeCredentialsComponent implements OnInit {
           this.hasOkButton = true;
           this.modalImage = "../../../assets/img/thumbs-up-image.png";
           this.openModal();
-          this.isLoadingComponent = false;
+          this.loadingService.setLoading(false);
         }, error => {
           console.error('Error updating username:', error);
           this.isModalOpen = true;
@@ -99,7 +100,7 @@ export class ChangeCredentialsComponent implements OnInit {
           this.modalImage = "../../../assets/img/confused-bull.png";
           this.hasOkButton = true;
           this.openModal();
-          this.isLoadingComponent = false;
+          this.loadingService.setLoading(false);
         });
     }
   }
@@ -107,7 +108,7 @@ export class ChangeCredentialsComponent implements OnInit {
   onUpdatePassword(userId: number): void {
     if (this.updateUsernameForm && this.updateUsernameForm.valid) {
       const newPassword = this.updatePasswordForm.value.password;
-      this.isLoadingComponent = true;
+      this.loadingService.setLoading(true);
       const updateDto: UpdateUserCredentials = {
         password: newPassword
       };
@@ -141,7 +142,7 @@ export class ChangeCredentialsComponent implements OnInit {
       img.src = this.modalImage;
 
       img.onload = () => {
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {
@@ -153,7 +154,7 @@ export class ChangeCredentialsComponent implements OnInit {
 
       img.onerror = () => {
         console.error("Error loading image.");
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {

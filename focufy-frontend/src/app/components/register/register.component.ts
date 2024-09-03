@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { passwordMatchValidator } from 'src/app/validators/validators';
 
@@ -15,7 +16,6 @@ import { passwordMatchValidator } from 'src/app/validators/validators';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errorMessage: string | null = null;
-  isLoadingComponent: boolean = false;
   isModalOpen: boolean = false;
   modalTitle: string = '';
   modalDescription: string = '';
@@ -24,11 +24,11 @@ export class RegisterComponent implements OnInit {
 
   private baseUrl = 'http://localhost:8080/auth/register';
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef, private modalService: ModalService) {
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef, private modalService: ModalService, private loadingService: LoadingService) {
   }
 
   ngOnInit(): void {
-    this.isLoadingComponent = true;
+    this.loadingService.setLoading(true);
     this.registerForm = new FormGroup({
       name: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
       email: new FormControl(null, [Validators.required, Validators.email]),
@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
       ])
     });
 
-    this.isLoadingComponent = false;
+    this.loadingService.setLoading(false);
 
     this.registerForm.get('password')?.valueChanges.subscribe(passwordValue => {
       this.registerForm.get('passwordConf')?.updateValueAndValidity();
@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
         password: this.registerForm.value.password
       };
 
-      this.isLoadingComponent = true;
+      this.loadingService.setLoading(true);
       console.log("isLoadingComponent=true");
 
       this.authService.register(user).subscribe(
@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
           });
         },
         error => {
-          this.isLoadingComponent = true;
+          this.loadingService.setLoading(true);
           if (error.status === 400 && error.error.message === `Email ${user.email} is already in use.`) {
             this.errorMessage = error;
           } else {
@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
       img.src = this.modalImage;
 
       img.onload = () => {
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {
@@ -103,7 +103,7 @@ export class RegisterComponent implements OnInit {
 
       img.onerror = () => {
         console.error("Error loading image.");
-        this.isLoadingComponent = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {

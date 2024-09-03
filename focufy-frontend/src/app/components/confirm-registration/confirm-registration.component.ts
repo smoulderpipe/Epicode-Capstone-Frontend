@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
@@ -9,8 +10,6 @@ import { ModalService } from 'src/app/services/modal.service';
   styleUrls: ['./confirm-registration.component.scss']
 })
 export class ConfirmRegistrationComponent implements OnInit {
-
-  isLoading = false;
 
   modalTitle: string = '';
   modalDescription: string = '';
@@ -21,7 +20,8 @@ export class ConfirmRegistrationComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
@@ -29,10 +29,10 @@ export class ConfirmRegistrationComponent implements OnInit {
       const token = params['token'];
 
       if (token) {
-        this.isLoading = true;
+        this.loadingService.setLoading(true);
         this.authService.confirmRegistration(token).subscribe({
           next: (response: string) => {
-            this.isLoading = true;
+            this.loadingService.setLoading(true);
             this.modalTitle = "Welcome aboard!";
             this.modalDescription = "Log in and see what awaits you...";
             this.modalImage = "../../../assets/img/thumbs-up-image.png";
@@ -42,7 +42,7 @@ export class ConfirmRegistrationComponent implements OnInit {
             });
           },
           error: (error) => {
-            this.isLoading = true;
+            this.loadingService.setLoading(true);
             this.modalTitle = "Oops!";
             this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
             this.modalImage = "../../../assets/img/confused-bull.png";
@@ -54,7 +54,7 @@ export class ConfirmRegistrationComponent implements OnInit {
           }
         });
       } else {
-        this.isLoading = true;
+        this.loadingService.setLoading(true);
         this.modalTitle = "Oops!";
         this.modalDescription = "There was an error confirming your registration, are you sure you clicked on the right link?";
         this.modalImage = "../../../assets/img/confused-bull.png";
@@ -73,7 +73,7 @@ export class ConfirmRegistrationComponent implements OnInit {
       img.src = this.modalImage;
 
       img.onload = () => {
-        this.isLoading = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {
@@ -85,7 +85,7 @@ export class ConfirmRegistrationComponent implements OnInit {
 
       img.onerror = () => {
         console.error("Error loading image.");
-        this.isLoading = false;
+        this.loadingService.setLoading(false);
         this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
         const subscription = this.modalService.modalClosed$.subscribe(closed => {
           if (closed) {
