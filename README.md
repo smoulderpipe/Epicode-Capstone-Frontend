@@ -1,6 +1,6 @@
 # 🎯Focufy (frontend)
 
-Questa repository contiene la parte frontend del progetto personale "Focufy", sviluppato come esame finale del corso full-stack developer di Epicode nel 2024.
+Questa repository contiene la parte frontend del progetto individuale "Focufy", che ho sviluppato per l'esame finale del corso full-stack developer di Epicode nel 2024.
 
 Per la parte di backend di cui l'app necessita per funzionare, fare riferimento a questa repository:
  [Epicode-Capstone-Backend.](https://github.com/smoulderpipe/Epicode-Capstone-Backend)
