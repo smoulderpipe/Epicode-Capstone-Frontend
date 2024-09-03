@@ -16,12 +16,12 @@ export class HealthGuard implements CanActivate {
 
   canActivate(): Observable<boolean> | boolean {
     console.log('Setting loading to true');
-    this.loadingService.setLoading(true); // Start loading
+    this.loadingService.setLoading(true);
 
     return this.checkBackendHealth().pipe(
       map(isBackendUp => {
         console.log('Setting loading to false');
-        this.loadingService.setLoading(false); // Stop loading
+        this.loadingService.setLoading(false);
 
         if (!isBackendUp) {
           this.router.navigate(['/service-unavailable']);
@@ -31,7 +31,7 @@ export class HealthGuard implements CanActivate {
       }),
       catchError(() => {
         console.log('Setting loading to false on error');
-        this.loadingService.setLoading(false); // Stop loading
+        this.loadingService.setLoading(false);
         this.router.navigate(['/service-unavailable']);
         return of(false);
       })
@@ -39,7 +39,7 @@ export class HealthGuard implements CanActivate {
   }
 
   private checkBackendHealth(): Observable<boolean> {
-    return this.http.get(this.baseUrl, { responseType: 'text' }).pipe(
+    return this.http.get(this.baseUrl + + "/health", { responseType: 'text' }).pipe(
       map(() => {
         console.log('Backend is up');
         return true;
