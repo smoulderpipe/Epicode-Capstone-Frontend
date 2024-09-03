@@ -5,6 +5,8 @@ import { StudyPlan } from 'src/app/models/studyPlan';
 import { User } from 'src/app/models/user';
 import { AnswerService } from 'src/app/services/answer.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { StudyPlanService } from 'src/app/services/study-plan.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -21,15 +23,27 @@ export class ProfileComponent implements OnInit {
   isFunEnough: boolean | null = null;
   isRestEnough: boolean | null = null;
 
+  modalTitle: string = '';
+  modalDescription: string = '';
+  modalImage: string = '';
+  hasOkButton: boolean = false;
+  hasYesButton: boolean = false;
+  hasNoButton: boolean = false;
+  hasHellNoButton: boolean = false;
+  hasGoAheadButton: boolean = false;
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private studyPlanService: StudyPlanService,
     private answerService: AnswerService,
-    private router: Router
+    private router: Router,
+    private modalService: ModalService,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
+    this.loadingService.setLoading(true);
     const userId = this.authService.getUserId();
     if (userId) {
       this.userService.getUserAvatar(userId).subscribe(
@@ -64,6 +78,7 @@ export class ProfileComponent implements OnInit {
       this.getFunAnswers(userId);
       this.getRestAnswers(userId);
       this.getSleepingAnswers(userId);
+      this.loadingService.setLoading(false);
     }
   }
 
@@ -223,31 +238,112 @@ export class ProfileComponent implements OnInit {
   }
 
   confirmRestart() {
-    const confirmation = confirm(`Would you like to start a new adventure? \n\nWARNING \nBy proceeding, you will PERMANENTLY DELETE your study plan, your avatar and your goals.`);
-    if (confirmation) {
-      this.onRestartAnswer();
-    } else {
-    }
+    this.loadingService.setLoading(true);
+    this.modalTitle = "What if...";
+    this.modalDescription = "Personalities change, tests don’t always get it right, and sometimes your avatar just doesn’t feel like ‘you.’ Ready to try something different?";
+    this.modalImage = "../../../assets/img/onRestartImage.png";
+    this.hasHellNoButton = false;
+    this.hasGoAheadButton = false;
+    this.hasYesButton = true;
+    this.hasNoButton = true;
+    this.openModal();
+  }
+
+  areYouSure() {
+    this.modalTitle = "Are you 100% sure?";
+    this.modalDescription = "By clicking 'GO AHEAD', you will PERMANENTLY DELETE your study plan, avatar, and goals, and you'll be redirected to the quiz page to start a new adventure."
+    this.modalImage = "../../../assets/img/warning.png";
+    this.hasYesButton = false;
+    this.hasNoButton = false;
+    this.hasHellNoButton = true;
+    this.hasGoAheadButton = true;
+    this.openModal();
   }
 
   onRestartAnswer() {
+    this.loadingService.setLoading(true);
+    this.hasGoAheadButton = false;
+    this.hasHellNoButton = false;
     const userId = this.authService.getUserId();
     if (!userId) {
       console.error('User ID not found');
       return;
     }
+  
+    const answers = [{
+      questionId: 24,
+      answerText: "yes",
+      personalAnswerType: "RESTART",
+      userId: userId
+  }];
 
-    const answers: any[] = [];
     this.answerService.savePersonalAnswers(answers).subscribe(
       (response) => {
         console.log('Restart answers submitted successfully', response);
-        alert('Your avatar and study plan data were correctly erased. Get ready to restart the experience by answering the test.')
-        this.router.navigate(['/survey']);
+        
+        this.authService.getUserDetails(userId).subscribe(
+          (userDetails) => {
+            this.user = userDetails;
+            this.avatar = null; 
+            this.studyPlan = null;
+            
+            this.modalTitle = "All set!";
+            this.modalDescription = "Your avatar and study plan data were correctly erased! Get ready to restart the experience by answering the test.";
+            this.modalImage = "../../../assets/img/thumbs-up-image.png";
+            this.hasOkButton = true;
+            
+            this.openModal().then(() => {
+              this.router.navigateByUrl('/survey');
+            });
+            
+            
+            this.loadingService.setLoading(false);
+          },
+          (error) => {
+            console.error('Error fetching user details after restart', error);
+            alert('There was a problem fetching updated user details.');
+            this.loadingService.setLoading(false);
+          }
+        );
       },
       (error) => {
         console.error('Error submitting restart answers', error);
-        alert('There was a problem erasing your avatar and study plan data, try again later.')
+        alert('There was a problem erasing your avatar and study plan data, try again later.');
+        this.loadingService.setLoading(false);
       }
     );
+    
+  }
+
+  openModal(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const img = new Image();
+      img.src = this.modalImage;
+  
+      img.onload = () => {
+        this.loadingService.setLoading(false);
+        this.showModalWithImage(resolve);
+      };
+  
+      img.onerror = () => {
+        console.error("Error loading image.");
+        this.loadingService.setLoading(false);
+        this.showModalWithImage(resolve);
+      };
+    });
+  }
+  
+  private showModalWithImage(resolve: () => void): void {
+    this.modalService.openModal(this.modalTitle, this.modalDescription, this.modalImage);
+    const subscription = this.modalService.modalClosed$.subscribe(closed => {
+      if (closed) {
+        subscription.unsubscribe();
+        resolve();
+      }
+    });
+  }
+
+  closeModal() {
+    this.modalService.closeModal();
   }
 }

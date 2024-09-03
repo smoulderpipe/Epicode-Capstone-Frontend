@@ -1,4 +1,11 @@
-<div class="d-flex justify-content-center">
+<app-modal
+  [modalTitle]="modalTitle"
+  [modalDescription]="modalDescription"
+  [modalImage]="modalImage"
+  [hasOkButton]="hasOkButton"
+  (close)="closeModal()">
+</app-modal>
+<div class="d-flex justify-content-center pt-3 pt-md-0">
   <div class="d-flex align-items-start p-lg-5 justify-content-center inner-body">
     <div class="container p-md-5 px-3 py-4 mt-md-5 mt-3 align-content-center justify-content-center"
       id="login-container">
@@ -19,9 +26,12 @@
           <small *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched">
             Enter the password.
           </small>
+          
         </div>
+        <a class="d-block forgot-password-link" (click)="onForgotPassword()">Forgot your password?</a>
 
-        <button type="submit" class="text-uppercase fs-5 btn btn-dark rounded-pill px-5 py-3 mt-3 bg-dark main-btn"
+        
+        <button type="submit" class="text-uppercase btn btn-dark rounded-pill px-5 py-3 mt-3 bg-dark main-btn"
           [disabled]="loginForm.invalid">Sign in</button>
       </form>
 

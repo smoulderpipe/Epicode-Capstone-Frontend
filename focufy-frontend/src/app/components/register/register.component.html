@@ -1,4 +1,12 @@
-<div class="d-flex justify-content-center">
+<app-modal
+  [modalTitle]="modalTitle"
+  [modalDescription]="modalDescription"
+  [modalImage]="modalImage"
+  [hasOkButton]="hasOkButton"
+  (close)="closeModal()">
+</app-modal>
+
+<div class="d-flex justify-content-center pt-3 pt-md-0">
     <div class="d-flex align-items-start p-lg-5 justify-content-center inner-body">
         <div class="container p-md-5 px-3 py-4 mt-md-5 mt-3 align-content-center justify-content-center"
             id="signupContainer">
@@ -53,17 +61,18 @@
                         </small>
                     </div>
                 </div>
-                
+
 
                 <button type="submit"
-                    class="text-uppercase fs-5 btn btn-dark bg-black main-btn rounded-pill px-5 py-3 mt-3"
+                    class="text-uppercase btn btn-dark bg-black main-btn rounded-pill px-5 py-3 mt-3"
                     [disabled]="registerForm.invalid">REGISTER</button>
-                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-                        {{ errorMessage }}
-                    </div>
+                <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                    {{ errorMessage }}
+                </div>
             </form>
 
         </div>
 
     </div>
+
 </div>

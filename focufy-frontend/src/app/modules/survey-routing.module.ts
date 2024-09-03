@@ -4,7 +4,7 @@ import { SharedModule } from './shared.module';
 import { SurveyComponent } from '../components/survey/survey.component';
 
 const routes: Routes = [
-  { path: '', component: SurveyComponent }
+  { path: '', component: SurveyComponent}
 ];
 
 @NgModule({

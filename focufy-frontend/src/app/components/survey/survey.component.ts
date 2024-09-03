@@ -10,6 +10,7 @@ import { Question } from 'src/app/models/question';
 import { UpdateLongTermGoal } from 'src/app/models/updateLongTermGoal';
 import { AnswerService } from 'src/app/services/answer.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { SurveyService } from 'src/app/services/survey.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -62,10 +63,12 @@ export class SurveyComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
+    this.loadingService.setLoading(true); 
     this.getQuestions();
     this.chronotypeForm = this.fb.group({});
     this.temperForm = this.fb.group({});
@@ -85,6 +88,8 @@ export class SurveyComponent implements OnInit {
       },
       (error) => {
         console.log('Error loading questions:', error);
+        alert('Error loading form');
+        this.loadingService.setLoading(false);
       }
     );
   }
@@ -123,9 +128,12 @@ export class SurveyComponent implements OnInit {
       (answers) => {
         this.answersMap[questionId] = answers;
         console.log(`Answers for question ${questionId} loaded:`, answers);
+        this.loadingService.setLoading(false);
       },
       (error) => {
         console.log(`Error loading answers for question ${questionId}:`, error);
+        alert(`Error loading answers for question ${questionId}:`);
+        this.loadingService.setLoading(false);
       }
     );
   }
@@ -146,6 +154,7 @@ export class SurveyComponent implements OnInit {
     }
 
     if (currentQuestion.questionType === 'DAYS') {
+      this.loadingService.setLoading(true);
       console.log('Submitting answers because current question type is DAYS');
       this.submitAnswers();
     } else if (this.currentQuestionIndex < this.questionsPage.content.length - 1) {
@@ -195,10 +204,10 @@ export class SurveyComponent implements OnInit {
       case 'DAYS':
         if (answerValue !== null && answerValue !== '' && !isNaN(answerValue)) {
           this.selectedAnswers[questionId] = +answerValue;
-      } else {
+        } else {
           console.warn(`Invalid answer for DAYS question: ${answerValue}`);
-      }
-      break;
+        }
+        break;
 
       default:
         console.warn(`Unhandled question type: ${currentQuestion.questionType}`);
@@ -403,9 +412,30 @@ export class SurveyComponent implements OnInit {
           this.userAvatarChronotypeMaxEnergyType = avatar.chronotype.maxEnergyType;
           this.userAvatarTemperStrength = avatar.temper.strengthType;
           this.userAvatarTemperRisk = avatar.temper.riskType;
-          this.showAvatar = true;
+
+          this.loadImageAndShowAvatar(this.userAvatarUrl);
+        } else {
+          this.loadingService.setLoading(false);
         }
+
+
       });
+      this.loadingService.setLoading(false);
+  }
+
+  private loadImageAndShowAvatar(imageUrl: string): void {
+    const img = new Image();
+    img.src = imageUrl;
+
+    img.onload = () => {
+      this.showAvatar = true;
+      this.loadingService.setLoading(false);
+    };
+
+    img.onerror = (error) => {
+      console.error('Error loading avatar image:', error);
+      this.loadingService.setLoading(false);
+    };
   }
 
   isCurrentAnswerValid(): boolean {
@@ -421,10 +451,10 @@ export class SurveyComponent implements OnInit {
         return control.value !== null && control.value !== '';
       case 'LONG_TERM_GOAL':
       case 'SHORT_TERM_GOAL':
-        return control.value !== null && control.value.trim() !== '' && control.value.length >= 3 && control.value.length <=30;
+        return control.value !== null && control.value.trim() !== '' && control.value.length >= 3 && control.value.length <= 30;
       case 'DAYS':
         const value = control.value;
-            return value !== null && !isNaN(value) && value >= 1 && value <= 365;
+        return value !== null && !isNaN(value) && value >= 1 && value <= 365;
       case 'RESTART':
         return control.value !== null;
       default:
@@ -433,6 +463,7 @@ export class SurveyComponent implements OnInit {
   }
 
   createStudyPlanAndAssociateMantras(): void {
+    this.loadingService.setLoading(true);
     const userId = this.authService.getUserId();
     if (userId !== null) {
       const shortTermGoalQuestion = this.questionsPage.content.find(question => question.questionType === 'SHORT_TERM_GOAL');
@@ -464,10 +495,12 @@ export class SurveyComponent implements OnInit {
           ).subscribe((mantrasResponse) => {
             console.log('Mantras added to study plan:', mantrasResponse);
             this.router.navigate(['/study-plan']);
+            this.loadingService.setLoading(false);
           });
         });
       } else {
         console.error('Unable to fetch shortTermGoal or numberOfDays from user responses.');
+        this.loadingService.setLoading(false);
       }
     } else {
       console.error('UserId is null. Unable to create study plan or add mantras.');

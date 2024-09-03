@@ -1,28 +1,28 @@
 <div class="d-flex justify-content-center main-container">
 
 
-  <div class="container m-md-5 m-3 p-md-5 text-center" id="survey-container">
+  <div class="container mx-3 mx-md-5 mt-5 mt-md-5 mb-3 mb-md-5 p-md-5 text-center" id="survey-container">
 
-    <div *ngIf="showAvatar">
+    <div *ngIf="showAvatar" class="mb-5 mb-md-0 pb-5 pb-md-0">
       <p class="mb-0">Your avatar type is:</p>
 
-      <h3 class="mb-4"><span class="text-capitalize">{{ userAvatarTemper.temperType}}</span>&nbsp;
+      <h3 class="mb-4 avatar-titles"><span>{{ userAvatarTemper.temperType}}</span>&nbsp;
         <span class="text-capitalize">{{ userAvatarChronotype.chronotypeType}}</span>
       </h3>
       <div class="row p-4 d-flex justify-content-center align-items-center avatar-card mb-4">
-        <div class="col-md-5"><img [src]="userAvatarUrl" class="img-fluid" /></div>
+        <div class="col-md-5 d-flex justify-content-center"><img [src]="userAvatarUrl" class="img-fluid" /></div>
 
         <div class="col-md-7 px-md-5 text-md-start text-center">
-          <p>The {{ userAvatarChronotype.chronotypeType}} chronotype {{ userAvatarChronotypeDescription}}</p>
+          <p><i>{{ userAvatarChronotype.chronotypeType}}</i> chronotypes {{ userAvatarChronotypeDescription}}</p>
           <p>Their energy and ability to concentrate peaks in the <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarChronotypeMaxEnergyType}}</span></p>
-          <p>Being {{userAvatarTemper.temperType}}, {{ userAvatarTemperDescription }}</p>
+          <p>Being <i>{{userAvatarTemper.temperType}}</i>, {{ userAvatarTemperDescription }}</p>
           <p>Inner strength: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperStrength}}</span></p>
           <p>Vulnerability: <span class="text-uppercase btn-light border border-1 border-black px-2 bg-white">{{userAvatarTemperRisk}}</span></p>
         </div>
       </div>
 
       <a routerLink="/study-plan"><button type="button"
-          class="bg-black main-btn text-uppercase fs-md-5 btn btn-dark rounded-pill px-md-5 px-3 py-3 mt-3 ms-md-2 fs-"
+          class="bg-black main-btn text-uppercase fs-md-5 btn btn-dark rounded-pill px-md-5 px-4 py-3 mt-3 ms-md-2 fs-"
           (click)="createStudyPlanAndAssociateMantras()">Discover your study plan</button></a>
 
     </div>
@@ -44,7 +44,7 @@
 
               <div class="answers-list d-flex justify-content-center" id="answer-list">
                 <ng-container [ngSwitch]="currentQuestion.questionType">
-                  <ul class="list-unstyled row justify-content-center px-md-5" *ngSwitchCase="'CHRONOTYPE'">
+                  <ul class="list-unstyled row justify-content-md-center justify-content-around px-md-5" *ngSwitchCase="'CHRONOTYPE'">
                     <li class="justify-content-center d-flex mb-3 px-md-2 px-1"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
                       <div class="conceal-radio d-flex justify-content-center">
@@ -55,7 +55,7 @@
                       </div>
                     </li>
                   </ul>
-                  <ul class="list-unstyled row justify-content-center" *ngSwitchCase="'TEMPER'">
+                  <ul class="list-unstyled row justify-content-md-center justify-content-around" *ngSwitchCase="'TEMPER'">
                     <li class="justify-content-center d-flex mb-3"
                       *ngFor="let answer of answersMap[currentQuestion.id] || []">
                       <div class="conceal-radio d-flex justify-content-center">

@@ -12,6 +12,10 @@ a {
     color: black;
 }
 
+.nav-btn {
+    background: black;
+}
+
 @media only screen and (max-width: 560px) {
 
     #logo {
@@ -20,13 +24,56 @@ a {
 
     #navbarNav {
         position: fixed;
-        right: 10px;
-        top: 68px;
+        right: 0px;
+        top: 56px;
+    }
 
+    #navbarNav ul {
+        backdrop-filter: blur(20px);
+        padding-left: 10px;
+        padding-bottom: 5px;
+        border-bottom-left-radius: 20px;
+        border-top-left-radius: 20px;
+        padding-top: 10px;
+        background: rgba(255, 255, 255, 1);
+        padding-right: 10px;
+        box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
     }
 
     #navbarNav li {
         margin-bottom: 6px;
+    }
+
+    #navbarNav .collapsing {
+        transform: translate(0px, 0px) !important;
+        position: fixed;
+        height: 0;
+        overflow: hidden;
+        -webkit-transition-property: height, visibility;
+        transition-property: height, visibility;
+        -webkit-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        -webkit-transition-timing-function: ease;
+        transition-timing-function: ease;
+        box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+      }
+
+    #navbarNav, #navbarNav.navbar-collapse.collapse {
+        transform: translate(150px, 0px);
+        transition: transform .3s;
+    }
+
+    #navbarNav, #navbarNav.navbar-collapse.collapsing {
+        transform: translate(80px, 0px);
+        transition: 0s;
+        display: block;
+    }
+
+    #navbarNav.navbar-collapse.collapse.show {
+        transform: translate(0, 0);
+        transition: 0.3s;
     }
 
     .navbar .navbar-toggler,
@@ -37,7 +84,11 @@ a {
     }
 
     .navbar-toggler-icon {
-        filter: brightness(0);
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0,0,0, 1)' stroke-width='3' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    }
+
+    .navbar::after {
+        mask: linear-gradient(to top, transparent, black 46%);
     }
 }
 
@@ -65,13 +116,9 @@ a {
     .navbar::after {
         transform: scale(2);
         background: white;
-        mask: linear-gradient(to top, transparent, black 55%);
+        mask: linear-gradient(to top, transparent, black 80%);
         backdrop-filter: blur(14px);
     }
-}
-
-.navbar li:hover {
-    filter: brightness(2);
 }
 
 .navbar::after {
@@ -81,6 +128,5 @@ a {
     inset: 0;
     z-index: -1;
     background: white;
-    mask: linear-gradient(to top, transparent, black 80%);
     backdrop-filter: blur(14px);
 }

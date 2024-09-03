@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,8 +18,20 @@ export class NavbarComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private studyPlanService: StudyPlanService,
-    private cdRef: ChangeDetectorRef
-  ) {}
+    private cdRef: ChangeDetectorRef,
+    private renderer: Renderer2
+  ) {
+    this.router.events.subscribe((event) => {
+      this.closeNavbar();
+    });
+  }
+
+  closeNavbar(){
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    if (navbarCollapse) {
+      this.renderer.removeClass(navbarCollapse, 'show');
+    }
+  }
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.authService.isLoggedIn();
@@ -50,7 +62,6 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        alert('Logout successful');
         this.router.navigate(['/login']);
       },
       error: (error) => {
