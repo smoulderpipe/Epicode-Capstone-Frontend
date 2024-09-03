@@ -10,6 +10,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ConfirmRegistrationComponent } from './components/confirm-registration/confirm-registration.component';
 import { ModalModule } from './modules/modal.module';
+import { ServiceUnavailableComponent } from './components/service-unavailable/service-unavailable.component';
+import { LoaderComponent } from './components/loader/loader.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,7 +19,9 @@ import { ModalModule } from './modules/modal.module';
     HomeComponent,
     FooterComponent,
     ProfileComponent,
-    ConfirmRegistrationComponent
+    ConfirmRegistrationComponent,
+    ServiceUnavailableComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
