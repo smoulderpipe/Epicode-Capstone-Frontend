@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:8080'
+  baseUrl: 'https://economic-emily-smoulderpipe-92a2c37b.koyeb.app'
 };

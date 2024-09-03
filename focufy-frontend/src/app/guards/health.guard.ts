@@ -3,11 +3,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { LoadingService } from '../services/loading.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HealthGuard implements CanActivate {
+
+  private baseUrl = environment.baseUrl;
 
   constructor(private router: Router, private http: HttpClient, private loadingService: LoadingService) {}
 
@@ -36,7 +39,7 @@ export class HealthGuard implements CanActivate {
   }
 
   private checkBackendHealth(): Observable<boolean> {
-    return this.http.get('http://localhost:8080/health', { responseType: 'text' }).pipe(
+    return this.http.get(this.baseUrl, { responseType: 'text' }).pipe(
       map(() => {
         console.log('Backend is up');
         return true;
