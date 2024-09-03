@@ -39,7 +39,7 @@ export class HealthGuard implements CanActivate {
   }
 
   private checkBackendHealth(): Observable<boolean> {
-    return this.http.get(this.baseUrl + + "/health", { responseType: 'text' }).pipe(
+    return this.http.get(this.baseUrl + "/health", { responseType: 'text' }).pipe(
       map(() => {
         console.log('Backend is up');
         return true;
