@@ -57,7 +57,6 @@ export class RegisterComponent implements OnInit {
       };
 
       this.loadingService.setLoading(true);
-      console.log("isLoadingComponent=true");
 
       this.authService.register(user).subscribe(
         (response: any) => {

@@ -84,7 +84,7 @@ export class ChangeCredentialsComponent implements OnInit {
 
       this.authService.changeCredentials(userId, updateDTO)
         .subscribe(response => {
-          console.log('Username updated', response);
+          console.log('Username updated');
           this.isModalOpen = true;
           this.modalTitle = 'Boom!';
           this.modalDescription = "Username updated, you're good to go!";
@@ -115,7 +115,7 @@ export class ChangeCredentialsComponent implements OnInit {
 
       this.authService.changeCredentials(userId, updateDto)
         .subscribe(response => {
-          console.log('Password updated', response);
+          console.log('Password updated');
           this.isModalOpen = true;
           this.modalTitle = "Boom!";
           this.modalDescription = "Password updated, you're good to go!";
@@ -124,7 +124,7 @@ export class ChangeCredentialsComponent implements OnInit {
           this.openModal();
 
         }, error => {
-          console.error("Error updating password", error);
+          console.error("Error updating password");
           this.isModalOpen = true;
           this.modalTitle = "Oops!";
           this.modalDescription = "We ran into an issue updating your password. Maybe try again later?";
