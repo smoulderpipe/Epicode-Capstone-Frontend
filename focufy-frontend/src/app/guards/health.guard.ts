@@ -15,12 +15,10 @@ export class HealthGuard implements CanActivate {
   constructor(private router: Router, private http: HttpClient, private loadingService: LoadingService) {}
 
   canActivate(): Observable<boolean> | boolean {
-    console.log('Setting loading to true');
     this.loadingService.setLoading(true);
 
     return this.checkBackendHealth().pipe(
       map(isBackendUp => {
-        console.log('Setting loading to false');
         this.loadingService.setLoading(false);
 
         if (!isBackendUp) {
@@ -30,7 +28,6 @@ export class HealthGuard implements CanActivate {
         return true;
       }),
       catchError(() => {
-        console.log('Setting loading to false on error');
         this.loadingService.setLoading(false);
         this.router.navigate(['/service-unavailable']);
         return of(false);
